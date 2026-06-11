@@ -17,7 +17,6 @@
             background-color: #000;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
-        /* Phần nền hiển thị ảnh tràn viền */
         #photo-container {
             position: absolute;
             top: 0;
@@ -35,12 +34,11 @@
             background-size: cover;
             background-position: center;
             opacity: 0;
-            transition: opacity 2s ease-in-out; /* Hiệu ứng chuyển ảnh mượt 2 giây */
+            transition: opacity 2s ease-in-out;
         }
         .slide.active {
             opacity: 1;
         }
-        /* Lớp phủ làm tối ảnh một chút để nổi bật chữ đồng hồ */
         .overlay {
             position: absolute;
             top: 0;
@@ -50,7 +48,6 @@
             background: rgba(0, 0, 0, 0.25);
             z-index: 2;
         }
-        /* Thiết kế phần hiển thị Đồng hồ */
         #clock-container {
             position: absolute;
             bottom: 40px;
@@ -83,15 +80,13 @@
     </div>
 
     <script>
-        // === THÔNG TIN ĐÃ CẤU HÌNH TỰ ĐỘNG ===
         const API_KEY = 'AIzaSyC2SgFOC_Eb_zOXYYf47pXoQ6FP0Dv9350'; 
         const FOLDER_ID = '1r1WUIKwAPAnsyIh-Zot7AevEW0uEZ-Hl'; 
-        const CHANGE_INTERVAL = 15000; // 15 giây tự động chuyển ảnh một lần
+        const CHANGE_INTERVAL = 15000; 
 
         let images = [];
         let currentIndex = 0;
 
-        // Hàm cập nhật thời gian thực tế
         function updateClock() {
             const now = new Date();
             let hours = String(now.getHours()).padStart(2, '0');
@@ -107,29 +102,32 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // Hàm lấy danh sách ảnh từ thư mục Google Drive của bạn
         async function fetchImagesFromDrive() {
-            const url = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID}'+in+parents+and+mimeType+contains+'image/'&key=${API_KEY}&fields=files(id)`;
+            // SỬA LỖI: Mã hóa chuẩn chuỗi truy vấn để không bị lỗi 400 từ Google
+            const query = encodeURIComponent(`'${FOLDER_ID}' in parents and mimeType contains 'image/'`);
+            const url = `https://www.googleapis.com/drive/v3/files?q=${query}&key=${API_KEY}&fields=files(id)`;
             
             try {
                 const response = await fetch(url);
-                if (!response.ok) throw new Error('API Error');
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error.message || 'Yêu cầu API thất bại');
+                }
                 const data = await response.json();
                 
                 if (data.files && data.files.length > 0) {
-                    // Chuyển đổi ID ảnh thành link hiển thị trực tiếp public
                     images = data.files.map(file => `https://drive.google.com/uc?export=view&id=${file.id}`);
                     initSlideshow();
                 } else {
-                    alert('Không tìm thấy ảnh nào hoặc thư mục Drive chưa được bật chia sẻ công khai.');
+                    alert('Không tìm thấy ảnh nào. Hãy chắc chắn trong thư mục Drive đã có ảnh chụp nhé!');
                 }
             } catch (error) {
                 console.error(error);
-                alert('Lỗi kết nối dữ liệu ảnh. Hãy đảm bảo bạn đã bật "Bất kỳ ai có liên kết đều xem được" cho thư mục Drive.');
+                // BẬT TÍNH NĂNG BẮT BỆNH: Hiện chi tiết lỗi thật từ Google trả về
+                alert('Lỗi từ hệ thống: ' + error.message);
             }
         }
 
-        // Khởi tạo khung chạy ảnh slideshow
         function initSlideshow() {
             const container = document.getElementById('photo-container');
             container.innerHTML = ''; 
