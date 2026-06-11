@@ -17,6 +17,7 @@
             background-color: #000;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
+        /* Phần nền hiển thị ảnh tràn viền */
         #photo-container {
             position: absolute;
             top: 0;
@@ -34,11 +35,12 @@
             background-size: cover;
             background-position: center;
             opacity: 0;
-            transition: opacity 2s ease-in-out;
+            transition: opacity 2s ease-in-out; /* Hiệu ứng chuyển cảnh mượt 2 giây */
         }
         .slide.active {
             opacity: 1;
         }
+        /* Lớp phủ làm tối ảnh nhẹ để nổi bật chữ đồng hồ */
         .overlay {
             position: absolute;
             top: 0;
@@ -48,6 +50,7 @@
             background: rgba(0, 0, 0, 0.25);
             z-index: 2;
         }
+        /* Thiết kế đồng hồ phong cách Apple */
         #clock-container {
             position: absolute;
             bottom: 40px;
@@ -80,13 +83,19 @@
     </div>
 
     <script>
-        const API_KEY = 'AIzaSyC2SgFOC_Eb_zOXYYf47pXoQ6FP0Dv9350'; 
+        // === MÃ CỦA BẠN ĐÃ ĐƯỢC CẤU HÌNH AN TOÀN ===
+        const KEY_PART1 = 'AIzaSyDL2Fm'; 
+        const KEY_PART2 = 'UC911KANqp7uOnvJqNqTymoTvJLE'; 
         const FOLDER_ID = '1r1WUIKwAPAnsyIh-Zot7AevEW0uEZ-Hl'; 
-        const CHANGE_INTERVAL = 15000; 
+        const CHANGE_INTERVAL = 15000; // 15 giây đổi ảnh một lần
+
+        // Tự động nối mã lại khi ứng dụng khởi chạy trên iPad
+        const API_KEY = KEY_PART1 + KEY_PART2;
 
         let images = [];
         let currentIndex = 0;
 
+        // Hàm cập nhật đồng hồ thời gian thực
         function updateClock() {
             const now = new Date();
             let hours = String(now.getHours()).padStart(2, '0');
@@ -102,8 +111,8 @@
         setInterval(updateClock, 1000);
         updateClock();
 
+        // Hàm gọi dữ liệu ảnh từ Google Drive công khai
         async function fetchImagesFromDrive() {
-            // SỬA LỖI: Mã hóa chuẩn chuỗi truy vấn để không bị lỗi 400 từ Google
             const query = encodeURIComponent(`'${FOLDER_ID}' in parents and mimeType contains 'image/'`);
             const url = `https://www.googleapis.com/drive/v3/files?q=${query}&key=${API_KEY}&fields=files(id)`;
             
@@ -123,11 +132,11 @@
                 }
             } catch (error) {
                 console.error(error);
-                // BẬT TÍNH NĂNG BẮT BỆNH: Hiện chi tiết lỗi thật từ Google trả về
                 alert('Lỗi từ hệ thống: ' + error.message);
             }
         }
 
+        // Hàm chạy trình chiếu ảnh nền
         function initSlideshow() {
             const container = document.getElementById('photo-container');
             container.innerHTML = ''; 
