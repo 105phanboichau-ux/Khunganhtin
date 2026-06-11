@@ -8,6 +8,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <title>Khung Ảnh Số Thông Minh</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Tourney:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
     <style>
         * {
             box-sizing: border-box;
@@ -21,7 +26,7 @@
             background-color: #000;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
-        /* ÉP BUỘC ẢNH DỌC PHẢI PHÓNG TO TRÀN HẾT CHIỀU NGANG VIỀN MÀN HÌNH IPAD */
+        /* Ép ảnh dọc phải phóng to tràn viền ngang màn hình */
         #photo-container {
             position: absolute;
             top: 0;
@@ -36,8 +41,8 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background-size: cover !important; /* Tự động phóng to và crop ảnh dọc vừa khít màn hình ngang */
-            background-position: center center; /* Giữ tâm bức ảnh cân đối không bị lệch */
+            background-size: cover !important; /* Tự động phóng to và crop vừa khít màn hình */
+            background-position: center center;
             background-repeat: no-repeat;
             opacity: 0;
             transition: opacity 2s ease-in-out;
@@ -51,38 +56,55 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.25);
             z-index: 2;
         }
-        /* Khu vực hiển thị Đồng hồ & Thời tiết Đắk Lắk */
+        /* THIẾT KẾ ĐỒNG HỒ THEO PHONG CÁCH ẢNH MẪU */
         #info-container {
             position: absolute;
             bottom: 40px;
             left: 40px;
             z-index: 3;
             color: #ffffff;
-            text-shadow: 0px 4px 12px rgba(0, 0, 0, 0.85);
+            text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.6);
         }
         #time {
-            font-size: 5.5rem;
-            font-weight: 300;
-            line-height: 1;
-        }
-        #date {
-            font-size: 1.8rem;
-            font-weight: 400;
-            margin-top: 8px;
-            letter-spacing: 1px;
-        }
-        #weather {
-            font-size: 1.5rem;
-            font-weight: 300;
-            margin-top: 5px;
-            color: #e0e0e0;
+            font-size: 7.5rem; /* Tăng kích thước chữ lớn và rõ nét */
+            line-height: 0.95;
             display: flex;
             align-items: center;
+            gap: 20px; /* Khoảng cách giữa Giờ và Phút không cần dấu hai chấm */
         }
-        /* THANH ĐIỀU KHIỂN: Mặc định ẩn hoàn toàn (opacity: 0) để giữ thẩm mỹ khung ảnh */
+        /* Kiểu chữ cho phần GIỜ (Màu vàng nắng đặc, dày) */
+        .hours-style {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: #F4B41A; /* Chuẩn tông màu vàng nghệ thuật trong ảnh */
+            letter-spacing: -2px;
+        }
+        /* Kiểu chữ cho phần PHÚT (Màu trắng dạng nét đôi nghệ thuật) */
+        .minutes-style {
+            font-family: 'Tourney', sans-serif;
+            font-weight: 500; /* Độ dày vừa phải để lộ rõ rãnh đôi */
+            color: #ffffff;
+            letter-spacing: -1px;
+        }
+        #date {
+            font-size: 1.6rem;
+            font-weight: 400;
+            margin-top: 15px;
+            letter-spacing: 0.5px;
+            color: #f5f5f7;
+            text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.8);
+        }
+        #weather {
+            font-size: 1.4rem;
+            font-weight: 300;
+            margin-top: 5px;
+            color: #d2d2Console;
+            text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.8);
+        }
+        /* Thanh chỉnh tốc độ ẩn thông minh */
         #control-panel {
             position: absolute;
             top: 20px;
@@ -98,7 +120,6 @@
             visibility: hidden;
             transition: opacity 0.4s ease, visibility 0.4s;
         }
-        /* Lớp kích hoạt hiện lên khi chạm màn hình */
         #control-panel.show {
             opacity: 1;
             visibility: visible;
@@ -116,7 +137,10 @@
     <div class="overlay"></div>
 
     <div id="info-container">
-        <div id="time">00:00</div>
+        <div id="time">
+            <span class="hours-style">00</span>
+            <span class="minutes-style">00</span>
+        </div>
         <div id="date">Thứ Hai, Ngày 01/01</div>
         <div id="weather">Đang cập nhật thời tiết...</div>
     </div>
@@ -137,26 +161,27 @@
         let slideInterval;
         let hideTimeout;
 
-        // Hàm xử lý ẩn/hiện thông minh cho thanh tốc độ trên iPad
+        // Cơ chế ẩn hiện thanh điều khiển thông minh
         function showControls() {
             const panel = document.getElementById('control-panel');
-            panel.classList.add('show'); // Hiện thanh gạt lên
-            
-            // Xóa đếm ngược cũ nếu đang có
+            panel.classList.add('show');
             if (hideTimeout) clearTimeout(hideTimeout);
-            
-            // Tự động ẩn menu đi sau 4 giây không chạm vào màn hình
             hideTimeout = setTimeout(() => {
                 panel.classList.remove('show');
             }, 4000);
         }
 
-        // 1. Đồng hồ thời gian thực
+        // Tách biệt hàm xử lý hiển thị Giờ và Phút theo phong cách mới
         function updateClock() {
             const now = new Date();
             let hours = String(now.getHours()).padStart(2, '0');
             let minutes = String(now.getMinutes()).padStart(2, '0');
-            document.getElementById('time').innerText = `${hours}:${minutes}`;
+            
+            // Đưa định dạng font riêng biệt vào cấu trúc giao diện
+            document.getElementById('time').innerHTML = `
+                <span class="hours-style">${hours}</span>
+                <span class="minutes-style">${minutes}</span>
+            `;
 
             const days = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
             document.getElementById('date').innerText = `${days[now.getDay()]}, Ngày ${now.getDate()}/${now.getMonth() + 1}`;
@@ -164,7 +189,7 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // 2. Dự báo thời tiết Đắk Lắk
+        // Cập nhật thời tiết Đắk Lắk
         function updateWeather() {
             const lat = 12.6667; 
             const lon = 108.0500;
@@ -191,14 +216,14 @@
         updateWeather();
         setInterval(updateWeather, 600000);
 
-        // 3. Quét nạp ảnh tự động từ Google Drive
+        // Nạp dữ liệu ảnh tự động từ Google Drive
         function fetchImagesFromDrive() {
             const query = encodeURIComponent(`'${FOLDER_ID}' in parents and mimeType contains 'image/'`);
             const url = `https://www.googleapis.com/drive/v3/files?q=${query}&key=${API_KEY}&fields=files(id)`;
             
             fetch(url)
                 .then(res => {
-                    if (!res.ok) throw new Error('Yêu cầu kết nối bị từ chối');
+                    if (!res.ok) throw new Error('Kết nối thất bại');
                     return res.json();
                 })
                 .then(data => {
@@ -206,7 +231,7 @@
                         images = data.files.map(file => `https://drive.google.com/uc?export=view&id=${file.id}`);
                         initSlideshow();
                     } else {
-                        document.getElementById('photo-container').innerHTML = '<div style="color:white;padding:40px;">Thư mục Drive trống hoặc chưa bật chia sẻ công khai!</div>';
+                        document.getElementById('photo-container').innerHTML = '<div style="color:white;padding:40px;">Thư mục Drive trống hoặc chưa bật công khai!</div>';
                     }
                 })
                 .catch(err => {
@@ -214,7 +239,7 @@
                 });
         }
 
-        // 4. Quản lý trình chiếu slideshow
+        // Quản lý trình chiếu ảnh nền mượt mà
         function initSlideshow() {
             const container = document.getElementById('photo-container');
             container.innerHTML = ''; 
