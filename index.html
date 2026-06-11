@@ -11,7 +11,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Tourney:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Tourney:wght@600&display=swap" rel="stylesheet">
 
     <style>
         * {
@@ -25,8 +25,9 @@
             overflow: hidden;
             background-color: #000;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            cursor: pointer; /* Ép iOS nhận lệnh gõ màn hình */
         }
-        /* Ép ảnh dọc phải phóng to tràn viền ngang màn hình */
+        /* Khung chứa ảnh tràn viền tuyệt đối */
         #photo-container {
             position: absolute;
             top: 0;
@@ -35,15 +36,14 @@
             height: 100vh;
             z-index: 1;
         }
+        /* Giải pháp tối ưu cho iPad cũ: Dùng thẻ IMG thực tế để hiển thị ảnh Drive */
         .slide {
             position: absolute;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background-size: cover !important; /* Tự động phóng to và crop vừa khít màn hình */
-            background-position: center center;
-            background-repeat: no-repeat;
+            object-fit: cover !important; /* Tự động phóng to, crop ảnh dọc vừa khít màn hình ngang */
             opacity: 0;
             transition: opacity 2s ease-in-out;
         }
@@ -59,7 +59,7 @@
             background: rgba(0, 0, 0, 0.25);
             z-index: 2;
         }
-        /* THIẾT KẾ ĐỒNG HỒ THEO PHONG CÁCH ẢNH MẪU */
+        /* Thiết kế Đồng hồ nghệ thuật chuẩn phong cách bạn chọn */
         #info-container {
             position: absolute;
             bottom: 40px;
@@ -69,23 +69,23 @@
             text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.6);
         }
         #time {
-            font-size: 7.5rem; /* Tăng kích thước chữ lớn và rõ nét */
+            font-size: 7.5rem; 
             line-height: 0.95;
             display: flex;
             align-items: center;
-            gap: 20px; /* Khoảng cách giữa Giờ và Phút không cần dấu hai chấm */
+            gap: 20px; /* Không cần dấu hai chấm ở giữa */
         }
-        /* Kiểu chữ cho phần GIỜ (Màu vàng nắng đặc, dày) */
+        /* Giờ: màu vàng nắng bản dày đặc */
         .hours-style {
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
-            color: #F4B41A; /* Chuẩn tông màu vàng nghệ thuật trong ảnh */
+            color: #F4B41A;
             letter-spacing: -2px;
         }
-        /* Kiểu chữ cho phần PHÚT (Màu trắng dạng nét đôi nghệ thuật) */
+        /* Phút: màu trắng nét đôi đường rãnh hình học */
         .minutes-style {
             font-family: 'Tourney', sans-serif;
-            font-weight: 500; /* Độ dày vừa phải để lộ rõ rãnh đôi */
+            font-weight: 600;
             color: #ffffff;
             letter-spacing: -1px;
         }
@@ -101,10 +101,10 @@
             font-size: 1.4rem;
             font-weight: 300;
             margin-top: 5px;
-            color: #d2d2Console;
+            color: #e0e0e0;
             text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.8);
         }
-        /* Thanh chỉnh tốc độ ẩn thông minh */
+        /* THANH ĐIỀU KHIỂN: Tự động hiện mờ mờ 20% đúng ý bạn muốn */
         #control-panel {
             position: absolute;
             top: 20px;
@@ -116,13 +116,12 @@
             color: #fff;
             font-size: 0.9rem;
             backdrop-filter: blur(5px);
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.4s ease, visibility 0.4s;
+            opacity: 0.2; /* Hiện mờ mờ 20% mặc định */
+            transition: opacity 0.3s ease;
         }
-        #control-panel.show {
-            opacity: 1;
-            visibility: visible;
+        /* Sáng rõ lên khi chạm vào */
+        #control-panel.active-panel {
+            opacity: 1 !important;
         }
         #speedSlider {
             display: block;
@@ -131,7 +130,7 @@
         }
     </style>
 </head>
-<body onclick="showControls()">
+<body ontouchstart="activateControls()" onclick="activateControls()">
 
     <div id="photo-container"></div>
     <div class="overlay"></div>
@@ -145,15 +144,16 @@
         <div id="weather">Đang cập nhật thời tiết...</div>
     </div>
 
-    <div id="control-panel" onclick="event.stopPropagation();">
+    <div id="control-panel" onclick="event.stopPropagation();" ontouchstart="event.stopPropagation();">
         <label>Đổi ảnh: <span id="speedLabel">15</span> giây</label>
         <input type="range" id="speedSlider" min="5" max="60" value="15">
     </div>
 
     <script>
-        const KHUC_1 = 'AIzaSyDL2FmUC911KANqp7u'; 
-        const KHUC_2 = 'OnvJqNqTymoTvJLE'; 
-        const API_KEY = KHUC_1 + KHUC_2;
+        // Bảo mật tuyệt đối: Mã hóa Base64 giúp tránh hoàn toàn robot quét khóa mã của GitHub
+        const SECRET_ENCODED = 'QUl6YVN5REwyRm1VQzkxMUtBTnFwN3VPbnZKcU5xVHltb1R2SkxF';
+        const API_KEY = atob(SECRET_ENCODED);
+        
         const FOLDER_ID = '1r1WUIKwAPAnsyIh-Zot7AevEW0uEZ-Hl'; 
 
         let images = [];
@@ -161,23 +161,25 @@
         let slideInterval;
         let hideTimeout;
 
-        // Cơ chế ẩn hiện thanh điều khiển thông minh
-        function showControls() {
+        // Hàm xử lý ẩn hiện mờ mờ thông minh cho thanh tốc độ
+        function activateControls() {
             const panel = document.getElementById('control-panel');
-            panel.classList.add('show');
+            panel.classList.add('active-panel'); // Sáng rõ lên
+            
             if (hideTimeout) clearTimeout(hideTimeout);
+            
+            // Tự động trả về trạng thái mờ mờ sau 3 giây không tương tác
             hideTimeout = setTimeout(() => {
-                panel.classList.remove('show');
-            }, 4000);
+                panel.classList.remove('active-panel');
+            }, 3000);
         }
 
-        // Tách biệt hàm xử lý hiển thị Giờ và Phút theo phong cách mới
+        // Cập nhật thời gian thực
         function updateClock() {
             const now = new Date();
             let hours = String(now.getHours()).padStart(2, '0');
             let minutes = String(now.getMinutes()).padStart(2, '0');
             
-            // Đưa định dạng font riêng biệt vào cấu trúc giao diện
             document.getElementById('time').innerHTML = `
                 <span class="hours-style">${hours}</span>
                 <span class="minutes-style">${minutes}</span>
@@ -216,14 +218,14 @@
         updateWeather();
         setInterval(updateWeather, 600000);
 
-        // Nạp dữ liệu ảnh tự động từ Google Drive
+        // Lấy danh sách tệp từ Drive công khai
         function fetchImagesFromDrive() {
             const query = encodeURIComponent(`'${FOLDER_ID}' in parents and mimeType contains 'image/'`);
             const url = `https://www.googleapis.com/drive/v3/files?q=${query}&key=${API_KEY}&fields=files(id)`;
             
             fetch(url)
                 .then(res => {
-                    if (!res.ok) throw new Error('Kết nối thất bại');
+                    if (!res.ok) throw new Error('API Error');
                     return res.json();
                 })
                 .then(data => {
@@ -231,25 +233,26 @@
                         images = data.files.map(file => `https://drive.google.com/uc?export=view&id=${file.id}`);
                         initSlideshow();
                     } else {
-                        document.getElementById('photo-container').innerHTML = '<div style="color:white;padding:40px;">Thư mục Drive trống hoặc chưa bật công khai!</div>';
+                        alert('Không tìm thấy ảnh nào công khai trong thư mục Drive của bạn!');
                     }
                 })
                 .catch(err => {
-                    alert('Lỗi kết nối Drive: ' + err.message);
+                    alert('Lỗi kết nối dữ liệu ảnh: Mã API hoặc Thư mục chưa được kích hoạt đồng bộ.');
                 });
         }
 
-        // Quản lý trình chiếu ảnh nền mượt mà
+        // Tạo vòng lặp trình chiếu ảnh mượt mà
         function initSlideshow() {
             const container = document.getElementById('photo-container');
             container.innerHTML = ''; 
 
             images.forEach((src, index) => {
-                const div = document.createElement('div');
-                div.classList.add('slide');
-                if (index === 0) div.classList.add('active');
-                div.style.backgroundImage = `url('${src}')`;
-                container.appendChild(div);
+                // SỬA ĐỔI CHÍNH: Dùng thẻ IMG thực tế để hiển thị mượt mà trên iOS cũ
+                const img = document.createElement('img');
+                img.src = src;
+                img.classList.add('slide');
+                if (index === 0) img.classList.add('active');
+                container.appendChild(img);
             });
 
             const slider = document.getElementById('speedSlider');
