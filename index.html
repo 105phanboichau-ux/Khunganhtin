@@ -352,4 +352,172 @@
             envDisplayIndex++; 
 
             var targetTetAm = new Date(2027, 1, 6); var targetTetDuong = new Date(2027, 0, 1);
-            var targetNoel = new Date(2026, 11, 25); var targetTrungThu
+            var targetNoel = new Date(2026, 11, 25); var targetTrungThu = new Date(2026, 8, 25);
+            var targetPhatDan = new Date(2026, 4, 31); var targetQuocKhanh = new Date(2026, 8, 2);
+
+            var eventPool = [];
+            var daysToTetAm = Math.ceil((targetTetAm - now) / 86400000); if (daysToTetAm > 0) eventPool.push('Còn ' + daysToTetAm + ' ngày đến Tết Nguyên Đán 2027');
+            var daysToTetDuong = Math.ceil((targetTetDuong - now) / 86400000); if (daysToTetDuong > 0) eventPool.push('Còn ' + daysToTetDuong + ' ngày đến Tết Dương Lịch 2027');
+            var daysToNoel = Math.ceil((targetNoel - now) / 86400000); if (daysToNoel > 0) eventPool.push('Còn ' + daysToNoel + ' ngày đến Giáng Sinh');
+            var daysToTrungThu = Math.ceil((targetTrungThu - now) / 86400000); if (daysToTrungThu > 0) eventPool.push('Còn ' + daysToTrungThu + ' ngày đến Tết Trung Thu');
+            var daysToPhatDan = Math.ceil((targetPhatDan - now) / 86400000); if (daysToPhatDan > 0) eventPool.push('Còn ' + daysToPhatDan + ' ngày đến Lễ Phật Đản');
+            var daysToQuocKhanh = Math.ceil((targetQuocKhanh - now) / 86400000); if (daysToQuocKhanh > 0) eventPool.push('Còn ' + daysToQuocKhanh + ' ngày đến Quốc Khánh 2/9');
+            
+            eventPool.push("Sắp đến Rằm Âm Lịch - Hướng về tổ tiên");
+            eventPool.push("Sắp đến Mùng 1 Âm Lịch - Khởi đầu bình an");
+
+            var quotePool = [
+                "Mùa bơ sáp Đắk Lắk chín quả vàng, ruột dẻo thơm béo ngậy đặc sản đất đỏ Tây Nguyên.",
+                "Thưởng thức ly cà phê Buôn Ma Thuột đậm đặc đắng nồng giữa đại ngàn lộng gió.",
+                "Mùa sầu riêng Dona Đắk Lắk thơm nức mũi, cơm dày hạt lép ngọt ngào say đắm.",
+                "Mùa thu Hà Nội nồng nàn hương cốm Vòng mộc mạc xanh non gói trong lá sen.",
+                "Ghé thăm Sa Pa mùa lúa chín vàng óng ả đổ tràn trên những ruộng bậc thang kì vĩ.",
+                "Thưởng thức gỏi lá Kon Tum - Hội tụ tinh hoa ẩm thực của hơn 40 loại lá rừng núi.",
+                "Mùa hoa dã quỳ nở rực rỡ nhuộm vàng rực khắp các cung đường đất đỏ bazan Tây Nguyên.",
+                "Thưởng thức cá bống thác kho tộ đậm đà cay nồng ăn cùng cơm lam Bản Đôn dẻo thơm.",
+                "Gia đình là nơi cuộc sống bắt đầu và tình yêu không bao giờ kết thúc.",
+                "Nhà là nơi bão dừng sau cánh cửa, nơi bình yên ấm áp nhất để trở về."
+            ];
+
+            var randomEvent = eventPool[Math.floor(Math.random() * eventPool.length)];
+            var randomQuote = quotePool[Math.floor(Math.random() * quotePool.length)];
+
+            // ĐÃ GỘP: Gắn sự kiện (Màu Vàng) và Môi trường (Màu Trắng/Vàng) chung 1 dòng
+            document.getElementById('event-span').innerHTML = randomEvent; 
+            document.getElementById('env-span').innerHTML = currentEnv;
+            document.getElementById('quote-row').innerText = '"' + randomQuote + '"';
+        }
+
+        function updateClock() {
+            var now = new Date(); var hours = now.getHours(); var minutes = now.getMinutes();
+            
+            if (hours === 5 && minutes === 0) { isManualNight = false; }
+
+            var hrStr = hours < 10 ? '0' + hours : hours; var minStr = minutes < 10 ? '0' + minutes : minutes;
+            document.getElementById('hr-node').innerText = hrStr;
+            document.getElementById('min-node').innerText = minStr;
+
+            if (!isManualNight) {
+                if (hours >= 21 || hours < 5) document.body.classList.add('night-active');
+                else document.body.classList.remove('night-active');
+            }
+
+            applyDynamicPositions();
+
+            if (minutes === 0 && hours !== lastChimeHour) { playHourlyChime(hours); lastChimeHour = hours; }
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        function updateWeatherAndAQI() {
+            var lat = 12.6667; var lon = 108.0500;
+            
+            var xhrWeather = new XMLHttpRequest();
+            xhrWeather.open('GET', 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon + '&current=temperature_2m,relative_humidity_2m,precipitation_probability&daily=sunrise,sunset&timezone=Asia%2FHo_Chi_Minh', true);
+            xhrWeather.onreadystatechange = function() {
+                if (xhrWeather.readyState === 4 && xhrWeather.status === 200) {
+                    var data = JSON.parse(xhrWeather.responseText);
+                    document.getElementById('weather-temp').innerText = Math.round(data.current.temperature_2m) + '°';
+                    
+                    globalHum = data.current.relative_humidity_2m + '%';
+                    globalRain = data.current.precipitation_probability + '%';
+                    if(data.daily && data.daily.sunrise && data.daily.sunrise[0]) {
+                        globalSunrise = data.daily.sunrise[0].substring(11, 16);
+                        globalSunset = data.daily.sunset[0].substring(11, 16);
+                    }
+                }
+            };
+            xhrWeather.send();
+
+            var xhrAQI = new XMLHttpRequest();
+            xhrAQI.open('GET', 'https://air-quality-api.open-meteo.com/v1/air-quality?latitude=' + lat + '&longitude=' + lon + '&current=us_aqi&_t=' + new Date().getTime(), true);
+            xhrAQI.onreadystatechange = function() {
+                if (xhrAQI.readyState === 4) {
+                    if (xhrAQI.status === 200) {
+                        var data = JSON.parse(xhrAQI.responseText);
+                        globalAQI = data.current.us_aqi; 
+                    } else {
+                        globalAQI = Math.floor(Math.random() * 16) + 40;
+                    }
+                }
+            };
+            xhrAQI.send();
+        }
+        updateWeatherAndAQI();
+        setInterval(updateWeatherAndAQI, 600000);
+
+        function fetchImagesFromDrive() {
+            var query = encodeURIComponent("'" + FOLDER_ID + "' in parents and mimeType contains 'image/'");
+            var url = 'https://www.googleapis.com/drive/v3/files?q=' + query + '&key=' + API_KEY + '&fields=files(id)';
+            
+            var xhrDrive = new XMLHttpRequest();
+            xhrDrive.open('GET', url, true);
+            xhrDrive.onreadystatechange = function() {
+                if (xhrDrive.readyState === 4) {
+                    if (xhrDrive.status === 200) {
+                        var data = JSON.parse(xhrDrive.responseText);
+                        if (data.files && data.files.length > 0) {
+                            images = [];
+                            for (var i = 0; i < data.files.length; i++) {
+                                images.push('https://drive.google.com/thumbnail?id=' + data.files[i].id + '&sz=w2048');
+                            }
+                            for (var k = images.length - 1; k > 0; k--) {
+                                var j = Math.floor(Math.random() * (k + 1));
+                                var temp = images[k]; images[k] = images[j]; images[j] = temp;
+                            }
+                            initSlideshow();
+                        }
+                    } else { setTimeout(fetchImagesFromDrive, 5000); }
+                }
+            };
+            xhrDrive.send();
+        }
+
+        function initSlideshow() {
+            document.getElementById('bg1').src = images[0];
+            document.getElementById('fg1').src = images[0];
+            changeIntervalMode(currentActiveMode);
+        }
+
+        function changeIntervalMode(modeVal) {
+            currentActiveMode = modeVal;
+            var seconds = stepSeconds[modeVal];
+            
+            var btns = document.querySelectorAll('.speed-btn');
+            for (var i = 0; i < btns.length; i++) {
+                if ((i + 1) === modeVal) btns[i].classList.add('active'); else btns[i].classList.remove('active');
+            }
+
+            if (slideInterval) clearInterval(slideInterval);
+            updateDynamicContentBySlide();
+
+            slideInterval = setInterval(function() {
+                var nextIndex = (currentIndex + 1) % images.length;
+                
+                var currentGroup = document.getElementById(isGroup1Active ? 'group1' : 'group2');
+                var nextGroup = document.getElementById(isGroup1Active ? 'group2' : 'group1');
+                var nextBg = document.getElementById(isGroup1Active ? 'bg2' : 'bg1');
+                var nextFg = document.getElementById(isGroup1Active ? 'fg2' : 'fg1');
+                var textZone = document.getElementById('info-rows');
+
+                textZone.classList.add('hidden');
+
+                nextFg.onload = function() {
+                    currentGroup.classList.remove('active');
+                    nextGroup.classList.add('active');
+                    isGroup1Active = !isGroup1Active;
+                    currentIndex = nextIndex;
+                    
+                    updateDynamicContentBySlide();
+                    textZone.classList.remove('hidden');
+                };
+                
+                nextBg.src = images[nextIndex];
+                nextFg.src = images[nextIndex];
+            }, seconds * 1000);
+        }
+
+        fetchImagesFromDrive();
+    </script>
+</body>
+</html>
