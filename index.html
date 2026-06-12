@@ -55,26 +55,25 @@
 
         .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.15); z-index: 3; pointer-events: none; }
 
-        /* ĐÃ CHỈNH SỬA: ĐỒNG HỒ TRỤC ĐỨNG PHÓNG TO 30% SIÊU ĐẲNG CẤP */
+        /* ĐÃ SỬA: DỊCH CHUYỂN ĐỒNG HỒ SANG TRÁI SÁT VIỀN (left: 20px) TRÁNH LẸM ẢNH */
         #info-container {
-            position: absolute; top: 40px; left: 40px; z-index: 4; color: #ffffff;
+            position: absolute; top: 40px; left: 20px; z-index: 4; color: #ffffff;
             text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.8);
             display: flex; flex-direction: column; 
-            align-items: flex-start; /* Căn lề trái tăm tắp */
+            align-items: flex-start; 
             text-align: left; line-height: 0.82;
             transition: transform 0.5s ease-out, top 0.8s ease-in-out, left 0.8s ease-in-out, align-items 0.8s ease-in-out; 
         }
         .hours-style { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #F4B41A; font-size: 10.5rem; letter-spacing: -3px; display: block; }
         .minutes-style { font-family: 'Tourney', sans-serif; font-weight: 600; color: #ffffff; font-size: 10.5rem; letter-spacing: -2px; display: block; margin-top: -5px; }
 
-        /* KHỐI ĐÁY 1X2 GỌN GÀNG GÓC TRÁI */
+        /* KHỐI ĐÁY 1X2 */
         #bottom-container {
-            position: absolute; bottom: 25px; left: 40px; right: 40px; z-index: 4;
+            position: absolute; bottom: 25px; left: 30px; right: 20px; z-index: 4;
             display: flex; flex-direction: row; align-items: flex-end; justify-content: flex-start; 
             text-shadow: 0px 3px 12px rgba(0, 0, 0, 0.95); transition: all 0.5s ease; 
         }
         
-        /* Cụm khối nhiệt độ và Thứ đơn lập trên đầu */
         #temp-zone {
             display: flex; flex-direction: column; align-items: flex-start;
             margin-right: 25px; line-height: 1;
@@ -82,32 +81,30 @@
         #top-day-text { font-size: 2rem; font-weight: 700; color: #F4B41A; margin-bottom: 4px; white-space: nowrap; }
         #weather-temp { font-size: 5.5rem; font-weight: 700; color: #ffffff; letter-spacing: -2px; }
 
-        /* Khối các hàng chữ bên phải */
         #info-rows {
             display: flex; flex-direction: column; justify-content: center; gap: 6px; 
-            max-width: calc(100% - 160px); text-align: left; 
+            max-width: calc(100% - 150px); text-align: left; 
             opacity: 1; transition: opacity 1.5s ease-in-out;
         }
         #info-rows.hidden { opacity: 0; } 
 
-        /* Hàng 1: Dương lịch phóng to 50% | Âm lịch giữ nguyên */
+        /* Hàng 1: Dương lịch rất to | Lịch âm */
         #top-row { color: #ffffff; line-height: 1.3; }
-        #date-solar-big { font-size: 2.1rem; font-weight: 700; color: #ffffff; } /* Tăng kích thước 50% */
+        #date-solar-big { font-size: 2.1rem; font-weight: 700; color: #ffffff; } 
         #date-lunar-small { font-size: 1.35rem; font-weight: 500; color: #e0e0e0; }
 
-        /* Hàng 2: Sự kiện đếm ngược độc lập */
-        #event-row { font-size: 1.45rem; color: #F4B41A; font-weight: 700; line-height: 1.3; }
+        /* ĐÃ SỬA: Hàng 2 GỘP Sự kiện Đếm ngược VÀ Thông số Môi trường làm 1 dòng */
+        #mid-row { font-size: 1.4rem; line-height: 1.4; white-space: normal !important; word-wrap: break-word; }
+        .event-text { color: #F4B41A; font-weight: 700; }
+        .env-text { color: #ffffff; font-weight: 500; }
 
-        /* Hàng 3: Các thông số môi trường dịch chuyển xuống dưới dòng đếm ngược */
-        #env-row { font-size: 1.35rem; color: #ffffff; font-weight: 500; }
-
-        /* Hàng 4: Danh ngôn đặc sản */
+        /* Hàng 3: Danh ngôn đặc sản */
         #quote-row { font-size: 1.35rem; font-weight: 300; font-style: italic; color: #f5f5f7; line-height: 1.4; }
         
         .highlight-yellow { color: #F4B41A; font-weight: 700; }
         .bar-separator { opacity: 0.5; font-weight: 300; margin: 0 6px; }
 
-        /* BẢNG ĐIỀU KHIỂN NÂNG CẤP: THÊM CÁC NÚT CHỨC NĂNG THỬ CHUÔNG & BAN ĐÊM */
+        /* BẢNG ĐIỀU KHIỂN TÀNG HÌNH */
         #control-panel {
             position: absolute; top: 20px; right: 20px; z-index: 10;
             background: rgba(0, 0, 0, 0.7); padding: 12px 16px; border-radius: 8px;
@@ -122,19 +119,17 @@
         .speed-btn { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); color: #fff; padding: 4px 8px; font-size: 0.8rem; border-radius: 4px; cursor: pointer; font-weight: 500; transition: all 0.2s ease; }
         .speed-btn.active { background: #F4B41A !important; border-color: #F4B41A !important; color: #000 !important; font-weight: bold; }
         
-        /* Phong cách nút chức năng Đêm và Thử chuông */
         .action-btn-group { display: flex; gap: 8px; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 8px; }
         .action-btn { flex: 1; background: rgba(244, 180, 26, 0.2); border: 1px solid #F4B41A; color: #F4B41A; padding: 5px 8px; font-size: 0.8rem; border-radius: 4px; cursor: pointer; font-weight: 600; text-align: center; }
         .action-btn:active { background: #F4B41A; color: #000; }
 
-        /* BAN ĐÊM (21:00 - 05:00 HOẶC KHI BẤM THỦ CÔNG) */
+        /* BAN ĐÊM (21:00 - 05:00) */
         .night-active { background-color: #000000 !important; } 
         .night-active #photo-container, .night-active #bottom-container { display: none !important; }
         .night-active #frame-wrapper { background-color: #000000 !important; box-shadow: none !important; border-color: transparent !important; }
         .night-active .hours-style { color: #ffffff !important; } 
-        .night-active #info-container { text-shadow: none !important; align-items: center !important; } /* Đêm căn giữa đồng trục chống cháy màn hình */
+        .night-active #info-container { text-shadow: none !important; align-items: center !important; } 
 
-        /* RESPONSIVE */
         @media (max-width: 900px) {
             html { font-size: 13px; } 
             #frame-wrapper { top: 35px; left: 30px; right: 30px; bottom: 35px; } 
@@ -143,8 +138,8 @@
         @media (max-width: 480px) {
             html { font-size: 9.5px; } 
             #frame-wrapper { top: 15px; left: 15px; right: 15px; bottom: 15px; } 
-            #info-container { top: 20px; left: 20px; } 
-            #bottom-container { flex-direction: column; align-items: flex-start; bottom: 15px; left: 20px; right: 20px; gap: 10px; }
+            #info-container { top: 20px; left: 15px; } 
+            #bottom-container { flex-direction: column; align-items: flex-start; bottom: 15px; left: 15px; right: 15px; gap: 10px; }
             #temp-zone { margin-right: 0; flex-direction: row; align-items: center; gap: 10px; }
             #info-rows { max-width: 100%; }
         }
@@ -182,8 +177,11 @@
                     <span class="bar-separator">|</span>
                     <span id="date-lunar-small">00/0/0000 AL</span>
                 </div>
-                <div id="event-row">Đang tính lịch sự kiện...</div>
-                <div id="env-row">AQI: --</div>
+                <div id="mid-row">
+                    <span class="event-text" id="event-span">Đang tính lịch sự kiện...</span>
+                    <span class="bar-separator">|</span>
+                    <span class="env-text" id="env-span">AQI: --</span>
+                </div>
                 <div id="quote-row">Đang tải dữ liệu đặc sản vùng miền...</div>
             </div>
         </div>
@@ -216,7 +214,7 @@
         var audioCtx = null; 
         var isGroup1Active = true; 
         var audioUnlocked = false;
-        var isManualNight = false; // Biến kích hoạt Đêm thủ công
+        var isManualNight = false; 
 
         var globalAQI = "--", globalHum = "--", globalRain = "--", globalSunrise = "--", globalSunset = "--";
         var envDisplayIndex = 0; 
@@ -243,40 +241,35 @@
             hideTimeout = setTimeout(function() { panel.classList.remove('active-panel'); }, 3000);
         }
 
-        // TÍNH NĂNG ÉP CHẾ ĐỘ BAN ĐÊM THỦ CÔNG ĐẾN SÁNG HÔM SAU
         function triggerManualNightMode() {
             isManualNight = true;
             document.body.classList.add('night-active');
             applyDynamicPositions();
         }
 
-        // HÀM KÍCH HOẠT CHUÔNG ĐÔI ĐA TẦN (TIẾNG CHUÔNG NGÂN VANG TO VÀ HAY HƠN)
         function playHourlyChime(currentHour) {
-            if (!isManualNight && (currentHour < 6 || currentHour >= 21)) return; // Khóa chuông đêm tự động
-            if (isManualNight) return; // Đang bật Đêm thủ công thì im lặng tuyệt đối
+            if (!isManualNight && (currentHour < 6 || currentHour >= 21)) return; 
+            if (isManualNight) return; 
             if (!audioCtx) return;
             try {
                 if (audioCtx.state === 'suspended') audioCtx.resume();
                 
                 var nowTime = audioCtx.currentTime;
-                
-                // --- TIẾNG ĐINH (Hợp âm kép nốt La khổng lồ ngân cực cao) ---
                 var osc1a = audioCtx.createOscillator(); var gain1a = audioCtx.createGain();
                 var osc1b = audioCtx.createOscillator();
-                osc1a.type = 'sine'; osc1a.frequency.setValueAtTime(880, nowTime); // Nốt A5 chính
-                osc1b.type = 'sine'; osc1b.frequency.setValueAtTime(882, nowTime); // Lệch tần tạo tiếng ngân rung nghệ thuật
+                osc1a.type = 'sine'; osc1a.frequency.setValueAtTime(880, nowTime); 
+                osc1b.type = 'sine'; osc1b.frequency.setValueAtTime(882, nowTime); 
                 gain1a.gain.setValueAtTime(0.25, nowTime); gain1a.gain.exponentialRampToValueAtTime(0.001, nowTime + 0.9);
                 osc1a.connect(gain1a); osc1b.connect(gain1a); gain1a.connect(audioCtx.destination);
                 osc1a.start(nowTime); osc1b.start(nowTime); osc1a.stop(nowTime + 0.9); osc1b.stop(nowTime + 0.9);
                 
-                // --- TIẾNG ĐOONG (Tổ hợp âm trầm nốt Mi vang dội sau 350 mili giây) ---
                 setTimeout(function() {
                     if (audioCtx.state === 'suspended') audioCtx.resume();
                     var playTime = audioCtx.currentTime;
                     var osc2a = audioCtx.createOscillator(); var gain2 = audioCtx.createGain();
                     var osc2b = audioCtx.createOscillator();
-                    osc2a.type = 'sine'; osc2a.frequency.setValueAtTime(659.25, playTime); // Nốt E5 trầm ấm
-                    osc2b.type = 'sine'; osc2b.frequency.setValueAtTime(329.63, playTime); // Trầm vĩ đại E4 (To hơn)
+                    osc2a.type = 'sine'; osc2a.frequency.setValueAtTime(659.25, playTime); 
+                    osc2b.type = 'sine'; osc2b.frequency.setValueAtTime(329.63, playTime); 
                     gain2.gain.setValueAtTime(0.3, playTime); gain2.gain.exponentialRampToValueAtTime(0.001, playTime + 1.5);
                     osc2a.connect(gain2); osc2b.connect(gain2); gain2.connect(audioCtx.destination);
                     osc2a.start(playTime); osc2b.start(playTime); osc2a.stop(playTime + 1.5); osc2b.stop(playTime + 1.5);
@@ -284,7 +277,6 @@
             } catch(e) {}
         }
 
-        // Nút bấm thử chuông hằng tiếng bất cứ lúc nào bạn thích
         function forcePlayChime() {
             if (!audioUnlocked) { activateControls(); }
             setTimeout(function() { playHourlyChime(12); }, 100);
@@ -308,7 +300,9 @@
                 infoNode.style.top = "50%"; infoNode.style.left = "50%";
                 infoNode.style.transform = "translate(-50%, -50%) translate(" + burnInX1 + "px, " + burnInY1 + "px)";
             } else {
-                infoNode.style.top = "40px"; infoNode.style.left = "40px";
+                infoNode.style.top = "40px"; 
+                // ĐÃ SỬA: Ép Đồng hồ dịch sát vào lề trái ở mốc 20px
+                infoNode.style.left = "20px";
                 infoNode.style.transform = "translate(" + burnInX1 + "px, " + burnInY1 + "px)";
             }
             if (bottomNode) bottomNode.style.transform = "translate(" + burnInX2 + "px, 0px)";
@@ -340,192 +334,22 @@
             var now = new Date();
             
             var days = ['Chủ Nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
-            document.getElementById('top-day-text').innerText = days[now.getDay()]; // Thứ độc lập trên đầu nhiệt độ
+            document.getElementById('top-day-text').innerText = days[now.getDay()]; 
             
-            // Format hàng ngày Dương và Âm riêng rẽ
             document.getElementById('date-solar-big').innerText = 'Ngày ' + now.getDate() + '/' + (now.getMonth() + 1) + '/' + now.getFullYear();
             document.getElementById('date-lunar-small').innerText = getLunarFormat(now);
 
+            // Đã rút gọn từ ngữ môi trường để dễ ghép chung 1 dòng với Sự kiện
             var envPool = [
-                'Chỉ số không khí Đắk Lắk hằng giờ: AQI <span class="highlight-yellow">' + globalAQI + '</span>',
-                'Độ ẩm môi trường: <span class="highlight-yellow">' + globalHum + '</span>',
-                'Khả năng có mưa giông: <span class="highlight-yellow">' + globalRain + '</span>',
-                'Bình minh đại ngàn: <span class="highlight-yellow">' + globalSunrise + '</span>',
-                'Hoàng hôn buông lờ: <span class="highlight-yellow">' + globalSunset + '</span>',
-                'Độ cao địa phương so với mặt nước biển: <span class="highlight-yellow">536m</span>'
+                'AQI Đắk Lắk: <span class="highlight-yellow">' + globalAQI + '</span>',
+                'Độ ẩm: <span class="highlight-yellow">' + globalHum + '</span>',
+                'Khả năng mưa: <span class="highlight-yellow">' + globalRain + '</span>',
+                'Bình minh: <span class="highlight-yellow">' + globalSunrise + '</span>',
+                'Hoàng hôn: <span class="highlight-yellow">' + globalSunset + '</span>',
+                'Độ cao địa hình: <span class="highlight-yellow">536m</span>'
             ];
             var currentEnv = envPool[envDisplayIndex % envPool.length];
             envDisplayIndex++; 
 
             var targetTetAm = new Date(2027, 1, 6); var targetTetDuong = new Date(2027, 0, 1);
-            var targetNoel = new Date(2026, 11, 25); var targetTrungThu = new Date(2026, 8, 25);
-            var targetPhatDan = new Date(2026, 4, 31); var targetQuocKhanh = new Date(2026, 8, 2);
-
-            var eventPool = [];
-            var daysToTetAm = Math.ceil((targetTetAm - now) / 86400000); if (daysToTetAm > 0) eventPool.push('Còn ' + daysToTetAm + ' ngày đến Tết Nguyên Đán Đinh Mùi 2027 🧧');
-            var daysToTetDuong = Math.ceil((targetTetDuong - now) / 86400000); if (daysToTetDuong > 0) eventPool.push('Còn ' + daysToTetDuong + ' ngày đến Tết Dương Lịch 2027 🌸');
-            var daysToNoel = Math.ceil((targetNoel - now) / 86400000); if (daysToNoel > 0) eventPool.push('Còn ' + daysToNoel + ' ngày đến Đại lễ Giáng Sinh Giáng 🎄');
-            var daysToTrungThu = Math.ceil((targetTrungThu - now) / 86400000); if (daysToTrungThu > 0) eventPool.push('Còn ' + daysToTrungThu + ' ngày đến Tết Trung Thu rước đèn 🥮');
-            var daysToPhatDan = Math.ceil((targetPhatDan - now) / 86400000); if (daysToPhatDan > 0) eventPool.push('Còn ' + daysToPhatDan + ' ngày đến Đại lễ Phật Đản Phật Giáo 🙏');
-            var daysToQuocKhanh = Math.ceil((targetQuocKhanh - now) / 86400000); if (daysToQuocKhanh > 0) eventPool.push('Còn ' + daysToQuocKhanh + ' ngày đến Đại lễ Quốc Khánh 2/9 🇨🇳');
-            
-            eventPool.push("🌕 Sắp đến ngày Rằm Âm Lịch hằng tháng - Thành kính hướng về tổ tiên");
-            eventPool.push("🌱 Sắp đến ngày Mùng 1 Âm Lịch đầu tháng - Khởi đầu tháng mới bình an");
-
-            var quotePool = [
-                "Mùa bơ sáp Đắk Lắk chín quả vàng, ruột dẻo thơm béo ngậy đặc sản đất đỏ Tây Nguyên.",
-                "Thưởng thức ly cà phê Buôn Ma Thuột đậm đặc đắng nồng giữa đại ngàn lộng gió.",
-                "Mùa sầu riêng Dona Đắk Lắk thơm nức mũi, cơm dày hạt lép ngọt ngào say đắm.",
-                "Mùa thu Hà Nội nồng nàn hương cốm Vòng mộc mạc xanh non gói trong lá sen.",
-                "Ghé thăm Sa Pa mùa lúa chín vàng óng ả đổ tràn trên những ruộng bậc thang kì vĩ.",
-                "Thưởng thức gỏi lá Kon Tum - Hội tụ tinh hoa ẩm thực của hơn 40 loại lá rừng núi.",
-                "Mùa hoa dã quỳ nở rực rỡ nhuộm vàng rực khắp các cung đường đất đỏ bazan Tây Nguyên.",
-                "Thưởng thức cá bống thác kho tộ đậm đà cay nồng ăn cùng cơm lam Bản Đôn dẻo thơm.",
-                "Gia đình là nơi cuộc sống bắt đầu và tình yêu không bao giờ kết thúc.",
-                "Nhà là nơi bão dừng sau cánh cửa, nơi bình yên ấm áp nhất để trở về."
-            ];
-
-            // Trộn ngẫu nhiên thực sự (Lật trang bốc câu chữ bất ngờ)
-            var randomEvent = eventPool[Math.floor(Math.random() * eventPool.length)];
-            var randomQuote = quotePool[Math.floor(Math.random() * quotePool.length)];
-
-            document.getElementById('event-row').innerHTML = randomEvent; 
-            document.getElementById('env-row').innerHTML = currentEnv;
-            document.getElementById('bottom-row').innerText = '"' + randomQuote + '"';
-        }
-
-        function updateClock() {
-            var now = new Date(); var hours = now.getHours(); var minutes = now.getMinutes();
-            
-            // Reset chế độ đêm thủ công khi trời sáng (Từ 5h sáng trở đi)
-            if (hours === 5 && minutes === 0) { isManualNight = false; }
-
-            var hrStr = hours < 10 ? '0' + hours : hours; var minStr = minutes < 10 ? '0' + minutes : minutes;
-            document.getElementById('hr-node').innerText = hrStr;
-            document.getElementById('min-node').innerText = minStr;
-
-            // Kiểm tra khung Đêm tự động (nếu không bật Thủ công)
-            if (!isManualNight) {
-                if (hours >= 21 || hours < 5) document.body.classList.add('night-active');
-                else document.body.classList.remove('night-active');
-            }
-
-            applyDynamicPositions();
-
-            if (minutes === 0 && hours !== lastChimeHour) { playHourlyChime(hours); lastChimeHour = hours; }
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-
-        function updateWeatherAndAQI() {
-            var lat = 12.6667; var lon = 108.0500;
-            
-            var xhrWeather = new XMLHttpRequest();
-            xhrWeather.open('GET', 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon + '&current=temperature_2m,relative_humidity_2m,precipitation_probability&daily=sunrise,sunset&timezone=Asia%2FHo_Chi_Minh', true);
-            xhrWeather.onreadystatechange = function() {
-                if (xhrWeather.readyState === 4 && xhrWeather.status === 200) {
-                    var data = JSON.parse(xhrWeather.responseText);
-                    document.getElementById('weather-temp').innerText = Math.round(data.current.temperature_2m) + '°';
-                    
-                    globalHum = data.current.relative_humidity_2m + '%';
-                    globalRain = data.current.precipitation_probability + '%';
-                    if(data.daily && data.daily.sunrise && data.daily.sunrise[0]) {
-                        globalSunrise = data.daily.sunrise[0].substring(11, 16);
-                        globalSunset = data.daily.sunset[0].substring(11, 16);
-                    }
-                }
-            };
-            xhrWeather.send();
-
-            var xhrAQI = new XMLHttpRequest();
-            xhrAQI.open('GET', 'https://air-quality-api.open-meteo.com/v1/air-quality?latitude=' + lat + '&longitude=' + lon + '&current=us_aqi&_t=' + new Date().getTime(), true);
-            xhrAQI.onreadystatechange = function() {
-                if (xhrAQI.readyState === 4) {
-                    if (xhrAQI.status === 200) {
-                        var data = JSON.parse(xhrAQI.responseText);
-                        globalAQI = data.current.us_aqi; 
-                    } else {
-                        globalAQI = Math.floor(Math.random() * 16) + 40;
-                    }
-                }
-            };
-            xhrAQI.send();
-        }
-        updateWeatherAndAQI();
-        setInterval(updateWeatherAndAQI, 600000);
-
-        function fetchImagesFromDrive() {
-            var query = encodeURIComponent("'" + FOLDER_ID + "' in parents and mimeType contains 'image/'");
-            var url = 'https://www.googleapis.com/drive/v3/files?q=' + query + '&key=' + API_KEY + '&fields=files(id)';
-            
-            var xhrDrive = new XMLHttpRequest();
-            xhrDrive.open('GET', url, true);
-            xhrDrive.onreadystatechange = function() {
-                if (xhrDrive.readyState === 4) {
-                    if (xhrDrive.status === 200) {
-                        var data = JSON.parse(xhrDrive.responseText);
-                        if (data.files && data.files.length > 0) {
-                            images = [];
-                            for (var i = 0; i < data.files.length; i++) {
-                                images.push('https://drive.google.com/thumbnail?id=' + data.files[i].id + '&sz=w2048');
-                            }
-                            for (var k = images.length - 1; k > 0; k--) {
-                                var j = Math.floor(Math.random() * (k + 1));
-                                var temp = images[k]; images[k] = images[j]; images[j] = temp;
-                            }
-                            initSlideshow();
-                        }
-                    } else { setTimeout(fetchImagesFromDrive, 5000); }
-                }
-            };
-            xhrDrive.send();
-        }
-
-        function initSlideshow() {
-            document.getElementById('bg1').src = images[0];
-            document.getElementById('fg1').src = images[0];
-            changeIntervalMode(currentActiveMode);
-        }
-
-        function changeIntervalMode(modeVal) {
-            currentActiveMode = modeVal;
-            var seconds = stepSeconds[modeVal];
-            
-            var btns = document.querySelectorAll('.speed-btn');
-            for (var i = 0; i < btns.length; i++) {
-                if ((i + 1) === modeVal) btns[i].classList.add('active'); else btns[i].classList.remove('active');
-            }
-
-            if (slideInterval) clearInterval(slideInterval);
-            updateDynamicContentBySlide();
-
-            slideInterval = setInterval(function() {
-                var nextIndex = (currentIndex + 1) % images.length;
-                
-                var currentGroup = document.getElementById(isGroup1Active ? 'group1' : 'group2');
-                var nextGroup = document.getElementById(isGroup1Active ? 'group2' : 'group1');
-                var nextBg = document.getElementById(isGroup1Active ? 'bg2' : 'bg1');
-                var nextFg = document.getElementById(isGroup1Active ? 'fg2' : 'fg1');
-                var textZone = document.getElementById('info-rows');
-
-                textZone.classList.add('hidden');
-
-                nextFg.onload = function() {
-                    currentGroup.classList.remove('active');
-                    nextGroup.classList.add('active');
-                    isGroup1Active = !isGroup1Active;
-                    currentIndex = nextIndex;
-                    
-                    updateDynamicContentBySlide();
-                    textZone.classList.remove('hidden');
-                };
-                
-                nextBg.src = images[nextIndex];
-                nextFg.src = images[nextIndex];
-            }, seconds * 1000);
-        }
-
-        fetchImagesFromDrive();
-    </script>
-</body>
-</html>
+            var targetNoel = new Date(2026, 11, 25); var targetTrungThu
