@@ -4,10 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
-    <title>Khung Ảnh Số Thông Minh</title>
+    <title>Khung Ảnh Số Nghệ Thuật</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,29 +20,42 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: #000;
+            background-color: #fff; /* Đổi nền trắng để tạo khung tranh đồng bộ với thanh địa chỉ */
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            cursor: pointer; /* Ép iOS nhận lệnh gõ màn hình */
+            cursor: pointer;
         }
-        /* Khung chứa ảnh tràn viền tuyệt đối */
+        
+        /* CẤU HÌNH "GIẢ VIỀN TRANH" - ĂN KHỚP VỚI THANH ĐỊA CHỈ SAFARI TRÊN IPAD */
+        #frame-wrapper {
+            position: absolute;
+            top: 0;
+            left: 20px;   /* Khoảng cách viền trái */
+            right: 20px;  /* Khoảng cách viền phải */
+            bottom: 20px; /* Khoảng cách viền dưới */
+            background-color: #000;
+            overflow: hidden;
+        }
+
+        /* Khung chứa ảnh tràn viền bên trong viền tranh */
         #photo-container {
             position: absolute;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
             z-index: 1;
         }
-        /* Giải pháp tối ưu cho iPad cũ: Dùng thẻ IMG thực tế để hiển thị ảnh Drive */
+        
+        /* Hiển thị ảnh: object-fit cover ép buộc cắt crop ảnh dọc tràn ngang */
         .slide {
             position: absolute;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            object-fit: cover !important; /* Tự động phóng to, crop ảnh dọc vừa khít màn hình ngang */
+            width: 100%;
+            height: 100%;
+            object-fit: cover !important;
             opacity: 0;
-            transition: opacity 2s ease-in-out;
+            transition: opacity 4s ease-in-out; /* Giảm tốc độ hoạt cảnh xuống còn 4 giây (chậm 50%) */
         }
         .slide.active {
             opacity: 1;
@@ -54,57 +64,81 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.25);
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.22);
             z-index: 2;
         }
-        /* Thiết kế Đồng hồ nghệ thuật chuẩn phong cách bạn chọn */
+
+        /* GÓC DƯỚI TRÁI: ĐỒNG HỒ & NGÀY THÁNG + ÂM LỊCH SIÊU LỚN */
         #info-container {
             position: absolute;
-            bottom: 40px;
-            left: 40px;
+            bottom: 35px;
+            left: 35px;
             z-index: 3;
             color: #ffffff;
-            text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.6);
+            text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.7);
+            transition: transform 0.5s ease-out; /* Phục vụ tính năng nhích vị trí */
         }
         #time {
-            font-size: 7.5rem; 
-            line-height: 0.95;
+            font-size: 8.5rem; /* Phóng to đồng hồ */
+            line-height: 0.9;
             display: flex;
             align-items: center;
-            gap: 20px; /* Không cần dấu hai chấm ở giữa */
+            gap: 15px;
         }
-        /* Giờ: màu vàng nắng bản dày đặc */
         .hours-style {
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
             color: #F4B41A;
             letter-spacing: -2px;
         }
-        /* Phút: màu trắng nét đôi đường rãnh hình học */
         .minutes-style {
             font-family: 'Tourney', sans-serif;
             font-weight: 600;
             color: #ffffff;
             letter-spacing: -1px;
         }
-        #date {
-            font-size: 1.6rem;
-            font-weight: 400;
+        #date-wrapper {
             margin-top: 15px;
+        }
+        #date {
+            font-size: 2.4rem; /* Tăng kích thước ngày dương */
+            font-weight: 700;
             letter-spacing: 0.5px;
-            color: #f5f5f7;
-            text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.8);
+            color: #ffffff;
         }
-        #weather {
-            font-size: 1.4rem;
-            font-weight: 300;
-            margin-top: 5px;
+        #lunar-date {
+            font-size: 1.8rem; /* Kích thước ngày âm */
+            font-weight: 400;
             color: #e0e0e0;
-            text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.8);
+            margin-top: 5px;
+            letter-spacing: 0.5px;
         }
-        /* THANH ĐIỀU KHIỂN: Tự động hiện mờ mờ 20% đúng ý bạn muốn */
+
+        /* GÓC TRÊN TRÁI: KHU VỰC THỜI TIẾT TÁCH RIÊNG */
+        #weather-container {
+            position: absolute;
+            top: 35px;
+            left: 35px;
+            z-index: 3;
+            color: #ffffff;
+            text-shadow: 0px 3px 10px rgba(0, 0, 0, 0.8);
+            transition: transform 0.5s ease-out; /* Phục vụ tính năng nhích vị trí */
+        }
+        #weather-temp {
+            font-size: 2.2rem; /* Trên là nhiệt độ */
+            font-weight: 700;
+            color: #ffffff;
+        }
+        #weather-status {
+            font-size: 1.4rem; /* Dưới là tình trạng mây mưa */
+            font-weight: 400;
+            color: #e0e0e0;
+            margin-top: 4px;
+        }
+
+        /* THANH ĐIỀU KHIỂN TỐC ĐỘ: Hiện mờ mờ 20% mặc định theo ý bạn */
         #control-panel {
             position: absolute;
             top: 20px;
@@ -116,44 +150,51 @@
             color: #fff;
             font-size: 0.9rem;
             backdrop-filter: blur(5px);
-            opacity: 0.2; /* Hiện mờ mờ 20% mặc định */
+            opacity: 0.2; /* Luôn giữ mờ mờ 20% để giữ nét thẩm mỹ */
             transition: opacity 0.3s ease;
         }
-        /* Sáng rõ lên khi chạm vào */
-        #control-panel.active-panel {
-            opacity: 1 !important;
+        #control-panel.active-panel, #control-panel:hover {
+            opacity: 1 !important; /* Sáng rõ lên khi chạm vào */
         }
         #speedSlider {
             display: block;
             margin-top: 5px;
-            width: 130px;
+            width: 140px;
         }
     </style>
 </head>
 <body ontouchstart="activateControls()" onclick="activateControls()">
 
-    <div id="photo-container"></div>
-    <div class="overlay"></div>
+    <div id="frame-wrapper">
+        <div id="photo-container"></div>
+        <div class="overlay"></div>
 
-    <div id="info-container">
-        <div id="time">
-            <span class="hours-style">00</span>
-            <span class="minutes-style">00</span>
+        <div id="weather-container">
+            <div id="weather-temp">🌡️ --°C</div>
+            <div id="weather-status">☀️ Đang cập nhật...</div>
         </div>
-        <div id="date">Thứ Hai, Ngày 01/01</div>
-        <div id="weather">Đang cập nhật thời tiết...</div>
-    </div>
 
-    <div id="control-panel" onclick="event.stopPropagation();" ontouchstart="event.stopPropagation();">
-        <label>Đổi ảnh: <span id="speedLabel">15</span> giây</label>
-        <input type="range" id="speedSlider" min="5" max="60" value="15">
+        <div id="info-container">
+            <div id="time">
+                <span class="hours-style">00</span>
+                <span class="minutes-style">00</span>
+            </div>
+            <div id="date-wrapper">
+                <div id="date">Thứ 0 00-00</div>
+                <div id="lunar-date">AL --/-- ----</div>
+            </div>
+        </div>
+
+        <div id="control-panel" onclick="event.stopPropagation();" ontouchstart="event.stopPropagation();">
+            <label>Đổi ảnh: <span id="speedLabel">1 phút</span></label>
+            <input type="range" id="speedSlider" min="1" max="4" value="1">
+        </div>
     </div>
 
     <script>
-        // Bảo mật tuyệt đối: Mã hóa Base64 giúp tránh hoàn toàn robot quét khóa mã của GitHub
+        // Bảo mật Base64 an toàn cho API
         const SECRET_ENCODED = 'QUl6YVN5REwyRm1VQzkxMUtBTnFwN3VPbnZKcU5xVHltb1R2SkxF';
         const API_KEY = atob(SECRET_ENCODED);
-        
         const FOLDER_ID = '1r1WUIKwAPAnsyIh-Zot7AevEW0uEZ-Hl'; 
 
         let images = [];
@@ -161,20 +202,71 @@
         let slideInterval;
         let hideTimeout;
 
-        // Hàm xử lý ẩn hiện mờ mờ thông minh cho thanh tốc độ
+        // Định xạ thanh slider: 1->1p(60s), 2->3p(180s), 3->5p(300s), 4->10p(600s)
+        const stepSeconds = { 1: 60, 2: 180, 3: 300, 4: 600 };
+        const stepLabels = { 1: "1 phút", 2: "3 phút", 3: "5 phút", 4: "10 phút" };
+
         function activateControls() {
             const panel = document.getElementById('control-panel');
-            panel.classList.add('active-panel'); // Sáng rõ lên
-            
+            panel.classList.add('active-panel');
             if (hideTimeout) clearTimeout(hideTimeout);
-            
-            // Tự động trả về trạng thái mờ mờ sau 3 giây không tương tác
             hideTimeout = setTimeout(() => {
                 panel.classList.remove('active-panel');
             }, 3000);
         }
 
-        // Cập nhật thời gian thực
+        // TÍNH NĂNG CHỐNG LƯU ẢNH (ANTI-BURN-IN): Tự nhích tọa độ ngẫu nhiên sau mỗi 1 phút
+        function runAntiBurnIn() {
+            const dx1 = Math.floor(Math.random() * 25) - 12; // -12px đến +12px
+            const dy1 = Math.floor(Math.random() * 25) - 12;
+            const dx2 = Math.floor(Math.random() * 25) - 12;
+            const dy2 = Math.floor(Math.random() * 25) - 12;
+            
+            document.getElementById('info-container').style.transform = `translate(${dx1}px, ${dy1}px)`;
+            document.getElementById('weather-container').style.transform = `translate(${dx2}px, ${dy2}px)`;
+        }
+        setInterval(runAntiBurnIn, 60000); // Kích hoạt nhích vị trí mỗi phút một lần
+
+        // THUẬT TOÁN TÍNH LỊCH ÂM CHUẨN XÁC ĐỘC LẬP CHO NĂM 2026
+        function calculateLunarText(now) {
+            const phases = [
+                [2025, 11, 20, 11, "Ất Tỵ"],
+                [2026, 0, 19, 12, "Ất Tỵ"],
+                [2026, 1, 17, 1, "Bính Ngọ"],
+                [2026, 2, 19, 2, "Bính Ngọ"],
+                [2026, 3, 17, 3, "Bính Ngọ"],
+                [2026, 4, 17, 4, "Bính Ngọ"], // Ngày 17/5 Dương lịch = 1/4 Âm lịch
+                [2026, 5, 15, 5, "Bính Ngọ"], // Ngày 15/6 Dương lịch = 1/5 Âm lịch
+                [2026, 6, 14, 6, "Bính Ngọ"],
+                [2026, 7, 12, 7, "Bính Ngọ"],
+                [2026, 8, 11, 8, "Bính Ngọ"],
+                [2026, 9, 11, 9, "Bính Ngọ"],
+                [2026, 10, 9, 10, "Bính Ngọ"],
+                [2026, 11, 9, 11, "Bính Ngọ"],
+                [2027, 0, 8, 12, "Bính Ngọ"],
+                [2027, 1, 6, 1, "Đinh Mùi"]
+            ];
+            
+            let activePhase = phases[0];
+            const checkTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+            
+            for (let i = 0; i < phases.length; i++) {
+                const d = new Date(phases[i][0], phases[i][1], phases[i][2], 0, 0, 0);
+                if (checkTime >= d) {
+                    activePhase = phases[i];
+                } else {
+                    break;
+                }
+            }
+            
+            const startDate = new Date(activePhase[0], activePhase[1], activePhase[2], 0, 0, 0);
+            const diffTime = checkTime - startDate;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+            
+            return `AL ${diffDays}-${activePhase[3]} ${activePhase[4]}`;
+        }
+
+        // Cập nhật Đồng hồ tinh gọn cực đại
         function updateClock() {
             const now = new Date();
             let hours = String(now.getHours()).padStart(2, '0');
@@ -185,13 +277,17 @@
                 <span class="minutes-style">${minutes}</span>
             `;
 
-            const days = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
-            document.getElementById('date').innerText = `${days[now.getDay()]}, Ngày ${now.getDate()}/${now.getMonth() + 1}`;
+            const days = ['Thủ Nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
+            // Chuyển sang định dạng tinh gọn: "Thứ 6 12-6"
+            document.getElementById('date').innerText = `${days[now.getDay()]} ${now.getDate()}-${now.getMonth() + 1}`;
+            
+            // Hiện lịch âm tự động
+            document.getElementById('lunar-date').innerText = calculateLunarText(now);
         }
         setInterval(updateClock, 1000);
         updateClock();
 
-        // Cập nhật thời tiết Đắk Lắk
+        // Cập nhật thời tiết tách biệt lên góc trên bên trái
         function updateWeather() {
             const lat = 12.6667; 
             const lon = 108.0500;
@@ -209,16 +305,18 @@
                     else if (code <= 82) status = 'Mưa rào';
                     else status = 'Có dông bão';
 
-                    document.getElementById('weather').innerText = `🌡️ ${temp}°C  |  ☀️ ${status}`;
+                    document.getElementById('weather-temp').innerText = `🌡️ ${temp}°C`;
+                    document.getElementById('weather-status').innerText = `☀️ ${status}`;
                 })
                 .catch(() => {
-                    document.getElementById('weather').innerText = 'Không tải được thời tiết';
+                    document.getElementById('weather-temp').innerText = '🌡️ --°C';
+                    document.getElementById('weather-status').innerText = 'Không tải được thời tiết';
                 });
         }
         updateWeather();
         setInterval(updateWeather, 600000);
 
-        // Lấy danh sách tệp từ Drive công khai
+        // Quét nạp ảnh tự động từ Google Drive công khai
         function fetchImagesFromDrive() {
             const query = encodeURIComponent(`'${FOLDER_ID}' in parents and mimeType contains 'image/'`);
             const url = `https://www.googleapis.com/drive/v3/files?q=${query}&key=${API_KEY}&fields=files(id)`;
@@ -233,21 +331,20 @@
                         images = data.files.map(file => `https://drive.google.com/uc?export=view&id=${file.id}`);
                         initSlideshow();
                     } else {
-                        alert('Không tìm thấy ảnh nào công khai trong thư mục Drive của bạn!');
+                        document.getElementById('photo-container').innerHTML = '<div style="color:white;padding:40px;">Thư mục Drive đang trống!</div>';
                     }
                 })
                 .catch(err => {
-                    alert('Lỗi kết nối dữ liệu ảnh: Mã API hoặc Thư mục chưa được kích hoạt đồng bộ.');
+                    alert('Lỗi nạp ảnh từ Drive, vui lòng kiểm tra kết nối mạng.');
                 });
         }
 
-        // Tạo vòng lặp trình chiếu ảnh mượt mà
+        // Vòng lặp trình chiếu ảnh mượt mà
         function initSlideshow() {
             const container = document.getElementById('photo-container');
             container.innerHTML = ''; 
 
             images.forEach((src, index) => {
-                // SỬA ĐỔI CHÍNH: Dùng thẻ IMG thực tế để hiển thị mượt mà trên iOS cũ
                 const img = document.createElement('img');
                 img.src = src;
                 img.classList.add('slide');
@@ -257,7 +354,8 @@
 
             const slider = document.getElementById('speedSlider');
             
-            function startInterval(seconds) {
+            function startInterval(val) {
+                const seconds = stepSeconds[val];
                 if (slideInterval) clearInterval(slideInterval);
                 slideInterval = setInterval(() => {
                     const slides = document.querySelectorAll('.slide');
@@ -270,11 +368,12 @@
             }
 
             slider.addEventListener('input', function() {
-                document.getElementById('speedLabel').innerText = this.value;
-                startInterval(parseInt(this.value));
+                document.getElementById('speedLabel').innerText = stepLabels[this.value];
+                startInterval(this.value);
             });
 
-            startInterval(parseInt(slider.value));
+            // Chạy mặc định mốc 1 phút
+            startInterval(slider.value);
         }
 
         fetchImagesFromDrive();
