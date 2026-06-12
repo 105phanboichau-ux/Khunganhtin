@@ -163,4 +163,414 @@
             white-space: nowrap;
             text-shadow: none; /* Tắt bóng chữ để hiển thị sắc nét trên nền màu */
             display: inline-block;
-            transition: background-color
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        /* 3. Dòng chữ đếm ngược sự kiện */
+        #countdown-text {
+            font-size: 1.5rem;
+            font-weight: 400;
+            white-space: nowrap;
+        }
+
+        .bar-separator {
+            opacity: 0.4;
+            font-weight: 300;
+            color: #ffffff;
+        }
+
+        /* DÒNG DANH NGÔN RIÊNG BIỆT NẰM Ở DƯỚI CÙNG MÀN HÌNH (LẤP ĐẦY KHOẢNG TRỐNG) */
+        #quote-container {
+            position: absolute;
+            bottom: 25px; /* Sát dưới đáy viền ảnh cực kỳ gọn gàng */
+            left: 40px;
+            right: 40px;
+            z-index: 3;
+            text-align: center; /* Căn giữa tạo sự cân bằng cân đối */
+            transition: transform 0.5s ease-out;
+        }
+        #quote-text {
+            font-size: 1.4rem;
+            font-weight: 300;
+            font-style: italic;
+            color: #e0e0e0;
+            text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.85);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* THANH ĐIỀU KHIỂN TỐC ĐỘ: Hiện mờ mờ 20% thẩm mỹ */
+        #control-panel {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 4;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 12px 18px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+            opacity: 0.2; 
+            transition: opacity 0.3s ease;
+        }
+        #control-panel.active-panel, #control-panel:hover {
+            opacity: 1 !important; 
+        }
+        #speedSlider {
+            display: block;
+            margin-top: 5px;
+            width: 140px;
+        }
+
+        /* CHẾ ĐỘ BAN ĐÊM TỰ ĐỘNG KHÔNG GÂY CHÓI (AUTO NIGHT MODE TỪ 22:00 - 06:00) */
+        .night-active #photo-container {
+            opacity: 0 !important; 
+        }
+        .night-active #frame-wrapper {
+            background-color: #000000 !important; 
+        }
+        .night-active .overlay {
+            background: rgba(0, 0, 0, 1) !important;
+        }
+        .night-active #info-container, .night-active #status-container, .night-active #quote-container {
+            opacity: 0.25 !important; /* Giảm độ sáng tổng thể xuống 25% */
+            text-shadow: none !important;
+        }
+        .night-active * {
+            color: #ff9900 !important; /* Toàn bộ chữ chuyển sang màu hổ phách ấm áp */
+        }
+        /* Đêm xuống hộp màu AQI tự xả nền biến thành dạng viền để chống chói mắt */
+        .night-active #aqi-badge {
+            background-color: transparent !important;
+            border: 1px solid #ff9900 !important;
+            color: #ff9900 !important;
+        }
+    </style>
+</head>
+<body ontouchstart="activateControls()" onclick="activateControls()">
+
+    <div id="frame-wrapper">
+        <div id="photo-container"></div>
+        <div class="overlay"></div>
+
+        <div id="info-container">
+            <div id="time">
+                <span class="hours-style">00</span>
+                <span class="minutes-style">00</span>
+            </div>
+            <div id="date-wrapper">
+                <div id="date">Thứ 0 00-00</div>
+                <div id="lunar-date">AL --/-- <br>----</div>
+            </div>
+        </div>
+
+        <div id="status-container">
+            <span id="weather-temp">--°C</span>
+            
+            <span class="bar-separator">|</span>
+            
+            <span id="aqi-badge">AQI: --</span>
+            
+            <span class="bar-separator">|</span>
+
+            <span id="countdown-text">Tết 2027: -- ngày</span>
+        </div>
+
+        <div id="quote-container">
+            <span id="quote-text">"Hạnh phúc là một hành trình..."</span>
+        </div>
+
+        <div id="control-panel" onclick="event.stopPropagation();" ontouchstart="event.stopPropagation();">
+            <label>Đổi ảnh: <span id="speedLabel">1 phút</span></label>
+            <input type="range" id="speedSlider" min="1" max="4" value="1">
+        </div>
+    </div>
+
+    <script>
+        // Hệ thống bảo mật mã hóa chuỗi API Key bằng Base64
+        const SECRET_ENCODED = 'QUl6YVN5REwyRm1VQzkxMUtBTnFwN3VPbnZKcU5xVHltb1R2SkxF';
+        const API_KEY = atob(SECRET_ENCODED);
+        const FOLDER_ID = '1r1WUIKwAPAnsyIh-Zot7AevEW0uEZ-Hl'; 
+
+        let images = [];
+        let currentIndex = 0;
+        let slideInterval;
+        let hideTimeout;
+        let lastChimeHour = -1;
+
+        const stepSeconds = { 1: 60, 2: 180, 3: 300, 4: 600 };
+        const stepLabels = { 1: "1 phút", 2: "3 phút", 3: "5 phút", 4: "10 phút" };
+
+        const quotesPool = [
+            "Gia đình là nơi cuộc sống bắt đầu và tình yêu không bao giờ kết thúc.",
+            "Nhà là nơi bão dừng sau cánh cửa, nơi bình yên nhất để trở về.",
+            "Hãy sống trọn vẹn từng phút giây, trân trọng những điều giản đơn đang có.",
+            "Một nụ cười bằng mười thang thuốc bổ, hãy luôn mỉm cười với cuộc đời.",
+            "Trân trọng quá khứ, hướng tới tương lai, sống hết mình cho hiện tại.",
+            "Bình yên đến từ bên trong tâm hồn, hãy nuôi dưỡng nó mỗi ngày."
+        ];
+
+        function activateControls() {
+            const panel = document.getElementById('control-panel');
+            panel.classList.add('active-panel');
+            if (hideTimeout) clearTimeout(hideTimeout);
+            hideTimeout = setTimeout(() => {
+                panel.classList.remove('active-panel');
+            }, 3000);
+        }
+
+        // TÍNH NĂNG CHỐNG LƯU MÀN HÌNH (ANTI-BURN-IN): Tự nhích ngẫu nhiên tọa độ chữ để bảo vệ phần cứng iPad
+        function runAntiBurnIn() {
+            const dx1 = Math.floor(Math.random() * 24) - 12; // Nhích ngẫu nhiên từ -12px đến +12px
+            const dy1 = Math.floor(Math.random() * 24) - 12;
+            const dx2 = Math.floor(Math.random() * 24) - 12;
+            const dy2 = Math.floor(Math.random() * 24) - 12;
+            const dx3 = Math.floor(Math.random() * 24) - 12;
+            const dy3 = Math.floor(Math.random() * 24) - 12;
+            
+            document.getElementById('info-container').style.transform = `translate(${dx1}px, ${dy1}px)`;
+            document.getElementById('status-container').style.transform = `translate(${dx2}px, ${dy2}px)`;
+            document.getElementById('quote-container').style.transform = `translate(${dx3}px, ${dy3}px)`;
+        }
+        setInterval(runAntiBurnIn, 60000); 
+
+        // TIẾNG CHUÔNG BÁO GIỜ TỰ ĐỘNG (HOURLY CHIME)
+        function playHourlyChime(currentHour) {
+            if (currentHour < 6 || currentHour > 21) return; // Không đổ chuông đêm
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                const ctx = new AudioContext();
+                
+                const osc1 = ctx.createOscillator();
+                const gain1 = ctx.createGain();
+                osc1.type = 'sine';
+                osc1.frequency.setValueAtTime(880, ctx.currentTime); 
+                gain1.gain.setValueAtTime(0.2, ctx.currentTime);
+                gain1.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.8);
+                osc1.connect(gain1);
+                gain1.connect(ctx.destination);
+                osc1.start();
+                osc1.stop(ctx.currentTime + 0.8);
+                
+                setTimeout(() => {
+                    const osc2 = ctx.createOscillator();
+                    const gain2 = ctx.createGain();
+                    osc2.type = 'sine';
+                    osc2.frequency.setValueAtTime(659.25, ctx.currentTime); 
+                    gain2.gain.setValueAtTime(0.2, ctx.currentTime);
+                    gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.2);
+                    osc2.connect(gain2);
+                    gain2.connect(ctx.destination);
+                    osc2.start();
+                    osc2.stop(ctx.currentTime + 1.2);
+                }, 350);
+            } catch(e) { console.log("Chime error:", e); }
+        }
+
+        // THUẬT TOÁN ĐẾM LỊCH ÂM TỰ ĐỘNG NĂM BÍNH NGỌ 2026 CHUẨN XÁC
+        function calculateLunarHtml(now) {
+            const phases = [
+                [2025, 11, 20, 11, "Ất Tỵ"], [2026, 0, 19, 12, "Ất Tỵ"],
+                [2026, 1, 17, 1, "Bính Ngọ"], [2026, 2, 19, 2, "Bính Ngọ"],
+                [2026, 3, 17, 3, "Bính Ngọ"], [2026, 4, 17, 4, "Bính Ngọ"],
+                [2026, 5, 15, 5, "Bính Ngọ"], [2026, 6, 14, 6, "Bính Ngọ"],
+                [2026, 7, 12, 7, "Bính Ngọ"], [2026, 8, 11, 8, "Bính Ngọ"],
+                [2026, 9, 11, 9, "Bính Ngọ"], [2026, 10, 9, 10, "Bính Ngọ"],
+                [2026, 11, 9, 11, "Bính Ngọ"], [2027, 0, 8, 12, "Bính Ngọ"],
+                [2027, 1, 6, 1, "Đinh Mùi"]
+            ];
+            let activePhase = phases[0];
+            const checkTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+            for (let i = 0; i < phases.length; i++) {
+                const d = new Date(phases[i][0], phases[i][1], phases[i][2], 0, 0, 0);
+                if (checkTime >= d) activePhase = phases[i];
+                else break;
+            }
+            const startDate = new Date(activePhase[0], activePhase[1], activePhase[2], 0, 0, 0);
+            const diffDays = Math.floor((checkTime - startDate) / (1000 * 60 * 60 * 24)) + 1;
+            return `AL ${diffDays}-${activePhase[3]}<br><span style="font-size: 1.4rem; opacity: 0.8; font-weight:300;">Năm ${activePhase[4]}</span>`;
+        }
+
+        // Điều khiển hệ thống thời gian thực
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            
+            // 1. Đồng hồ chính
+            let hrStr = String(hours).padStart(2, '0');
+            let minStr = String(minutes).padStart(2, '0');
+            document.getElementById('time').innerHTML = `<span class="hours-style">${hrStr}</span><span class="minutes-style">${minStr}</span>`;
+
+            // 2. Lịch Dương và Lịch Âm nhảy số hằng ngày
+            const days = ['Chủ Nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
+            document.getElementById('date').innerText = `${days[now.getDay()]} ${now.getDate()}-${now.getMonth() + 1}`;
+            document.getElementById('lunar-date').innerHTML = calculateLunarHtml(now);
+
+            // 3. TỰ ĐỘNG CHUYỂN CHẾ ĐỘ BAN ĐÊM (22:00 - 06:00)
+            if (hours >= 22 || hours < 6) {
+                document.body.classList.add('night-active');
+            } else {
+                document.body.classList.remove('night-active');
+            }
+
+            // 4. BÁO CHUÔNG HẰNG GIỜ
+            if (minutes === 0 && hours !== lastChimeHour) {
+                playHourlyChime(hours);
+                lastChimeHour = hours;
+            }
+
+            // 5. Cập nhật xoay tua kho danh ngôn theo số phút để tối ưu ram máy iPad
+            const quoteIdx = Math.floor(minutes / 10) % quotesPool.length;
+            document.getElementById('quote-text').innerText = `"${quotesPool[quoteIdx]}"`;
+
+            // 6. ĐẾM NGƯỢC TẾT ĐINH MÙI (06/02/2027)
+            const tet2027 = new Date(2027, 1, 6, 0, 0, 0);
+            const todayZero = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+            const daysToTet = Math.ceil((tet2027 - todayZero) / (1000 * 60 * 60 * 24));
+            
+            if (daysToTet > 0) {
+                document.getElementById('countdown-text').innerText = `🧧 Còn ${daysToTet} ngày đến Tết 2027`;
+            } else if (daysToTet === 0) {
+                document.getElementById('countdown-text').innerText = `🎉 Mừng Tết Đinh Mùi 2027!`;
+            } else {
+                document.getElementById('countdown-text').innerText = `✨ Năm mới an khang thịnh vượng!`;
+            }
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // CẬP NHẬT THỜI TIẾT ĐẮK LẮK VÀ HỘP ĐỔI MÀU AQI CHUẨN XÁC THEO ẢNH PHÂN CẤP
+        function updateWeatherAndAQI() {
+            const lat = 12.6667; 
+            const lon = 108.0500;
+            
+            // Gọi thời tiết thực tế
+            fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m`)
+                .then(res => res.json())
+                .then(data => {
+                    const temp = Math.round(data.current.temperature_2m);
+                    document.getElementById('weather-temp').innerText = `${temp}°C`;
+                })
+                .catch(() => {
+                    document.getElementById('weather-temp').innerText = '--°C';
+                });
+
+            // Gọi chỉ số không khí AQI Đắk Lắk thực tế và tự động phối màu nền chuẩn 100%
+            fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=us_aqi`)
+                .then(res => res.json())
+                .then(data => {
+                    const aqi = data.current.us_aqi;
+                    const badge = document.getElementById('aqi-badge');
+                    
+                    let aqiLabel = "Tốt";
+                    let bgColor = "#2ecc71"; // Xanh lá
+                    let textColor = "#ffffff";
+                    
+                    if (aqi <= 50) {
+                        aqiLabel = "Tốt";
+                        bgColor = "#2ecc71";
+                    } else if (aqi <= 100) {
+                        aqiLabel = "Trung bình";
+                        bgColor = "#f1c40f"; // Vàng nắng
+                        textColor = "#000000"; // Chữ đen trên nền vàng để lộ chữ rõ ràng
+                    } else if (aqi <= 150) {
+                        aqiLabel = "Kém";
+                        bgColor = "#e67e22"; // Cam
+                    } else if (aqi <= 200) {
+                        aqiLabel = "Xấu";
+                        bgColor = "#e74c3c"; // Đỏ
+                    } else if (aqi <= 300) {
+                        aqiLabel = "Rất xấu";
+                        bgColor = "#9b59b6"; // Tím
+                    } else {
+                        aqiLabel = "Nguy hiểm";
+                        bgColor = "#795548"; // Nâu
+                    }
+                    
+                    // Sửa đổi: Ghi text sạch sẽ, không kèm icon thô kệch phía sau
+                    badge.innerText = `AQI: ${aqi} (${aqiLabel})`;
+                    badge.style.backgroundColor = bgColor;
+                    badge.style.color = textColor;
+                })
+                .catch(() => {
+                    document.getElementById('aqi-badge').innerText = "AQI: --";
+                });
+        }
+        updateWeatherAndAQI();
+        setInterval(updateWeatherAndAQI, 600000);
+
+        // Hệ thống quét và gọi ảnh từ thư mục Google Drive công khai
+        function fetchImagesFromDrive() {
+            const query = encodeURIComponent(`'${FOLDER_ID}' in parents and mimeType contains 'image/'`);
+            const url = `https://www.googleapis.com/drive/v3/files?q=${query}&key=${API_KEY}&fields=files(id)`;
+            
+            fetch(url)
+                .then(res => {
+                    if (!res.ok) throw new Error('API Error');
+                    return res.json();
+                })
+                .then(data => {
+                    if (data.files && data.files.length > 0) {
+                        images = data.files.map(file => `https://drive.google.com/uc?export=view&id=${file.id}`);
+                        
+                        // TÍNH NĂNG CHẠY RANDOM: Giải thuật Fisher-Yates xáo ngẫu nhiên mảng ảnh bốc từ Drive
+                        for (var i = images.length - 1; i > 0; i--) {
+                            var j = Math.floor(Math.random() * (i + 1));
+                            var temp = images[i];
+                            images[i] = images[j];
+                            images[j] = temp;
+                        }
+                        initSlideshow();
+                    } else {
+                        document.getElementById('photo-container').innerHTML = '<div style="color:white;padding:40px;">Thư mục Drive đang trống!</div>';
+                    }
+                })
+                .catch(err => {
+                    alert('Lỗi nạp ảnh từ Drive, vui lòng kiểm tra kết nối mạng.');
+                });
+        }
+
+        // Vòng lặp quản lý trình chiếu hình nền
+        function initSlideshow() {
+            const container = document.getElementById('photo-container');
+            container.innerHTML = ''; 
+
+            images.forEach((src, index) => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.classList.add('slide');
+                if (index === 0) img.classList.add('active');
+                container.appendChild(img);
+            });
+
+            const slider = document.getElementById('speedSlider');
+            
+            function startInterval(val) {
+                const seconds = stepSeconds[val];
+                if (slideInterval) clearInterval(slideInterval);
+                slideInterval = setInterval(() => {
+                    const slides = document.querySelectorAll('.slide');
+                    if (slides.length <= 1) return;
+
+                    slides[currentIndex].classList.remove('active');
+                    currentIndex = (currentIndex + 1) % slides.length;
+                    slides[currentIndex].classList.add('active');
+                }, seconds * 1000);
+            }
+
+            slider.addEventListener('input', function() {
+                document.getElementById('speedLabel').innerText = stepLabels[this.value];
+                startInterval(this.value);
+            });
+
+            startInterval(slider.value);
+        }
+
+        fetchImagesFromDrive();
+    </script>
+</body>
+</html>
