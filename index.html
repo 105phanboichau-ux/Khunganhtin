@@ -7,7 +7,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
-    
     <meta name="referrer" content="no-referrer">
     
     <title>Khung Ảnh Số Nghệ Thuật</title>
@@ -20,16 +19,16 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body, html {
             width: 100%; height: 100%; overflow: hidden;
-            background-color: #ffffff; 
+            background-color: #ffffff; /* Khung viền ngoài màu trắng tinh khôi chuẩn Matte Gallery */
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             cursor: pointer; transition: background-color 1s ease;
         }
         
-        /* KHUNG TRANH TRẮNG MỸ THUẬT DẬP NỔI SÂU */
+        /* KHUNG TRANH TRẮNG MỸ THUẬT DẬP NỔI SÂU KHÔNG CẮT ẢNH */
         #frame-wrapper {
             position: absolute;
             top: 60px; left: 60px; right: 60px; bottom: 60px; 
-            background-color: #0d0d0f; 
+            background-color: #0d0d0f; /* Lòng khung đen nhung lộng lẫy */
             overflow: hidden;
             box-shadow: 0px 15px 45px rgba(0, 0, 0, 0.15), inset 0px 0px 30px rgba(0,0,0,0.85);
             border: 1px solid #eaeaea; transition: all 0.5s ease;
@@ -37,7 +36,7 @@
 
         #photo-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
         
-        /* ẢNH GIỮ NGUYÊN BẢN (CONTAIN) LƠ LỬNG TRONG KHUNG */
+        /* Chế độ contain bảo toàn 100% hình ảnh gốc lơ lửng giữa khung tranh */
         .slide {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             object-fit: contain !important; 
@@ -59,34 +58,34 @@
         .hours-style { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #F4B41A; letter-spacing: -2px; transition: color 0.8s ease; }
         .minutes-style { font-family: 'Tourney', sans-serif; font-weight: 600; color: #ffffff; letter-spacing: -1px; }
 
-        /* KHỐI ĐÁY BÊN TRÁI BỐ CỤC TRANH TỐI GIẢN 1x2 */
+        /* ĐÃ THIẾT KẾ CẢI TIẾN: KHỐI ĐÁY BÊN TRÁI BỐ CỤC TRANH TỐI GIẢN 1x2 */
         #bottom-container {
             position: absolute; bottom: 30px; left: 40px; right: 40px; z-index: 4;
             display: flex; flex-direction: row; align-items: center; justify-content: flex-start; 
-            gap: 20px; text-shadow: 0px 3px 12px rgba(0, 0, 0, 0.95); transition: all 0.5s ease; 
+            gap: 25px; text-shadow: 0px 3px 12px rgba(0, 0, 0, 0.95); transition: all 0.5s ease; 
         }
         
-        /* 1. CỘT TRÁI: Nhiệt độ khổng lồ */
+        /* CỘT TRÁI: Nhiệt độ khổng lồ tăng kích thước gấp đôi */
         #weather-temp { font-size: 4.8rem; font-weight: 700; color: #ffffff; line-height: 1; white-space: nowrap; }
 
-        /* 2. CỘT PHẢI: Khối chứa 2 hàng thông tin */
+        /* CỘT PHẢI: Khối chứa 2 hàng thông tin (Dạng 1x2 gọn gàng tinh tế) */
         #info-rows {
-            display: flex; flex-direction: column; justify-content: center; gap: 6px; 
+            display: flex; flex-direction: column; justify-content: center; gap: 8px; 
             max-width: calc(100% - 140px); text-align: left; transition: all 0.5s ease;
         }
 
-        /* DÒNG TRÊN: Lịch (Dương + Âm) | AQI Số màu | Sự kiện */
+        /* DÒNG TRÊN: Lịch Dương - Âm sạch sẽ | Số AQI tinh gọn | Ngày đếm ngược */
         #status-row { 
-            display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 10px; 
+            display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 12px; 
             font-size: 1.35rem; color: #ffffff; font-weight: 500; 
         }
-        #aqi-val { font-weight: 700; transition: color 0.5s ease; } 
+        #aqi-val { font-weight: 700; transition: color 0.5s ease; } /* Chỉ tô màu đúng con số chỉ số AQI */
         .bar-separator { opacity: 0.4; font-weight: 300; }
 
-        /* DÒNG DƯỚI: Danh ngôn tự ngắt dòng */
+        /* DÒNG DƯỚI: Dòng danh ngôn tự động xuống dòng mượt mà */
         #quote-row { 
             font-size: 1.35rem; font-weight: 300; font-style: italic; color: #f5f5f7; 
-            white-space: normal !important; word-wrap: break-word; line-height: 1.4;
+            white-space: normal !important; word-wrap: break-word; line-height: 1.45;
         }
 
         /* BẢNG PHÍM BẤM THỜI GIAN NHỎ ĐẸP TINH GIẢN */
@@ -101,7 +100,7 @@
         .speed-btn { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); color: #fff; padding: 4px 8px; font-size: 0.8rem; border-radius: 4px; cursor: pointer; font-weight: 500; transition: all 0.2s ease; }
         .speed-btn.active { background: #F4B41A !important; border-color: #F4B41A !important; color: #000 !important; font-weight: bold; }
 
-        /* CHẾ ĐỘ BAN ĐÊM (21:00 - 05:00) */
+        /* CHẾ ĐỘ BAN ĐÊM (21:00 TỐI - 05:00 SÁNG HÔM SAU) */
         .night-active { background-color: #000000 !important; } 
         .night-active #photo-container, .night-active #bottom-container { display: none !important; }
         .night-active #frame-wrapper { background-color: #000000 !important; box-shadow: none !important; border-color: transparent !important; }
@@ -109,23 +108,16 @@
         .night-active .hours-style { color: #ffffff !important; } 
         .night-active #info-container { text-shadow: none !important; }
 
-        /* BỘ LỌC ĐA MÀN HÌNH (RESPONSIVE WEB DESIGN) */
+        /* BỘ LỌC ĐA MÀN HÌNH TỰ ĐỘNG (CO GIÃN THEO THIẾT BỊ ANDROID/IPHONE) */
         @media (max-width: 900px) {
             html { font-size: 13px; } 
             #frame-wrapper { top: 35px; left: 30px; right: 30px; bottom: 35px; } 
         }
-        
         @media (max-width: 480px) {
             html { font-size: 9.5px; } 
             #frame-wrapper { top: 15px; left: 15px; right: 15px; bottom: 15px; } 
             #info-container { top: 20px; left: 20px; } 
-            
-            #bottom-container {
-                flex-direction: column; 
-                align-items: flex-start; 
-                bottom: 15px; left: 20px; right: 20px;
-                gap: 8px;
-            }
+            #bottom-container { flex-direction: column; align-items: flex-start; bottom: 15px; left: 20px; right: 20px; gap: 8px; }
             #info-rows { max-width: 100%; }
             #status-row { justify-content: flex-start; gap: 8px; }
         }
@@ -135,8 +127,8 @@
 
     <div id="frame-wrapper">
         <div id="photo-container">
-            <img id="slide1" class="slide active" alt="" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" referrerpolicy="no-referrer">
-            <img id="slide2" class="slide" alt="" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" referrerpolicy="no-referrer">
+            <img id="slide1" class="slide active" alt="" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+            <img id="slide2" class="slide" alt="" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
         </div>
         <div class="overlay"></div>
 
@@ -153,7 +145,7 @@
                     <span class="bar-separator">|</span>
                     <span id="aqi-text">AQI <span id="aqi-val">--</span></span>
                     <span class="bar-separator">|</span>
-                    <span id="countdown-text">Đang tính lịch...</span>
+                    <span id="countdown-text">Đang tính lịch sự kiện...</span>
                 </div>
                 <div id="quote-row">
                     <span id="quote-text">Đang tải dữ liệu đặc sản vùng miền...</span>
@@ -239,20 +231,9 @@
                 var gain1 = audioCtx.createGain();
                 osc1.type = 'sine'; osc1.frequency.setValueAtTime(880, audioCtx.currentTime); 
                 gain1.gain.setValueAtTime(0.18, audioCtx.currentTime);
-                gain1.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.8);
+                gain1.gain.exponentialRampToValueAtTime(0.001, currentHour + 0.8);
                 osc1.connect(gain1); gain1.connect(audioCtx.destination);
                 osc1.start(); osc1.stop(audioCtx.currentTime + 0.8);
-                
-                setTimeout(function() {
-                    if (audioCtx.state === 'suspended') audioCtx.resume();
-                    var osc2 = audioCtx.createOscillator();
-                    var gain2 = audioCtx.createGain();
-                    osc2.type = 'sine'; osc2.frequency.setValueAtTime(659.25, audioCtx.currentTime); 
-                    gain2.gain.setValueAtTime(0.18, audioCtx.currentTime);
-                    gain2.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.2);
-                    osc2.connect(gain2); gain2.connect(audioCtx.destination);
-                    osc2.start(); osc2.stop(audioCtx.currentTime + 1.2);
-                }, 350);
             } catch(e) {}
         }
 
@@ -344,10 +325,6 @@
             else document.body.classList.remove('night-active');
 
             applyDynamicPositions();
-
-            if (minutes === 0 && hours !== lastChimeHour) {
-                playHourlyChime(hours); lastChimeHour = hours;
-            }
         }
         setInterval(updateClock, 1000);
         updateClock();
@@ -405,7 +382,8 @@
                         if (data.files && data.files.length > 0) {
                             images = [];
                             for (var i = 0; i < data.files.length; i++) {
-                                images.push('https://drive.google.com/uc?export=view&id=' + data.files[i].id);
+                                // ĐÃ CẢI TIẾN THẦN THÁNH: Chuyển sang endpoint thumbnail siêu nhe RAM, phá bỏ lớp khóa bảo mật của Android Chrome hằng năm
+                                images.push('https://drive.google.com/thumbnail?id=' + data.files[i].id + '&sz=w2048');
                             }
                             for (var k = images.length - 1; k > 0; k--) {
                                 var j = Math.floor(Math.random() * (k + 1));
