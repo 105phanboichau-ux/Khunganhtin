@@ -8,6 +8,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
     
+    <meta name="referrer" content="no-referrer">
+    
     <title>Khung Ảnh Số Nghệ Thuật</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -107,24 +109,17 @@
         .night-active .hours-style { color: #ffffff !important; } 
         .night-active #info-container { text-shadow: none !important; }
 
-        /* ================================================================= */
-        /* 🌐 BỘ LỌC ĐA MÀN HÌNH TỰ ĐỘNG (RESPONSIVE WEB DESIGN)             */
-        /* ================================================================= */
-        
-        /* 1. Thiết lập cho Màn hình cỡ vừa (Máy tính bảng nhỏ, Điện thoại xoay ngang) */
+        /* BỘ LỌC ĐA MÀN HÌNH (RESPONSIVE WEB DESIGN) */
         @media (max-width: 900px) {
-            html { font-size: 13px; } /* Thu nhỏ font chữ hệ thống */
-            #frame-wrapper { top: 35px; left: 30px; right: 30px; bottom: 35px; } /* Thu hẹp bớt viền */
+            html { font-size: 13px; } 
+            #frame-wrapper { top: 35px; left: 30px; right: 30px; bottom: 35px; } 
         }
         
-        /* 2. Thiết lập tối ưu tối đa cho Điện thoại di động dọc (Android / iPhone) */
         @media (max-width: 480px) {
-            html { font-size: 9.5px; } /* Thu nhỏ chữ để ôm khít màn hình điện thoại */
-            #frame-wrapper { top: 15px; left: 15px; right: 15px; bottom: 15px; } /* Viền siêu mỏng để ngắm ảnh rõ hơn */
+            html { font-size: 9.5px; } 
+            #frame-wrapper { top: 15px; left: 15px; right: 15px; bottom: 15px; } 
+            #info-container { top: 20px; left: 20px; } 
             
-            #info-container { top: 20px; left: 20px; } /* Đẩy đồng hồ khép sát góc trên */
-            
-            /* Chuyển đổi khối đáy sang hàng dọc xếp lớp thông minh chống tràn viền bẻ chữ */
             #bottom-container {
                 flex-direction: column; 
                 align-items: flex-start; 
@@ -140,8 +135,8 @@
 
     <div id="frame-wrapper">
         <div id="photo-container">
-            <img id="slide1" class="slide active">
-            <img id="slide2" class="slide">
+            <img id="slide1" class="slide active" alt="" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" referrerpolicy="no-referrer">
+            <img id="slide2" class="slide" alt="" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" referrerpolicy="no-referrer">
         </div>
         <div class="overlay"></div>
 
@@ -415,9 +410,9 @@
                             for (var k = images.length - 1; k > 0; k--) {
                                 var j = Math.floor(Math.random() * (k + 1));
                                 var temp = images[k]; images[k] = images[j]; images[j] = temp;
+                            }
+                            initSlideshow();
                         }
-                        initSlideshow();
-                    }
                     } else {
                         setTimeout(fetchImagesFromDrive, 5000); 
                     }
