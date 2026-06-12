@@ -60,68 +60,46 @@
 
         .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.15); z-index: 3; pointer-events: none; }
 
-        /* ĐÃ NÂNG CẤP TRỤC DỌC (MAGIC AXIS): Đồng hồ được khóa chiều rộng 110px để căn giữa tuyệt đối */
+        /* KHU VỰC 1: GÓC TRÁI TRÊN (ĐỒNG HỒ + DƯƠNG LỊCH) */
         #info-container {
-            position: absolute; top: 35px; left: 35px; z-index: 4; color: #ffffff;
+            position: absolute; top: 35px; left: 35px; z-index: 4; 
             text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.8);
-            display: flex; flex-direction: column; 
-            width: 110px; /* Khóa chiều rộng */
-            align-items: center; /* Căn giữa đồng hồ trong khối 110px */
-            line-height: 0.82;
+            display: flex; flex-direction: column; align-items: center; 
             transition: all 0.8s ease-in-out; 
         }
-        
-        /* ĐÃ GIẢM 20% KÍCH THƯỚC NHƯ YÊU CẦU */
-        .hours-style { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #F4B41A; font-size: 6.2rem; letter-spacing: -2px; display: block; }
-        .minutes-style { font-family: 'Tourney', sans-serif; font-weight: 600; color: #ffffff; font-size: 6.2rem; letter-spacing: -1px; display: block; margin-top: -2px; }
+        .hours-style { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #F4B41A; font-size: 6.2rem; letter-spacing: -2px; display: block; line-height: 0.82; }
+        .minutes-style { font-family: 'Tourney', sans-serif; font-weight: 600; color: #ffffff; font-size: 6.2rem; letter-spacing: -1px; display: block; margin-top: -2px; line-height: 0.82; }
+        /* Dương lịch dời lên đây, bỏ năm */
+        #date-solar-top { font-size: 1.5rem; font-weight: 700; color: #F4B41A; margin-top: 12px; white-space: nowrap; }
 
-        /* BỐ CỤC ĐÁY TỐI GIẢN */
+        /* KHU VỰC ĐÁY MÀN HÌNH (Chia 2 nửa Trái - Phải) */
         #bottom-container {
-            position: absolute; bottom: 25px; left: 35px; right: 20px; z-index: 4;
-            display: flex; flex-direction: row; 
-            align-items: center; justify-content: flex-start; 
+            position: absolute; bottom: 30px; left: 35px; right: 35px; z-index: 4;
+            display: flex; flex-direction: row; justify-content: space-between; align-items: flex-end; 
             text-shadow: 0px 3px 12px rgba(0, 0, 0, 0.95); transition: all 0.5s ease; 
         }
-        
-        /* KHỐI NHIỆT ĐỘ CŨNG BỊ KHÓA CHIỀU RỘNG 110PX ĐỂ KHỚP TRỤC VỚI ĐỒNG HỒ Ở TRÊN */
-        #temp-zone {
-            padding-right: 20px; margin-right: 20px; 
-            border-right: 2px solid rgba(255, 255, 255, 0.25); 
+
+        /* KHU VỰC 2: GÓC TRÁI DƯỚI (Nhiệt độ + Danh ngôn) */
+        #bottom-left {
+            display: flex; flex-direction: row; align-items: center; gap: 20px;
+            max-width: 55%; 
         }
-        .temp-content {
-            width: 110px; /* Trùng khớp 100% với Đồng hồ */
-            display: flex; flex-direction: column; align-items: center;
-        }
-        #top-day-text { font-size: 1.5rem; font-weight: 700; color: #F4B41A; margin-bottom: 5px; white-space: nowrap; text-transform: uppercase;}
-        
         #temp-wrapper { position: relative; display: flex; align-items: center; justify-content: center; }
-        #weather-val { font-size: 4rem; font-weight: 700; color: #ffffff; letter-spacing: -2px; line-height: 0.8; }
-        /* Dấu độ treo lơ lửng, không ảnh hưởng trọng tâm căn giữa của số 30 */
-        .degree-symbol { position: absolute; top: -5px; right: -18px; font-size: 2rem; font-weight: 700; color: #ffffff; }
+        #weather-val { font-size: 4.5rem; font-weight: 700; color: #ffffff; letter-spacing: -2px; line-height: 0.8; }
+        .degree-symbol { position: absolute; top: -5px; right: -20px; font-size: 2rem; font-weight: 700; color: #ffffff; }
+        
+        #quote-row { font-size: 1.3rem; font-weight: 300; font-style: italic; color: #f5f5f7; line-height: 1.45; word-wrap: break-word; }
 
-        /* KHỐI THÔNG TIN BÊN PHẢI */
-        #info-rows {
-            display: flex; flex-direction: column; justify-content: center; gap: 6px; 
-            max-width: calc(100% - 160px); text-align: left; 
-            opacity: 1; transition: opacity 1.5s ease-in-out;
+        /* KHU VỰC 3: GÓC PHẢI DƯỚI (Âm lịch + Sự kiện/AQI) */
+        #bottom-right {
+            display: flex; flex-direction: column; align-items: flex-end; text-align: right;
+            max-width: 40%; gap: 6px;
         }
-        #info-rows.hidden { opacity: 0; } 
-
-        #top-row { color: #ffffff; line-height: 1.3; margin-bottom: 2px; }
-        #date-solar-big { font-size: 2rem; font-weight: 700; color: #ffffff; } 
-        #date-lunar-small { font-size: 1.25rem; font-weight: 500; color: #e0e0e0; }
-        
-        /* ĐÃ THU GỌN VÀ GIẢM SIZE ĐỂ LUÔN NẰM TRÊN 1 DÒNG */
-        #mid-row { font-size: 1.15rem; line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .event-text { color: #F4B41A; font-weight: 700; }
-        .env-text { color: #ffffff; font-weight: 500; }
-        
-        #quote-row { font-size: 1.25rem; font-weight: 300; font-style: italic; color: #f5f5f7; line-height: 1.4; }
-        
+        #date-lunar-corner { font-size: 1.6rem; font-weight: 700; color: #F4B41A; letter-spacing: 0.5px; }
+        #event-env-corner { font-size: 1.25rem; font-weight: 500; color: #ffffff; line-height: 1.4; opacity: 0.95; }
         .highlight-yellow { color: #F4B41A; font-weight: 700; }
-        .bar-separator { opacity: 0.5; font-weight: 300; margin: 0 8px; }
 
-        /* BẢNG ĐIỀU KHIỂN TÀNG HÌNH */
+        /* BẢNG ĐIỀU KHIỂN & NÚT NEXT TÀNG HÌNH */
         #control-panel {
             position: absolute; top: 20px; right: 20px; z-index: 10;
             background: rgba(0, 0, 0, 0.75); padding: 12px 16px; border-radius: 8px;
@@ -138,18 +116,17 @@
         .action-btn { flex: 1; background: rgba(244, 180, 26, 0.2); border: 1px solid #F4B41A; color: #F4B41A; padding: 5px 8px; font-size: 0.8rem; border-radius: 4px; cursor: pointer; font-weight: 600; text-align: center; }
         .action-btn:active { background: #F4B41A; color: #000; }
 
-        /* NÚT NEXT TÀNG HÌNH SIÊU NHỎ */
         #next-btn {
-            position: absolute; bottom: 25px; right: 25px; z-index: 10;
+            position: absolute; bottom: 85px; right: 35px; z-index: 10;
             padding: 8px; display: flex; align-items: center; justify-content: center;
             opacity: 0.15; transition: opacity 0.3s; cursor: pointer;
         }
         #next-btn:active { opacity: 0.8; }
         .night-active #next-btn { display: none; }
 
-        /* CHẾ ĐỘ BAN ĐÊM */
+        /* CHẾ ĐỘ BAN ĐÊM - ẨN HẾT CHỮ CON, CHỈ HIỆN ĐỒNG HỒ GIỮA MÀN HÌNH */
         .night-active { background-color: #000000 !important; } 
-        .night-active #photo-container, .night-active #bottom-container, .night-active #next-btn { display: none !important; }
+        .night-active #photo-container, .night-active #bottom-container, .night-active #date-solar-top { display: none !important; }
         .night-active #frame-wrapper { background-color: #000000 !important; box-shadow: none !important; border-color: transparent !important; }
         
         .night-active #info-container { 
@@ -157,10 +134,10 @@
             align-items: center !important; width: 100% !important; left: 0 !important; text-shadow: none !important;
         }
         .night-active .hours-style, .night-active .minutes-style { 
-            font-size: 26vw !important; color: #ff9500 !important; margin: 0 1vw !important; letter-spacing: 0 !important;
+            font-size: 26vw !important; color: #ff9500 !important; margin: 0 1vw !important; letter-spacing: 0 !important; line-height: 1;
         }
 
-        /* RESPONSIVE */
+        /* RESPONSIVE CHO ĐIỆN THOẠI */
         @media (max-width: 900px) {
             html { font-size: 13px; } 
             #frame-wrapper { top: 35px; left: 30px; right: 30px; bottom: 35px; } 
@@ -170,9 +147,8 @@
             #frame-wrapper { top: 15px; left: 15px; right: 15px; bottom: 15px; } 
             #info-container { top: 20px; left: 15px; } 
             #bottom-container { flex-direction: column; align-items: flex-start; bottom: 15px; left: 15px; right: 15px; gap: 15px; }
-            #temp-zone { margin-right: 0; border-right: none; padding-right: 0; flex-direction: row; align-items: flex-end; gap: 15px; }
-            .temp-content { flex-direction: row; gap: 10px; width: auto; }
-            #info-rows { max-width: 100%; }
+            #bottom-left, #bottom-right { max-width: 100%; text-align: left; align-items: flex-start; }
+            #next-btn { bottom: 15px; right: 15px; }
         }
     </style>
 </head>
@@ -194,30 +170,20 @@
         <div id="info-container">
             <span class="hours-style" id="hr-node">00</span>
             <span class="minutes-style" id="min-node">00</span>
+            <div id="date-solar-top">Thứ -, --/--</div>
         </div>
 
         <div id="bottom-container">
-            <div id="temp-zone">
-                <div class="temp-content">
-                    <div id="top-day-text">Thứ -</div>
-                    <div id="temp-wrapper">
-                        <span id="weather-val">--</span><span class="degree-symbol">°</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div id="info-rows">
-                <div id="top-row">
-                    <span id="date-solar-big">Ngày 00/00/0000</span>
-                    <span class="bar-separator">|</span>
-                    <span id="date-lunar-small">00/0/0000 AL</span>
-                </div>
-                <div id="mid-row">
-                    <span class="event-text" id="event-span">Đang tính lịch...</span>
-                    <span class="bar-separator">|</span>
-                    <span class="env-text" id="env-span">AQI: --</span>
+            <div id="bottom-left">
+                <div id="temp-wrapper">
+                    <span id="weather-val">--</span><span class="degree-symbol">°</span>
                 </div>
                 <div id="quote-row">Đang tải dữ liệu đặc sản vùng miền...</div>
+            </div>
+            
+            <div id="bottom-right">
+                <div id="date-lunar-corner">--/-- Âm Lịch</div>
+                <div id="event-env-corner">Đang tính lịch sự kiện...</div>
             </div>
         </div>
 
@@ -260,7 +226,7 @@
 
         var burnInX1 = 0, burnInY1 = 0, burnInX2 = 0, burnInY2 = 0;
         var stepSeconds = { 1: 60, 2: 180, 3: 300, 4: 600 };
-        var currentActiveMode = 2; // Mặc định chạy 3 phút
+        var currentActiveMode = 2; // Mặc định 3 phút
 
         function activateControls() {
             if (!audioUnlocked) {
@@ -351,7 +317,7 @@
                 infoNode.style.left = "35px";
                 infoNode.style.transform = "translate(" + burnInX1 + "px, " + burnInY1 + "px)";
             }
-            if (bottomNode) bottomNode.style.transform = "translate(" + burnInX2 + "px, 0px)";
+            if (bottomNode) bottomNode.style.transform = "translate(0px, " + burnInX2 + "px)";
         }
 
         function getLunarFormat(now) {
@@ -373,26 +339,25 @@
             }
             var startDate = new Date(activePhase[0], activePhase[1], activePhase[2], 0, 0, 0);
             var diffDays = Math.floor((checkTime - startDate) / (1000 * 60 * 60 * 24)) + 1;
-            return diffDays + '/' + (activePhase[1] === 0 ? 12 : activePhase[1]) + '/' + activePhase[4] + ' AL';
+            return diffDays + '/' + (activePhase[1] === 0 ? 12 : activePhase[1]) + ' Âm Lịch';
         }
 
         function updateDynamicContentBySlide() {
             var now = new Date();
             
+            // Xây dựng TOP LEFT: Dương lịch bỏ năm
             var days = ['Chủ Nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
-            document.getElementById('top-day-text').innerText = days[now.getDay()]; 
+            document.getElementById('date-solar-top').innerText = days[now.getDay()] + ', Ngày ' + now.getDate() + '/' + (now.getMonth() + 1);
             
-            document.getElementById('date-solar-big').innerText = 'Ngày ' + now.getDate() + '/' + (now.getMonth() + 1) + '/' + now.getFullYear();
-            document.getElementById('date-lunar-small').innerText = getLunarFormat(now);
+            // Xây dựng BOTTOM RIGHT: Âm lịch
+            document.getElementById('date-lunar-corner').innerText = getLunarFormat(now);
 
-            // ĐÃ RÚT GỌN TỪ NGỮ ĐỂ CHỐNG XUỐNG DÒNG
             var envPool = [
-                'AQI: <span class="highlight-yellow">' + globalAQI + '</span>',
-                'Độ ẩm: <span class="highlight-yellow">' + globalHum + '</span>',
-                'Tỷ lệ mưa: <span class="highlight-yellow">' + globalRain + '</span>',
-                'Bình minh: <span class="highlight-yellow">' + globalSunrise + '</span>',
-                'Hoàng hôn: <span class="highlight-yellow">' + globalSunset + '</span>',
-                'Độ cao: <span class="highlight-yellow">536m</span>'
+                'AQI: ' + globalAQI,
+                'Độ ẩm: ' + globalHum,
+                'Mưa: ' + globalRain,
+                'Bình minh: ' + globalSunrise,
+                'Hoàng hôn: ' + globalSunset
             ];
             var currentEnv = envPool[envDisplayIndex % envPool.length];
             envDisplayIndex++; 
@@ -402,12 +367,12 @@
             var targetPhatDan = new Date(2026, 4, 31); var targetQuocKhanh = new Date(2026, 8, 2);
 
             var eventPool = [];
-            var daysToTetAm = Math.ceil((targetTetAm - now) / 86400000); if (daysToTetAm > 0) eventPool.push('Còn ' + daysToTetAm + ' ngày đến Tết Nguyên Đán');
-            var daysToTetDuong = Math.ceil((targetTetDuong - now) / 86400000); if (daysToTetDuong > 0) eventPool.push('Còn ' + daysToTetDuong + ' ngày đến Tết Dương Lịch');
-            var daysToNoel = Math.ceil((targetNoel - now) / 86400000); if (daysToNoel > 0) eventPool.push('Còn ' + daysToNoel + ' ngày đến Giáng Sinh');
-            var daysToTrungThu = Math.ceil((targetTrungThu - now) / 86400000); if (daysToTrungThu > 0) eventPool.push('Còn ' + daysToTrungThu + ' ngày đến Tết Trung Thu');
-            var daysToPhatDan = Math.ceil((targetPhatDan - now) / 86400000); if (daysToPhatDan > 0) eventPool.push('Còn ' + daysToPhatDan + ' ngày đến Lễ Phật Đản');
-            var daysToQuocKhanh = Math.ceil((targetQuocKhanh - now) / 86400000); if (daysToQuocKhanh > 0) eventPool.push('Còn ' + daysToQuocKhanh + ' ngày đến Quốc Khánh 2/9');
+            var daysToTetAm = Math.floor((targetTetAm - now) / 86400000); if (daysToTetAm > 0) eventPool.push('Còn ' + daysToTetAm + ' ngày đến Tết Nguyên Đán');
+            var daysToTetDuong = Math.floor((targetTetDuong - now) / 86400000); if (daysToTetDuong > 0) eventPool.push('Còn ' + daysToTetDuong + ' ngày đến Tết Dương Lịch');
+            var daysToNoel = Math.floor((targetNoel - now) / 86400000); if (daysToNoel > 0) eventPool.push('Còn ' + daysToNoel + ' ngày đến Giáng Sinh');
+            var daysToTrungThu = Math.floor((targetTrungThu - now) / 86400000); if (daysToTrungThu > 0) eventPool.push('Còn ' + daysToTrungThu + ' ngày đến Tết Trung Thu');
+            var daysToPhatDan = Math.floor((targetPhatDan - now) / 86400000); if (daysToPhatDan > 0) eventPool.push('Còn ' + daysToPhatDan + ' ngày đến Lễ Phật Đản');
+            var daysToQuocKhanh = Math.floor((targetQuocKhanh - now) / 86400000); if (daysToQuocKhanh > 0) eventPool.push('Còn ' + daysToQuocKhanh + ' ngày đến Quốc Khánh 2/9');
             
             eventPool.push("Sắp đến Rằm Âm Lịch");
             eventPool.push("Sắp đến Mùng 1 Âm Lịch");
@@ -428,8 +393,10 @@
             var randomEvent = eventPool[Math.floor(Math.random() * eventPool.length)];
             var randomQuote = quotePool[Math.floor(Math.random() * quotePool.length)];
 
-            document.getElementById('event-span').innerHTML = randomEvent; 
-            document.getElementById('env-span').innerHTML = currentEnv;
+            // Hợp nhất BOTTOM RIGHT (Sự kiện + Môi trường)
+            document.getElementById('event-env-corner').innerHTML = randomEvent + ' &nbsp;|&nbsp; ' + currentEnv; 
+            
+            // Xây dựng BOTTOM LEFT (Danh ngôn)
             document.getElementById('quote-row').innerText = '"' + randomQuote + '"';
         }
 
@@ -540,9 +507,6 @@
             var nextGroup = document.getElementById(isGroup1Active ? 'group2' : 'group1');
             var nextBg = document.getElementById(isGroup1Active ? 'bg2' : 'bg1');
             var nextFg = document.getElementById(isGroup1Active ? 'fg2' : 'fg1');
-            var textZone = document.getElementById('info-rows');
-
-            textZone.classList.add('hidden');
 
             nextFg.onload = function() {
                 currentGroup.classList.remove('active');
@@ -551,7 +515,6 @@
                 currentIndex = nextIndex;
                 
                 updateDynamicContentBySlide();
-                textZone.classList.remove('hidden');
             };
             
             nextBg.src = images[nextIndex];
