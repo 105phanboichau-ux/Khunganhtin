@@ -6,6 +6,7 @@
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
     
     <title>Khung Ảnh Số Nghệ Thuật</title>
     
@@ -29,7 +30,7 @@
             background-color: #0d0d0f; 
             overflow: hidden;
             box-shadow: 0px 15px 45px rgba(0, 0, 0, 0.15), inset 0px 0px 30px rgba(0,0,0,0.85);
-            border: 1px solid #eaeaea; transition: all 1s ease;
+            border: 1px solid #eaeaea; transition: all 0.5s ease;
         }
 
         #photo-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
@@ -56,21 +57,20 @@
         .hours-style { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #F4B41A; letter-spacing: -2px; transition: color 0.8s ease; }
         .minutes-style { font-family: 'Tourney', sans-serif; font-weight: 600; color: #ffffff; letter-spacing: -1px; }
 
-        /* KHỐI ĐÁY BÊN TRÁI ĐÃ NÂNG CẤP BỐ CỤC 1x2 SIÊU GỌN GÀNG */
+        /* KHỐI ĐÁY BÊN TRÁI BỐ CỤC TRANH TỐI GIẢN 1x2 */
         #bottom-container {
             position: absolute; bottom: 30px; left: 40px; right: 40px; z-index: 4;
-            display: flex; flex-direction: row; align-items: center; justify-content: flex-start; /* Ép sang trái */
-            gap: 20px; text-shadow: 0px 3px 12px rgba(0, 0, 0, 0.95); transition: transform 0.5s ease-out; 
+            display: flex; flex-direction: row; align-items: center; justify-content: flex-start; 
+            gap: 20px; text-shadow: 0px 3px 12px rgba(0, 0, 0, 0.95); transition: all 0.5s ease; 
         }
         
-        /* 1. CỘT TRÁI: Nhiệt độ khổng lồ gấp đôi */
+        /* 1. CỘT TRÁI: Nhiệt độ khổng lồ */
         #weather-temp { font-size: 4.8rem; font-weight: 700; color: #ffffff; line-height: 1; white-space: nowrap; }
 
         /* 2. CỘT PHẢI: Khối chứa 2 hàng thông tin */
         #info-rows {
             display: flex; flex-direction: column; justify-content: center; gap: 6px; 
-            max-width: calc(100% - 140px); /* Chống tràn chữ ra viền phải */
-            text-align: left;
+            max-width: calc(100% - 140px); text-align: left; transition: all 0.5s ease;
         }
 
         /* DÒNG TRÊN: Lịch (Dương + Âm) | AQI Số màu | Sự kiện */
@@ -78,7 +78,7 @@
             display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 10px; 
             font-size: 1.35rem; color: #ffffff; font-weight: 500; 
         }
-        #aqi-val { font-weight: 700; transition: color 0.5s ease; } /* Số AQI đổi màu */
+        #aqi-val { font-weight: 700; transition: color 0.5s ease; } 
         .bar-separator { opacity: 0.4; font-weight: 300; }
 
         /* DÒNG DƯỚI: Danh ngôn tự ngắt dòng */
@@ -106,6 +106,34 @@
         .night-active .overlay { background: rgba(0, 0, 0, 1) !important; }
         .night-active .hours-style { color: #ffffff !important; } 
         .night-active #info-container { text-shadow: none !important; }
+
+        /* ================================================================= */
+        /* 🌐 BỘ LỌC ĐA MÀN HÌNH TỰ ĐỘNG (RESPONSIVE WEB DESIGN)             */
+        /* ================================================================= */
+        
+        /* 1. Thiết lập cho Màn hình cỡ vừa (Máy tính bảng nhỏ, Điện thoại xoay ngang) */
+        @media (max-width: 900px) {
+            html { font-size: 13px; } /* Thu nhỏ font chữ hệ thống */
+            #frame-wrapper { top: 35px; left: 30px; right: 30px; bottom: 35px; } /* Thu hẹp bớt viền */
+        }
+        
+        /* 2. Thiết lập tối ưu tối đa cho Điện thoại di động dọc (Android / iPhone) */
+        @media (max-width: 480px) {
+            html { font-size: 9.5px; } /* Thu nhỏ chữ để ôm khít màn hình điện thoại */
+            #frame-wrapper { top: 15px; left: 15px; right: 15px; bottom: 15px; } /* Viền siêu mỏng để ngắm ảnh rõ hơn */
+            
+            #info-container { top: 20px; left: 20px; } /* Đẩy đồng hồ khép sát góc trên */
+            
+            /* Chuyển đổi khối đáy sang hàng dọc xếp lớp thông minh chống tràn viền bẻ chữ */
+            #bottom-container {
+                flex-direction: column; 
+                align-items: flex-start; 
+                bottom: 15px; left: 20px; right: 20px;
+                gap: 8px;
+            }
+            #info-rows { max-width: 100%; }
+            #status-row { justify-content: flex-start; gap: 8px; }
+        }
     </style>
 </head>
 <body ontouchstart="activateControls()" onclick="activateControls()">
@@ -166,7 +194,7 @@
         var burnInX2 = 0, burnInY2 = 0;
 
         var stepSeconds = { 1: 60, 2: 180, 3: 300, 4: 600 };
-        var currentActiveMode = 2; // Mặc định mở lên là 3 phút
+        var currentActiveMode = 2; 
 
         function activateControls() {
             if (!audioCtx) {
@@ -233,7 +261,6 @@
             } catch(e) {}
         }
 
-        // Đã sửa hàm tính Âm lịch trả về định dạng: (27-4 AL) không bao gồm chữ Bính Ngọ
         function getLunarTextString(now) {
             var phases = [
                 [2025, 11, 20, 11, "Ất Tỵ"], [2026, 0, 19, 12, "Ất Tỵ"],
@@ -274,7 +301,7 @@
             var daysToTrungThu = Math.ceil((targetTrungThu - now) / (1000 * 60 * 60 * 24));
 
             var eventPool = [];
-            if (daysToTetAm > 0) eventPool.push('Còn ' + daysToTetAm + ' ngày đến Tết Nguyên Đán Đinh Mùi 2027');
+            if (daysToTetAm > 0) eventPool.push('Còn ' + daysToTetAm + ' ngày đến Tết Nguyên Đán 2027');
             if (daysToTetDuong > 0) eventPool.push('Còn ' + daysToTetDuong + ' ngày đến Tết Dương Lịch 2027');
             if (daysToNoel > 0) eventPool.push('Còn ' + daysToNoel + ' ngày đến Giáng Sinh');
             if (daysToTrungThu > 0) eventPool.push('Còn ' + daysToTrungThu + ' ngày đến Tết Trung Thu');
@@ -313,7 +340,6 @@
             var minStr = minutes < 10 ? '0' + minutes : minutes;
             document.getElementById('time').innerHTML = '<span class="hours-style">' + hrStr + '</span><span class="minutes-style">' + minStr + '</span>';
 
-            // Ghép Dương Lịch và Âm Lịch vào cùng 1 dòng liền mạch
             var days = ['Chủ Nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
             var solarStr = days[now.getDay()] + ' ' + now.getDate() + '-' + (now.getMonth() + 1);
             var lunarStr = getLunarTextString(now);
@@ -352,7 +378,6 @@
                     var aqi = data.current.us_aqi; 
                     var aqiValNode = document.getElementById('aqi-val');
                     
-                    // Chỉ đổi màu đúng con số AQI, bỏ toàn bộ chữ "Trung bình", "Tốt"
                     var color = "#2ecc71"; 
                     if (aqi <= 50) color = "#2ecc71"; 
                     else if (aqi <= 100) color = "#f1c40f"; 
@@ -390,9 +415,9 @@
                             for (var k = images.length - 1; k > 0; k--) {
                                 var j = Math.floor(Math.random() * (k + 1));
                                 var temp = images[k]; images[k] = images[j]; images[j] = temp;
-                            }
-                            initSlideshow();
                         }
+                        initSlideshow();
+                    }
                     } else {
                         setTimeout(fetchImagesFromDrive, 5000); 
                     }
@@ -417,7 +442,6 @@
             }
 
             if (slideInterval) clearInterval(slideInterval);
-            
             updateDynamicContentBySlide(currentIndex);
 
             slideInterval = setInterval(function() {
