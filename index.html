@@ -20,21 +20,21 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: #fff; /* Nền trắng phối hợp với thanh địa chỉ Safari tạo khung tranh */
+            background-color: #fff; /* Nền trắng tạo khung tranh đồng bộ với thanh địa chỉ Safari */
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             cursor: pointer;
         }
         
-        /* ĐÃ TĂNG GẤP 3 LẦN: ĐỘ DÀY VIỀN TRẮNG ĐỂ BẰNG CHÍNH XÁC KHUNG THANH ĐỊA CHỈ SAFARI */
+        /* CẤU HÌNH VIỀN TRANH DÀY BẰNG THANH ĐỊA CHỈ SAFARI */
         #frame-wrapper {
             position: absolute;
             top: 0;
-            left: 60px;   /* Viền trái dày 60px */
-            right: 60px;  /* Viền phải dày 60px */
-            bottom: 60px; /* Viền dưới dày 60px */
+            left: 60px;   
+            right: 60px;  
+            bottom: 60px; 
             background-color: #000;
             overflow: hidden;
-            box-shadow: 0 0 20px rgba(0,0,0,0.05); /* Tạo hiệu ứng nổi nhẹ cho khung */
+            box-shadow: 0 0 20px rgba(0,0,0,0.05); 
         }
 
         /* Khung chứa ảnh tràn viền bên trong viền tranh */
@@ -56,7 +56,7 @@
             height: 100%;
             object-fit: cover !important;
             opacity: 0;
-            transition: opacity 4s ease-in-out; /* Hoạt cảnh chuyển ảnh chậm 50% */
+            transition: opacity 4s ease-in-out; /* Hoạt cảnh chuyển ảnh chậm 50% đầy nghệ thuật */
         }
         .slide.active {
             opacity: 1;
@@ -71,7 +71,7 @@
             z-index: 2;
         }
 
-        /* GÓC DƯỚI TRÁI: ĐỒNG HỒ & NGÀY THÁNG + ÂM LỊCH SIÊU LỚN */
+        /* GÓC DƯỚI TRÁI: ĐỒNG HỒ & NGÀY THÁNG + LỊCH ÂM SIÊU LỚN */
         #info-container {
             position: absolute;
             bottom: 40px;
@@ -117,7 +117,7 @@
             letter-spacing: 0.5px;
         }
 
-        /* GÓC TRÊN TRÁI: ĐÃ PHÓNG TO KÍCH THƯỚC ĐẠT 50% Ô THỜI GIAN */
+        /* GÓC TRÊN TRÁI: KHU VỰC THỜI TIẾT LỚN BẰNG 50% ĐỒNG HỒ */
         #weather-container {
             position: absolute;
             top: 40px;
@@ -128,13 +128,13 @@
             transition: transform 0.5s ease-out; /* Nhích vị trí chống lưu ảnh */
         }
         #weather-temp {
-            font-size: 3.8rem; /* Phóng lớn nhiệt độ */
+            font-size: 3.8rem; 
             font-weight: 700;
             color: #ffffff;
             line-height: 1;
         }
         #weather-status {
-            font-size: 1.8rem; /* Phóng lớn tình trạng mây nắng */
+            font-size: 1.8rem; 
             font-weight: 400;
             color: #e0e0e0;
             margin-top: 6px;
@@ -152,11 +152,11 @@
             color: #fff;
             font-size: 0.9rem;
             backdrop-filter: blur(5px);
-            opacity: 0.2; /* Mặc định luôn mờ mờ để giữ thẩm mỹ */
+            opacity: 0.2; /* Mặc định luôn mờ mờ để không vướng mắt */
             transition: opacity 0.3s ease;
         }
         #control-panel.active-panel, #control-panel:hover {
-            opacity: 1 !important; /* Sáng rõ hẳn lên khi tương tác */
+            opacity: 1 !important; /* Sáng rõ hẳn lên khi chạm tay điều chỉnh */
         }
         #speedSlider {
             display: block;
@@ -194,7 +194,7 @@
     </div>
 
     <script>
-        // Giấu mã API bằng công nghệ mã hóa Base64
+        // Giấu mã API bằng công nghệ mã hóa Base64 tránh robot quét
         const SECRET_ENCODED = 'QUl6YVN5REwyRm1VQzkxMUtBTnFwN3VPbnZKcU5xVHltb1R2SkxF';
         const API_KEY = atob(SECRET_ENCODED);
         const FOLDER_ID = '1r1WUIKwAPAnsyIh-Zot7AevEW0uEZ-Hl'; 
@@ -204,7 +204,7 @@
         let slideInterval;
         let hideTimeout;
 
-        // Định xạ thanh gạt: mốc 1p, 3p, 5p, 10p đúng yêu cầu
+        // Các mốc phút đổi ảnh: 1 phút, 3 phút, 5 phút, 10 phút
         const stepSeconds = { 1: 60, 2: 180, 3: 300, 4: 600 };
         const stepLabels = { 1: "1 phút", 2: "3 phút", 3: "5 phút", 4: "10 phút" };
 
@@ -227,7 +227,7 @@
             document.getElementById('info-container').style.transform = `translate(${dx1}px, ${dy1}px)`;
             document.getElementById('weather-container').style.transform = `translate(${dx2}px, ${dy2}px)`;
         }
-        setInterval(runAntiBurnIn, 60000); // Kích hoạt nhích tọa độ sau mỗi phút
+        setInterval(runAntiBurnIn, 60000); 
 
         // THUẬT TOÁN ĐẾM LỊCH ÂM NĂM BÍNH NGỌ 2026 CHUẨN XÁC
         function calculateLunarText(now) {
@@ -280,10 +280,7 @@
             `;
 
             const days = ['Chủ Nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
-            // Hiện đúng định dạng siêu gọn: Thứ 6 12-6
             document.getElementById('date').innerText = `${days[now.getDay()]} ${now.getDate()}-${now.getMonth() + 1}`;
-            
-            // Hiện lịch âm tự động nhảy số hằng ngày
             document.getElementById('lunar-date').innerText = calculateLunarText(now);
         }
         setInterval(updateClock, 1000);
@@ -331,6 +328,15 @@
                 .then(data => {
                     if (data.files && data.files.length > 0) {
                         images = data.files.map(file => `https://drive.google.com/uc?export=view&id=${file.id}`);
+                        
+                        // TÍNH NĂNG CHẠY RANDOM: Xáo trộn mảng ảnh ngẫu nhiên chuẩn giải thuật Fisher-Yates cho iOS cũ
+                        for (var i = images.length - 1; i > 0; i--) {
+                            var j = Math.floor(Math.random() * (i + 1));
+                            var temp = images[i];
+                            images[i] = images[j];
+                            images[j] = temp;
+                        }
+                        
                         initSlideshow();
                     } else {
                         document.getElementById('photo-container').innerHTML = '<div style="color:white;padding:40px;">Thư mục Drive đang trống!</div>';
@@ -374,7 +380,6 @@
                 startInterval(this.value);
             });
 
-            // Chạy mặc định mốc 1 phút ban đầu
             startInterval(slider.value);
         }
 
