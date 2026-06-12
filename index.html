@@ -17,26 +17,26 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body, html {
             width: 100%; height: 100%; overflow: hidden;
-            background-color: #ffffff; /* Viền ngoài trắng tinh khôi */
+            background-color: #ffffff; /* Khung viền ngoài TRẮNG TINH KHÔI chuẩn phòng tranh */
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             cursor: pointer;
             transition: background-color 1s ease;
         }
         
-        /* KHUNG TRANH TRẮNG MỸ THUẬT (MUSEUM FLOATING MATTE) */
+        /* LÒNG KHUNG BÊN TRONG MÀU ĐEN SÂU THẲM TẠO ĐỘ HÚT */
         #frame-wrapper {
             position: absolute;
             top: 60px; left: 60px; right: 60px; bottom: 60px; 
-            background-color: #fcfcfc; /* Nền trong cũng màu trắng ngà làm nổi bật ảnh */
+            background-color: #0d0d0f; 
             overflow: hidden;
-            box-shadow: 0px 15px 45px rgba(0, 0, 0, 0.15), inset 0px 0px 15px rgba(0,0,0,0.05);
+            box-shadow: 0px 15px 45px rgba(0, 0, 0, 0.15), inset 0px 0px 30px rgba(0,0,0,0.85);
             border: 1px solid #eaeaea;
             transition: all 1s ease;
         }
 
         #photo-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
         
-        /* Chế độ contain bảo toàn 100% ảnh. Hiệu ứng drop-shadow tạo bóng đổ cho bức ảnh lơ lửng */
+        /* CHẾ ĐỘ CONTAIN BẢO TOÀN 100% ẢNH KHÔNG BỊ CẮT + ĐỔ BÓNG NỔI 3D */
         .slide {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             object-fit: contain !important; 
@@ -45,15 +45,9 @@
             filter: drop-shadow(0px 15px 35px rgba(0,0,0,0.5));
         }
         .slide.active { opacity: 1; z-index: 2; }
-        
-        /* Lớp overlay Gradient tạo khoảng tối nhẹ ở đỉnh và đáy để hiển thị chữ màu trắng rõ ràng trên nền trắng */
-        .overlay { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 20%, rgba(0,0,0,0) 75%, rgba(0,0,0,0.65) 100%);
-            z-index: 3; pointer-events: none;
-        }
+        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.18); z-index: 3; pointer-events: none; }
 
-        /* GÓC TRÊN CÙNG BÊN TRÁI: Chỉ còn Đồng hồ khổng lồ */
+        /* GÓC TRÊN TRÁI CHỈ CÒN LẠI BỘ ĐẾM GIỜ SIÊU THOÁNG */
         #info-container {
             position: absolute; top: 40px; left: 40px; z-index: 4; color: #ffffff;
             text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.7);
@@ -64,7 +58,7 @@
         .hours-style { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #F4B41A; letter-spacing: -2px; transition: color 0.8s ease; }
         .minutes-style { font-family: 'Tourney', sans-serif; font-weight: 600; color: #ffffff; letter-spacing: -1px; }
 
-        /* KHỐI ĐA NĂNG ĐÁY MÀN HÌNH: CĂN GIỮA ĐỒNG TRỤC TUYỆT ĐỐI */
+        /* KHỐI ĐA NĂNG ĐÁY MÀN HÌNH: CĂN GIỮA ĐỒNG TRỤC, SÁT ĐÁY 15PX */
         #bottom-container {
             position: absolute; bottom: 15px; left: 0; right: 0; width: 100%; z-index: 4;
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
@@ -72,22 +66,21 @@
             text-shadow: 0px 3px 12px rgba(0, 0, 0, 0.95); transition: transform 0.5s ease-out; 
         }
         
-        /* Câu danh ngôn tự động ngắt dòng mềm mại khi quá dài */
+        /* Danh ngôn thiết lập tự động ngắt dòng mềm mại (word-wrap) */
         #quote-container { width: 100%; text-align: center; display: flex; justify-content: center; }
         #quote-text { 
             font-size: 1.4rem; font-weight: 300; font-style: italic; color: #f5f5f7; 
             white-space: normal !important; word-wrap: break-word; display: block; max-width: 90%; line-height: 1.45; text-align: center;
         }
         
-        /* Thanh trạng thái mới: Nhiệt độ | Dương lịch | Âm Lịch | AQI | Sự kiện */
+        /* Thanh trạng thái quy tụ toàn bộ thông số */
         #status-container { 
             width: 100%; display: flex; flex-direction: row; flex-wrap: wrap;
             align-items: center; justify-content: center; gap: 15px; font-size: 1.45rem; color: #ffffff; 
         }
-        /* Dương lịch và Nhiệt độ to bằng nhau */
-        #weather-temp, #date { font-size: 2.4rem; font-weight: 700; color: #ffffff; white-space: nowrap; }
+        #weather-temp, #date { font-size: 2.4rem; font-weight: 700; white-space: nowrap; }
         
-        /* Hai hộp Âm lịch và AQI đồng bộ nền, thiết kế gọn gàng */
+        /* Hộp Âm Lịch & AQI thiết kế nhỏ gọn, đồng bộ màu nền */
         .badge { 
             font-size: 1.25rem; font-weight: 700; padding: 4px 12px; border-radius: 6px; 
             white-space: nowrap; text-shadow: none; display: inline-block; 
@@ -98,7 +91,7 @@
         #countdown-text { white-space: nowrap; }
         .bar-separator { opacity: 0.4; font-weight: 300; color: #ffffff; }
 
-        /* BẢNG PHÍM BẤM THỜI GIAN NHỎ ĐẸP */
+        /* BẢNG PHÍM BẤM THỜI GIAN NHỎ ĐẸP TINH GIẢN */
         #control-panel {
             position: absolute; top: 20px; right: 20px; z-index: 10;
             background: rgba(0, 0, 0, 0.65); padding: 10px 14px; border-radius: 8px;
@@ -110,14 +103,13 @@
         .speed-btn { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); color: #fff; padding: 4px 8px; font-size: 0.8rem; border-radius: 4px; cursor: pointer; font-weight: 500; transition: all 0.2s ease; }
         .speed-btn.active { background: #F4B41A !important; border-color: #F4B41A !important; color: #000 !important; font-weight: bold; }
 
-        /* CHẾ ĐỘ BAN ĐÊM (21:00 - 05:00) */
+        /* CHẾ ĐỘ BAN ĐÊM (21:00 TỐI - 05:00 SÁNG HÔM SAU) */
         .night-active { background-color: #000000 !important; } 
         .night-active #photo-container, .night-active #bottom-container { display: none !important; }
         .night-active #frame-wrapper { background-color: #000000 !important; box-shadow: none !important; border-color: transparent !important; }
         .night-active .overlay { background: rgba(0, 0, 0, 1) !important; }
         .night-active .hours-style { color: #ffffff !important; } 
         .night-active #info-container { text-shadow: none !important; }
-        .night-active .badge { background-color: transparent !important; border: 1px solid #ff9900 !important; color: #ff9900 !important; }
     </style>
 </head>
 <body ontouchstart="activateControls()" onclick="activateControls()">
@@ -134,7 +126,7 @@
         </div>
 
         <div id="bottom-container">
-            <div id="quote-container"><span id="quote-text">Đang tải dữ liệu...</span></div>
+            <div id="quote-container"><span id="quote-text">Đang tải dữ liệu đặc sản vùng miền...</span></div>
             
             <div id="status-container">
                 <span id="weather-temp">--°C</span>
@@ -207,6 +199,7 @@
             const infoNode = document.getElementById('info-container');
             const bottomNode = document.getElementById('bottom-container');
 
+            // Đêm đưa đồng hồ vào chính giữa, Ngày trả về góc trên trái
             if (isNightMode) {
                 infoNode.style.top = "50%"; infoNode.style.left = "50%";
                 infoNode.style.transform = "translate(-50%, -50%) translate(" + burnInX1 + "px, " + burnInY1 + "px)";
@@ -242,7 +235,7 @@
             } catch(e) {}
         }
 
-        // Bỏ thẻ ngắt dòng, nén Âm lịch thành 1 chuỗi gọn gàng để nhét vào hộp badge
+        // Đã bỏ thẻ <br>, nén Âm lịch thành chuỗi chữ ngang gọn gàng để nhét vừa vào hộp Badge
         function calculateLunarHtml(now) {
             const phases = [
                 [2025, 11, 20, 11, "Ất Tỵ"], [2026, 0, 19, 12, "Ất Tỵ"],
@@ -266,6 +259,7 @@
             return `AL ${diffDays}-${activePhase[3]} ${activePhase[4]}`;
         }
 
+        // Tự động hoán đổi nội dung theo Ảnh - Loại bỏ biến tiếng việt có dấu
         function updateDynamicContentBySlide(indexSeed) {
             const now = new Date();
             const targetTetAm = new Date(2027, 1, 6); 
@@ -285,8 +279,8 @@
             const eventPool = [];
             if (daysToTetAm > 0) eventPool.push(`🧧 Còn ${daysToTetAm} ngày đến Tết Nguyên Đán Đinh Mùi 2027`);
             if (daysToTetDuong > 0) eventPool.push(`🌸 Còn ${daysToTetDuong} ngày đến Tết Dương Lịch 2027`);
-            if (daysToNoel > 0) eventPool.push(`🎄 Còn ${daysToNoel} ngày đến Giáng Sinh`);
-            if (daysToTrungThu > 0) eventPool.push(`🥮 Còn ${daysToTrungThu} ngày đến Tết Trung Thu`);
+            if (daysToNoel > 0) eventPool.push(`🎄 Còn ${daysToNoel} ngày đến Đại lễ Giáng Sinh`);
+            if (daysToTrungThu > 0) eventPool.push(`🥮 Còn ${daysToTrungThu} ngày đến Tết Trung Thu phá cỗ`);
             if (daysToPhatDan > 0) eventPool.push(`🙏 Còn ${daysToPhatDan} ngày đến Đại lễ Phật Đản (15/4 AL)`);
             if (daysToQuocKhanh > 0) eventPool.push(`🇨🇳 Còn ${daysToQuocKhanh} ngày đến Quốc Khánh 2/9`);
             
@@ -310,8 +304,8 @@
                 "Ngắm hoàng hôn buông lững lờ lãng mạn khi trải nghiệm đi thuyền trên Hồ L Lắk thơ mộng."
             ];
 
-            document.getElementById('countdown-text').innerHTML = eventPool[indexSeed % eventPool.length];
-            document.getElementById('quote-text').innerText = `"${quotePool[indexSeed % quotePool.length]}"`;
+            if(eventPool.length > 0) document.getElementById('countdown-text').innerHTML = eventPool[indexSeed % eventPool.length];
+            if(quotePool.length > 0) document.getElementById('quote-text').innerText = `"${quotePool[indexSeed % quotePool.length]}"`;
         }
 
         function updateClock() {
@@ -323,8 +317,9 @@
 
             const days = ['Chủ Nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
             document.getElementById('date').innerText = `${days[now.getDay()]} ${now.getDate()}-${now.getMonth() + 1}`;
-            document.getElementById('lunar-date').innerHTML = calculateLunarHtml(now);
+            document.getElementById('lunar-date').innerText = calculateLunarHtml(now);
 
+            // Tự bật nền đen từ 21h tối đến 5h sáng hôm sau
             if (hours >= 21 || hours < 5) document.body.classList.add('night-active');
             else document.body.classList.remove('night-active');
 
@@ -358,6 +353,7 @@
                     else if (aqi <= 300) { label = "Rất xấu"; bg = "#9b59b6"; }
                     else { label = "Nguy hiểm"; bg = "#795548"; }
                     
+                    // CẬP NHẬT ĐỒNG BỘ: Ép Lịch Âm chạy chung nền 100% với hộp AQI
                     badge.innerText = `AQI: ${aqi} (${label})`; 
                     badge.style.backgroundColor = bg; badge.style.color = text;
                     if(lunarBadge) {
@@ -371,4 +367,56 @@
         function fetchImagesFromDrive() {
             const query = encodeURIComponent(`'${FOLDER_ID}' in parents and mimeType contains 'image/'`);
             fetch(`https://www.googleapis.com/drive/v3/files?q=${query}&key=${API_KEY}&fields=files(id)`)
-                .then(res => { if (!res.ok) throw new Error('Err
+                .then(res => { if (!res.ok) throw new Error('Err'); return res.json(); })
+                .then(data => {
+                    if (data.files && data.files.length > 0) {
+                        images = data.files.map(file => `https://drive.google.com/uc?export=view&id=${file.id}`);
+                        for (var i = images.length - 1; i > 0; i--) {
+                            var j = Math.floor(Math.random() * (i + 1));
+                            var temp = images[i]; images[i] = images[j]; images[j] = temp;
+                        }
+                        initSlideshow();
+                    }
+                }).catch(() => setTimeout(fetchImagesFromDrive, 5000)); 
+        }
+
+        function initSlideshow() {
+            document.getElementById('slide1').src = images[0];
+            changeIntervalMode(currentActiveMode);
+        }
+
+        function changeIntervalMode(modeVal) {
+            currentActiveMode = modeVal;
+            const seconds = stepSeconds[modeVal];
+            
+            const btns = document.querySelectorAll('.speed-btn');
+            for(let i=0; i<btns.length; i++) {
+                if(i+1 === modeVal) btns[i].classList.add('active');
+                else btns[i].classList.remove('active');
+            }
+
+            if (slideInterval) clearInterval(slideInterval);
+            
+            // Khởi tạo chạy chữ ngay lần đầu hoán đổi
+            updateDynamicContentBySlide(currentIndex);
+
+            slideInterval = setInterval(() => {
+                let nextIndex = (currentIndex + 1) % images.length;
+                let currentImg = document.getElementById(isSlide1Active ? 'slide1' : 'slide2');
+                let nextImg = document.getElementById(isSlide1Active ? 'slide2' : 'slide1');
+
+                nextImg.onload = function() {
+                    currentImg.classList.remove('active');
+                    nextImg.classList.add('active');
+                    isSlide1Active = !isSlide1Active;
+                    currentIndex = nextIndex;
+                    updateDynamicContentBySlide(currentIndex);
+                };
+                nextImg.src = images[nextIndex];
+            }, seconds * 1000);
+        }
+
+        fetchImagesFromDrive();
+    </script>
+</body>
+</html>
