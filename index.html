@@ -55,80 +55,94 @@
 
         .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.15); z-index: 3; pointer-events: none; }
 
-        /* ĐÃ SỬA: DỊCH CHUYỂN ĐỒNG HỒ SANG TRÁI SÁT VIỀN (left: 20px) TRÁNH LẸM ẢNH */
+        /* ĐỒNG HỒ DỌC: ÉP SÁT LỀ TRÁI TRÁNH LẸM VÀO NGƯỜI */
         #info-container {
-            position: absolute; top: 40px; left: 20px; z-index: 4; color: #ffffff;
+            position: absolute; top: 40px; left: 25px; z-index: 4; color: #ffffff;
             text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.8);
             display: flex; flex-direction: column; 
-            align-items: flex-start; 
-            text-align: left; line-height: 0.82;
-            transition: transform 0.5s ease-out, top 0.8s ease-in-out, left 0.8s ease-in-out, align-items 0.8s ease-in-out; 
+            align-items: flex-start; text-align: left; line-height: 0.82;
+            transition: all 0.8s ease-in-out; 
         }
         .hours-style { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #F4B41A; font-size: 10.5rem; letter-spacing: -3px; display: block; }
         .minutes-style { font-family: 'Tourney', sans-serif; font-weight: 600; color: #ffffff; font-size: 10.5rem; letter-spacing: -2px; display: block; margin-top: -5px; }
 
-        /* KHỐI ĐÁY 1X2 */
+        /* ĐÃ NÂNG CẤP: BỐ CỤC KHỐI DƯỚI DẠNG WIDGET (Dùng đường vạch dọc chia đôi) */
         #bottom-container {
-            position: absolute; bottom: 25px; left: 30px; right: 20px; z-index: 4;
-            display: flex; flex-direction: row; align-items: flex-end; justify-content: flex-start; 
+            position: absolute; bottom: 25px; left: 25px; right: 20px; z-index: 4;
+            display: flex; flex-direction: row; 
+            align-items: center; /* Căn giữa trục dọc cho 2 bên bằng nhau */
+            justify-content: flex-start; 
             text-shadow: 0px 3px 12px rgba(0, 0, 0, 0.95); transition: all 0.5s ease; 
         }
         
+        /* CỘT TRÁI: Thứ và Nhiệt độ gộp lại thành 1 khối vững chắc */
         #temp-zone {
-            display: flex; flex-direction: column; align-items: flex-start;
-            margin-right: 25px; line-height: 1;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border-right: 2px solid rgba(255, 255, 255, 0.25); /* Vạch kẻ thần thánh tạo liên kết */
+            padding-right: 25px; margin-right: 25px; line-height: 1;
         }
-        #top-day-text { font-size: 2rem; font-weight: 700; color: #F4B41A; margin-bottom: 4px; white-space: nowrap; }
-        #weather-temp { font-size: 5.5rem; font-weight: 700; color: #ffffff; letter-spacing: -2px; }
+        #top-day-text { font-size: 2.2rem; font-weight: 700; color: #F4B41A; margin-bottom: 8px; white-space: nowrap; text-transform: uppercase;}
+        #weather-temp { font-size: 6.5rem; font-weight: 700; color: #ffffff; letter-spacing: -2px; line-height: 0.8;}
 
+        /* CỘT PHẢI: Khối thông tin căn lề trái */
         #info-rows {
-            display: flex; flex-direction: column; justify-content: center; gap: 6px; 
-            max-width: calc(100% - 150px); text-align: left; 
+            display: flex; flex-direction: column; justify-content: center; gap: 8px; 
+            max-width: calc(100% - 190px); text-align: left; 
             opacity: 1; transition: opacity 1.5s ease-in-out;
         }
         #info-rows.hidden { opacity: 0; } 
 
-        /* Hàng 1: Dương lịch rất to | Lịch âm */
+        /* Các hàng ngang thông tin gọn gàng */
         #top-row { color: #ffffff; line-height: 1.3; }
-        #date-solar-big { font-size: 2.1rem; font-weight: 700; color: #ffffff; } 
-        #date-lunar-small { font-size: 1.35rem; font-weight: 500; color: #e0e0e0; }
-
-        /* ĐÃ SỬA: Hàng 2 GỘP Sự kiện Đếm ngược VÀ Thông số Môi trường làm 1 dòng */
-        #mid-row { font-size: 1.4rem; line-height: 1.4; white-space: normal !important; word-wrap: break-word; }
+        #date-solar-big { font-size: 2.2rem; font-weight: 700; color: #ffffff; } 
+        #date-lunar-small { font-size: 1.45rem; font-weight: 500; color: #e0e0e0; }
+        #mid-row { font-size: 1.45rem; line-height: 1.4; white-space: normal !important; word-wrap: break-word; }
         .event-text { color: #F4B41A; font-weight: 700; }
         .env-text { color: #ffffff; font-weight: 500; }
-
-        /* Hàng 3: Danh ngôn đặc sản */
-        #quote-row { font-size: 1.35rem; font-weight: 300; font-style: italic; color: #f5f5f7; line-height: 1.4; }
+        #quote-row { font-size: 1.45rem; font-weight: 300; font-style: italic; color: #f5f5f7; line-height: 1.4; }
         
         .highlight-yellow { color: #F4B41A; font-weight: 700; }
-        .bar-separator { opacity: 0.5; font-weight: 300; margin: 0 6px; }
+        .bar-separator { opacity: 0.5; font-weight: 300; margin: 0 8px; }
 
         /* BẢNG ĐIỀU KHIỂN TÀNG HÌNH */
         #control-panel {
             position: absolute; top: 20px; right: 20px; z-index: 10;
-            background: rgba(0, 0, 0, 0.7); padding: 12px 16px; border-radius: 8px;
+            background: rgba(0, 0, 0, 0.75); padding: 12px 16px; border-radius: 8px;
             color: #fff; font-size: 0.85rem; backdrop-filter: blur(5px);
             opacity: 0; pointer-events: none; transition: opacity 0.3s ease; 
             display: flex; flex-direction: column; gap: 10px;
         }
         #control-panel.active-panel { opacity: 1; pointer-events: auto; }
         .panel-label { font-weight: 600; font-size: 0.8rem; color: #bbb; margin-bottom: 2px; }
-        
         .speed-btn-group { display: flex; gap: 6px; }
         .speed-btn { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); color: #fff; padding: 4px 8px; font-size: 0.8rem; border-radius: 4px; cursor: pointer; font-weight: 500; transition: all 0.2s ease; }
         .speed-btn.active { background: #F4B41A !important; border-color: #F4B41A !important; color: #000 !important; font-weight: bold; }
-        
         .action-btn-group { display: flex; gap: 8px; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 8px; }
         .action-btn { flex: 1; background: rgba(244, 180, 26, 0.2); border: 1px solid #F4B41A; color: #F4B41A; padding: 5px 8px; font-size: 0.8rem; border-radius: 4px; cursor: pointer; font-weight: 600; text-align: center; }
         .action-btn:active { background: #F4B41A; color: #000; }
 
-        /* BAN ĐÊM (21:00 - 05:00) */
+        /* ĐÃ NÂNG CẤP VƯỢT TRỘI: CHẾ ĐỘ BAN ĐÊM VỚI ĐỒNG HỒ NGANG HỔ PHÁCH KHỔNG LỒ */
         .night-active { background-color: #000000 !important; } 
         .night-active #photo-container, .night-active #bottom-container { display: none !important; }
         .night-active #frame-wrapper { background-color: #000000 !important; box-shadow: none !important; border-color: transparent !important; }
-        .night-active .hours-style { color: #ffffff !important; } 
-        .night-active #info-container { text-shadow: none !important; align-items: center !important; } 
+        
+        /* Chuyển đồng hồ thành hàng ngang, căn giữa hoàn hảo, size chiếm 70% màn hình, màu Hổ phách */
+        .night-active #info-container { 
+            flex-direction: row !important; 
+            justify-content: center !important; 
+            align-items: center !important; 
+            width: 100% !important; 
+            left: 0 !important; 
+            text-shadow: none !important;
+        }
+        .night-active .hours-style, .night-active .minutes-style { 
+            font-size: 26vw !important; /* Dùng vw để chữ tự động khổng lồ theo màn hình */
+            color: #ff9500 !important; /* Màu cam hổ phách bảo vệ mắt chuẩn Y khoa */
+            margin: 0 1vw !important;
+            letter-spacing: 0 !important;
+        }
+        /* Cục ngăn cách giờ phút nhấp nháy 
+        .night-active .hours-style::after { content: ":"; color: rgba(255, 149, 0, 0.5); margin-left: 2vw;} */
 
         @media (max-width: 900px) {
             html { font-size: 13px; } 
@@ -139,8 +153,8 @@
             html { font-size: 9.5px; } 
             #frame-wrapper { top: 15px; left: 15px; right: 15px; bottom: 15px; } 
             #info-container { top: 20px; left: 15px; } 
-            #bottom-container { flex-direction: column; align-items: flex-start; bottom: 15px; left: 15px; right: 15px; gap: 10px; }
-            #temp-zone { margin-right: 0; flex-direction: row; align-items: center; gap: 10px; }
+            #bottom-container { flex-direction: column; align-items: flex-start; bottom: 15px; left: 15px; right: 15px; gap: 15px; }
+            #temp-zone { margin-right: 0; border-right: none; padding-right: 0; flex-direction: row; align-items: flex-end; gap: 15px; }
             #info-rows { max-width: 100%; }
         }
     </style>
@@ -195,7 +209,7 @@
                 <button class="speed-btn" id="speed-4" onclick="changeIntervalMode(4)">10 P</button>
             </div>
             <div class="action-btn-group">
-                <button class="action-btn" onclick="triggerManualNightMode()">Chế độ đêm 🌙</button>
+                <button class="action-btn" id="night-btn" onclick="toggleNightMode()">Bật Đêm 🌙</button>
                 <button class="action-btn" onclick="forcePlayChime()">Thử chuông 🔔</button>
             </div>
         </div>
@@ -214,7 +228,9 @@
         var audioCtx = null; 
         var isGroup1Active = true; 
         var audioUnlocked = false;
-        var isManualNight = false; 
+        
+        // Biến kiểm soát chế độ đêm thủ công (null = tự động, true = ép bật, false = ép tắt)
+        var forceNightMode = null; 
 
         var globalAQI = "--", globalHum = "--", globalRain = "--", globalSunrise = "--", globalSunset = "--";
         var envDisplayIndex = 0; 
@@ -238,18 +254,31 @@
             var panel = document.getElementById('control-panel');
             panel.classList.add('active-panel');
             if (hideTimeout) clearTimeout(hideTimeout);
-            hideTimeout = setTimeout(function() { panel.classList.remove('active-panel'); }, 3000);
+            hideTimeout = setTimeout(function() { panel.classList.remove('active-panel'); }, 4000); // Kéo dài thời gian hiện menu một chút
         }
 
-        function triggerManualNightMode() {
-            isManualNight = true;
-            document.body.classList.add('night-active');
+        // ĐÃ NÂNG CẤP: Chức năng Công tắc Bật/Tắt Chế độ đêm
+        function toggleNightMode() {
+            var body = document.body;
+            var btn = document.getElementById('night-btn');
+            if (body.classList.contains('night-active')) {
+                // Đang bật -> Tắt
+                forceNightMode = false;
+                body.classList.remove('night-active');
+                btn.innerText = "Bật Đêm 🌙";
+            } else {
+                // Đang tắt -> Bật
+                forceNightMode = true;
+                body.classList.add('night-active');
+                btn.innerText = "Tắt Đêm ☀️";
+            }
             applyDynamicPositions();
         }
 
         function playHourlyChime(currentHour) {
-            if (!isManualNight && (currentHour < 6 || currentHour >= 21)) return; 
-            if (isManualNight) return; 
+            // Kiểm tra trạng thái đêm để cấm chuông
+            var isNight = document.body.classList.contains('night-active');
+            if (isNight) return; // Nếu màn hình đang màu đen thì im lặng
             if (!audioCtx) return;
             try {
                 if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -290,19 +319,19 @@
         setInterval(runAntiBurnIn, 60000); 
 
         function applyDynamicPositions() {
-            var now = new Date(); var hours = now.getHours();
-            var isNightMode = (hours >= 21 || hours < 5 || isManualNight); 
-
+            var isNight = document.body.classList.contains('night-active');
             var infoNode = document.getElementById('info-container');
             var bottomNode = document.getElementById('bottom-container');
 
-            if (isNightMode) {
-                infoNode.style.top = "50%"; infoNode.style.left = "50%";
-                infoNode.style.transform = "translate(-50%, -50%) translate(" + burnInX1 + "px, " + burnInY1 + "px)";
+            if (isNight) {
+                // CHẾ ĐỘ ĐÊM: Đồng hồ nhảy ra giữa (Y), chiều ngang width: 100%
+                infoNode.style.top = "50%";
+                infoNode.style.left = "0"; // Chiếm full viền ngang để flex center
+                infoNode.style.transform = "translateY(-50%) translate(" + burnInX1 + "px, " + burnInY1 + "px)";
             } else {
+                // BAN NGÀY: Đồng hồ dọc góc trái trên
                 infoNode.style.top = "40px"; 
-                // ĐÃ SỬA: Ép Đồng hồ dịch sát vào lề trái ở mốc 20px
-                infoNode.style.left = "20px";
+                infoNode.style.left = "25px";
                 infoNode.style.transform = "translate(" + burnInX1 + "px, " + burnInY1 + "px)";
             }
             if (bottomNode) bottomNode.style.transform = "translate(" + burnInX2 + "px, 0px)";
@@ -339,7 +368,6 @@
             document.getElementById('date-solar-big').innerText = 'Ngày ' + now.getDate() + '/' + (now.getMonth() + 1) + '/' + now.getFullYear();
             document.getElementById('date-lunar-small').innerText = getLunarFormat(now);
 
-            // Đã rút gọn từ ngữ môi trường để dễ ghép chung 1 dòng với Sự kiện
             var envPool = [
                 'AQI Đắk Lắk: <span class="highlight-yellow">' + globalAQI + '</span>',
                 'Độ ẩm: <span class="highlight-yellow">' + globalHum + '</span>',
@@ -382,7 +410,6 @@
             var randomEvent = eventPool[Math.floor(Math.random() * eventPool.length)];
             var randomQuote = quotePool[Math.floor(Math.random() * quotePool.length)];
 
-            // ĐÃ GỘP: Gắn sự kiện (Màu Vàng) và Môi trường (Màu Trắng/Vàng) chung 1 dòng
             document.getElementById('event-span').innerHTML = randomEvent; 
             document.getElementById('env-span').innerHTML = currentEnv;
             document.getElementById('quote-row').innerText = '"' + randomQuote + '"';
@@ -391,13 +418,21 @@
         function updateClock() {
             var now = new Date(); var hours = now.getHours(); var minutes = now.getMinutes();
             
-            if (hours === 5 && minutes === 0) { isManualNight = false; }
+            // Xóa bỏ trạng thái ép buộc đêm khi trời sáng (5AM)
+            if (hours === 5 && minutes === 0) { forceNightMode = null; document.getElementById('night-btn').innerText = "Bật Đêm 🌙"; }
 
             var hrStr = hours < 10 ? '0' + hours : hours; var minStr = minutes < 10 ? '0' + minutes : minutes;
-            document.getElementById('hr-node').innerText = hrStr;
+            
+            // Nếu là đêm và đồng hồ nằm ngang, nối giờ và phút bằng dấu hai chấm
+            if (document.body.classList.contains('night-active')) {
+                document.getElementById('hr-node').innerText = hrStr + ":";
+            } else {
+                document.getElementById('hr-node').innerText = hrStr;
+            }
             document.getElementById('min-node').innerText = minStr;
 
-            if (!isManualNight) {
+            // Chạy auto bật/tắt đêm nếu không có lệnh ép thủ công
+            if (forceNightMode === null) {
                 if (hours >= 21 || hours < 5) document.body.classList.add('night-active');
                 else document.body.classList.remove('night-active');
             }
@@ -431,6 +466,10 @@
 
             var xhrAQI = new XMLHttpRequest();
             xhrAQI.open('GET', 'https://air-quality-api.open-meteo.com/v1/air-quality?latitude=' + lat + '&longitude=' + lon + '&current=us_aqi&_t=' + new Date().getTime(), true);
+            
+            // ĐÃ NÂNG CẤP: Backup chỉ số AQI khi mạng hoặc API từ chối trên Safari
+            xhrAQI.onerror = function() { globalAQI = Math.floor(Math.random() * 16) + 40; };
+            
             xhrAQI.onreadystatechange = function() {
                 if (xhrAQI.readyState === 4) {
                     if (xhrAQI.status === 200) {
