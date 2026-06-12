@@ -17,46 +17,45 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body, html {
             width: 100%; height: 100%; overflow: hidden;
-            background-color: #ffffff; /* Khung viền ngoài màu trắng tinh khôi chuẩn Matte Gallery cao cấp */
+            background-color: #fcfcfc; /* KHUNG VIỀN MỚI: Màu trắng ngà cao cấp chuẩn phòng triển lãm nghệ thuật */
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             cursor: pointer;
             transition: background-color 1s ease;
         }
         
-        /* KHUNG VIỀN TRANH BẢN DÀY 60PX ĐỐI XỨNG HOÀN HẢO TUYỆT ĐỐI 4 CẠNH */
+        /* KHUNG TRANH NỔI PHÒNG TRIỂN LÃM (MUSEUM FLOATING MATTE) DÀY 60PX ĐỐI XỨNG */
         #frame-wrapper {
             position: absolute;
-            top: 60px; left: 60px; right: 60px; bottom: 60px; /* Dày đều chập chặn 60px bốn góc */
-            background-color: #0d0d0f; /* Lòng khung màu đen nhung sâu lắng làm nền cho tranh nổi */
+            top: 60px; left: 60px; right: 60px; bottom: 60px; /* Cân bằng tuyệt đối 4 cạnh */
+            background-color: #0b0b0c; /* Lòng khung đen nhung sâu thẳm làm nền cho ảnh nổi lên */
             overflow: hidden;
-            /* Đã nâng cấp: Tạo hiệu ứng khe shadow box dập nổi 3D đa tầng tạo độ sâu hút hồn cho ảnh */
-            box-shadow: 0px 15px 45px rgba(0, 0, 0, 0.15), 
-                        0px 2px 10px rgba(0, 0, 0, 0.1), 
-                        inset 0px 0px 30px rgba(0, 0, 0, 0.85); /* Tạo độ sâu đổ bóng vào trong */
-            border: 1px solid rgba(0, 0, 0, 0.06);
+            /* ĐÃ NÂNG CẤP: Hiệu ứng bóng dập nổi dốc đa tầng giúp toàn bộ khung ảnh bên trong trông nổi bật hẳn lên */
+            box-shadow: 0px 20px 50px rgba(0, 0, 0, 0.3), 
+                        inset 0px 0px 25px rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.15);
             transition: all 1s ease;
         }
 
         #photo-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
         
-        /* ĐÃ CẢI TIẾN THƯỢNG HẠNG: Chuyển sang contain giúp bảo toàn 100% bức ảnh không bao giờ bị cắt mất hình */
+        /* Chế độ contain bảo toàn 100% ảnh đứng/ngang lơ lửng ở trung tâm không bao giờ bị xén */
         .slide {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: contain !important; /* Giữ trọn vẹn ảnh dọc/ngang không bị xén đầu xén chân */
+            object-fit: contain !important; 
             opacity: 0; 
             transition: opacity 4s ease-in-out; /* Hoạt cảnh lật trang chậm mượt */
+            box-shadow: 0 10px 35px rgba(0,0,0,0.6); /* Tạo bóng đổ riêng cho bức ảnh nổi lên trên nền đen */
         }
         .slide.active { opacity: 1; z-index: 2; }
         
-        /* Lớp overlay phủ nhẹ tinh tế để làm nổi bật hệ thống chữ */
         .overlay { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0, 0, 0, 0.12); 
+            background: rgba(0, 0, 0, 0.1); 
             z-index: 3; 
             pointer-events: none;
         }
 
-        /* GÓC TRÊN CÙNG BÊN TRÁI: CHỈ CÒN ĐỒNG HỒ KHỔNG LỒ SIÊU THOÁNG MẮT (Đêm tự nhảy ra giữa) */
+        /* GÓC TRÊN CÙNG BÊN TRÁI: ĐỒNG HỒ VÀNG KHỔNG LỒ SIÊU THOÁNG MẮT (Ban đêm tự động ra giữa) */
         #info-container {
             position: absolute; top: 40px; left: 40px; z-index: 4; color: #ffffff;
             text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.75);
@@ -75,7 +74,7 @@
             text-shadow: 0px 3px 12px rgba(0, 0, 0, 0.95); transition: transform 0.5s ease-out; 
         }
         
-        /* ĐÃ TỐI ƯU GỌN GÀNG: Cho phép câu danh ngôn tự động ngắt dòng mềm mại khi quá dài, căn giữa trục dọc */
+        /* ĐÃ SỬA: Danh ngôn tự động ngắt xuống dòng mềm mại khi quá dài, căn giữa trục dọc hoàn hảo */
         #quote-container { width: 100%; text-align: center; display: flex; justify-content: center; }
         #quote-text { 
             font-size: 1.35rem; font-weight: 300; font-style: italic; color: #f5f5f7; 
@@ -89,11 +88,11 @@
         }
         #weather-temp, #date-text-bottom { font-size: 2.2rem; font-weight: 700; color: #ffffff; white-space: nowrap; }
         
-        /* Kiểu dáng hộp Lịch Âm & AQI nhỏ nhắn, tinh tế, tắt bóng chữ */
+        /* Thiết kế hai chiếc Hộp Âm Lịch & AQI nhỏ nhắn tinh tế, tắt bóng chữ */
         #lunar-badge-bottom, #aqi-badge { 
             font-size: 1.2rem; font-weight: 700; padding: 3px 10px; border-radius: 5px; 
             white-space: nowrap; text-shadow: none; display: inline-block; 
-            background-color: rgba(255,255,255,0.15); 
+            background-color: rgba(255,255,255,0.18); 
             transition: background-color 0.5s ease, color 0.5s ease; 
         }
         
@@ -179,7 +178,7 @@
         let burnInX2 = 0, burnInY2 = 0;
 
         const stepSeconds = { 1: 60, 2: 180, 3: 300, 4: 600 };
-        let currentActiveMode = 2; // Khởi tạo mặc định chọn mốc 3 Phút
+        let currentActiveMode = 2; 
 
         function activateControls() {
             if (!audioCtx) {
@@ -295,7 +294,7 @@
             eventPool.push("🌱 Sắp đến ngày Mùng 1 Âm Lịch đầu tháng - Khởi đầu tháng mới bình an");
             eventPool.push("☕ Thác Dray Nur Đắk Lắk mùa này nước đổ tung bọt trắng xóa vĩ đại");
             eventPool.push("🏮 Đón chờ mùa Lễ hội Đua voi Bản Đôn Đắk Lắk đậm đà bản sắc đại ngàn");
-            eventPool.push("⛪ Sắp đến kỳ lễ Phục Sinh thanh khiết trang nghiêm bên Thiên Chúa Giáo");
+            eventPool.push("A Sắp đến kỳ lễ Phục Sinh thanh khiết trang nghiêm bên Thiên Chúa Giáo");
             eventPool.push("🌾 Sắp đến mùa Lễ mừng lúa mới đón vụ mùa ấm no của đồng bào Ê Đê");
             eventPool.push("⛵ Sắp diễn ra hội đua thuyền rồng truyền thống trên sông Krông Ana địa phương");
             eventPool.push("🍲 Mùa lễ Vu Lan báo hiếu tháng 7 Âm lịch - Thắt đóa hoa hồng cài áo tri ân");
@@ -319,46 +318,14 @@
             document.getElementById('quote-text').innerText = `"${quotePool[indexSeed % quotePool.length]}"`;
         }
 
+        // ĐÃ HOÀN THIỆN: Sửa hàm điền số 0 thủ công chuẩn 100% không dùng padStart để tương thích Safari iOS 10 cũ
         function updateClock() {
             const now = new Date();
             const hours = now.getHours(); const minutes = now.getMinutes();
             
-            let hrStr = String(hours).padStart(2, '0'); let minStr = String(minutes).padStart(2, '0');
+            // Giải pháp cổ điển thay cho padStart chống crash script
+            let hrStr = hours < 10 ? '0' + hours : hours;
+            let minStr = minutes < 10 ? '0' + minutes : minutes;
             document.getElementById('time').innerHTML = `<span class="hours-style">${hrStr}</span><span class="minutes-style">${minStr}</span>`;
 
-            const days = ['Chủ Nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
-            document.getElementById('date-text-bottom').innerText = `${days[now.getDay()]} ${now.getDate()}-${now.getMonth() + 1}`;
-            document.getElementById('lunar-badge-bottom').innerText = getLunarTextString(now);
-
-            if (hours >= 21 || hours < 5) document.body.classList.add('night-active');
-            else document.body.classList.remove('night-active');
-
-            applyDynamicPositions();
-
-            if (minutes === 0 && hours !== lastChimeHour) {
-                playHourlyChime(hours); lastChimeHour = hours;
-            }
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-
-        function updateWeatherAndAQI() {
-            const lat = 12.6667; const lon = 108.0500;
-            fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m`)
-                .then(res => res.json()).then(data => {
-                    document.getElementById('weather-temp').innerText = `${Math.round(data.current.temperature_2m)}°C`;
-                }).catch(() => { document.getElementById('weather-temp').innerText = '--°C'; });
-
-            fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=us_aqi`)
-                .then(res => res.json()).then(data => {
-                    const aqi = data.current.us_aqi; const badge = document.getElementById('aqi-badge');
-                    const lunarBadge = document.getElementById('lunar-badge-bottom'); 
-                    let label = "Tốt"; let bg = "#2ecc71"; let text = "#fff";
-                    if (aqi <= 50) { label = "Tốt"; bg = "#2ecc71"; }
-                    else if (aqi <= 100) { label = "Trung bình"; bg = "#f1c40f"; text = "#000"; }
-                    else if (aqi <= 150) { label = "Kém"; bg = "#e67e22"; }
-                    else if (aqi <= 200) { label = "Xấu"; bg = "#e74c3c"; }
-                    else if (aqi <= 300) { label = "Rất xấu"; bg = "#9b59b6"; }
-                    else { label = "Nguy hiểm"; bg = "#795548"; }
-                    
-                    badge.innerText = `AQI: ${aqi} (${label})`; badge.style.backgroundColor = bg; badge
+            const days =
