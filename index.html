@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
     <title>Khung Ảnh Số Nghệ Thuật</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -150,7 +153,7 @@
             transition: transform 0.5s ease-out; 
         }
 
-        /* Dòng 1: Danh ngôn ẩm thực, đặc sản vùng miền xếp trên */
+        /* Dòng 1: Danh ngôn đặc sản vùng miền đổi theo ảnh (ở trên) */
         #quote-container {
             width: 100%;
             text-align: center;
@@ -245,7 +248,6 @@
             font-weight: 500;
             transition: all 0.2s ease;
         }
-        /* Phím bấm đang được kích hoạt hoạt động */
         .speed-btn.active {
             background: #F4B41A !important;
             border-color: #F4B41A !important;
@@ -253,7 +255,7 @@
             font-weight: bold;
         }
 
-        /* CHẾ ĐỘ BAN ĐÊM TỰ ĐỘNG KHÓA NỀN ĐEN SÂU (21:00 - 05:00 SÁNG) */
+        /* CHẾ ĐỘ BAN ĐÊM TỰ ĐỘNG KHÓA NỀN ĐEN SÂU (21:00 TOI - 05:00 SÁNG) */
         .night-active #photo-container {
             opacity: 0 !important; 
         }
@@ -322,7 +324,6 @@
     </div>
 
     <script>
-        // Hệ thống bảo mật mã hóa chuỗi API Key bằng Base64 bảo vệ tuyệt đối dữ liệu
         const SECRET_ENCODED = 'QUl6YVN5REwyRm1VQzkxMUtBTnFwN3VPbnZKcU5xVHltb1R2SkxF';
         const API_KEY = atob(SECRET_ENCODED);
         const FOLDER_ID = '1r1WUIKwAPAnsyIh-Zot7AevEW0uEZ-Hl'; 
@@ -332,19 +333,15 @@
         let slideInterval;
         let hideTimeout;
         let lastChimeHour = -1;
-        let audioCtx = null; // Quản lý bộ âm thanh chuông báo giờ hằng tiếng
+        let audioCtx = null; 
 
-        // Tọa độ phục vụ tính năng chống lưu ảnh (Anti-Burn-In) hằng phút
         let burnInX1 = 0, burnInY1 = 0;
         let burnInX2 = 0, burnInY2 = 0;
 
-        // Cấu hình các mốc phím bấm Phút đổi ảnh
         const stepSeconds = { 1: 60, 2: 180, 3: 300, 4: 600 };
-        let currentActiveMode = 2; // ĐẶT MẶC ĐỊNH LÀ MỐC 2 (3 PHÚT CHUYỂN ẢNH 1 LẦN) KHI MỞ APP
+        let currentActiveMode = 2; // ĐẶT MẶC ĐỊNH 3 PHÚT KHI KHỞI CHẠY APP
 
-        // Hàm mở khóa âm thanh trên iOS và xử lý bảng điều khiển ẩn mờ mờ tinh tế
         function activateControls() {
-            // GIẢI PHÁP SỬA LỖI MẤT CHUÔNG: Mở khóa AudioContext bằng cái chạm tay đầu tiên trên iPad 4
             if (!audioCtx) {
                 try {
                     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
@@ -363,9 +360,8 @@
             }, 3000);
         }
 
-        // TÍNH NĂNG CHỐNG LƯU MÀN HÌNH NÂNG CAO: Tính toán dịch nhích ngẫu nhiên vị trí chữ hằng phút
         function runAntiBurnIn() {
-            burnInX1 = Math.floor(Math.random() * 24) - 12; // Nhích ngẫu nhiên từ -12px đến +12px
+            burnInX1 = Math.floor(Math.random() * 24) - 12; 
             burnInY1 = Math.floor(Math.random() * 24) - 12;
             burnInX2 = Math.floor(Math.random() * 24) - 12;
             burnInY2 = Math.floor(Math.random() * 24) - 12;
@@ -373,11 +369,9 @@
         }
         setInterval(runAntiBurnIn, 60000); 
 
-        // HÀM ĐIỀU PHỐI VỊ TRÍ TOÀN DIỆN (ĐỒNG HỒ NHẢY VÀO CHÍNH GIỮA MÀN HÌNH BAN ĐÊM)
         function applyDynamicPositions() {
             const now = new Date();
             const hours = now.getHours();
-            // Đã cài đặt chuẩn khung giờ ban đêm: Tự đóng ảnh từ 21:00 tối đến 05:00 sáng hôm sau
             const isNightMode = (hours >= 21 || hours < 5); 
 
             const infoNode = document.getElementById('info-container');
@@ -398,14 +392,12 @@
             }
         }
 
-        // TIẾNG CHUÔNG BÁO GIỜ TỰ ĐỘNG ĐINH-ĐOONG (IM LẶNG TUYỆT ĐỐI TỪ 21H ĐẾN 5H SÁNG)
         function playHourlyChime(currentHour) {
-            if (currentHour < 6 || currentHour >= 21) return; // Khóa chuông đêm bảo vệ giấc ngủ
+            if (currentHour < 6 || currentHour >= 21) return; 
             if (!audioCtx) return;
             try {
                 if (audioCtx.state === 'suspended') audioCtx.resume();
                 
-                // Tiếng Đinh (Âm cao thanh khiết)
                 const osc1 = audioCtx.createOscillator();
                 const gain1 = audioCtx.createGain();
                 osc1.type = 'sine';
@@ -417,7 +409,6 @@
                 osc1.start();
                 osc1.stop(audioCtx.currentTime + 0.8);
                 
-                // Tiếng Đoong (Âm trầm ngân vang vang sau 350ms)
                 setTimeout(() => {
                     if (audioCtx.state === 'suspended') audioCtx.resume();
                     const osc2 = audioCtx.createOscillator();
@@ -434,7 +425,6 @@
             } catch(e) { console.log("Chime play error:", e); }
         }
 
-        // THUẬT TOÁN ĐẾM LỊCH ÂM TỰ ĐỘNG NĂM BÍNH NGỌ 2026 CHUẨN XÁC
         function calculateLunarHtml(now) {
             const phases = [
                 [2025, 11, 20, 11, "Ất Tỵ"], [2026, 0, 19, 12, "Ất Tỵ"],
@@ -458,27 +448,24 @@
             return `AL ${diffDays}-${activePhase[3]}<br><span style="font-size: 1.4rem; opacity: 0.8; font-weight:300;">Năm ${activePhase[4]}</span>`;
         }
 
-        // TÍNH NĂNG ĐỔI NỘI DUNG THEO ẢNH: Đếm ngược đa dạng lễ hội + Đặc sản vùng miền chuyển đổi theo ảnh lật trang
         function updateDynamicContentBySlide() {
             if (images.length === 0) return;
             const now = new Date();
             
-            // Tính toán cụ thể số ngày đến các mốc sự kiện lớn
-            const targetTetAm = new Date(2027, 1, 6); // Mùng 1 Tết Đinh Mùi
+            const targetTetAm = new Date(2027, 1, 6); 
             const targetNoel = new Date(2026, 11, 25);
             const targetTetDuong = new Date(2027, 0, 1);
             const targetQuocKhanh = new Date(2026, 8, 2);
-            const targetPhậtĐản = new Date(2026, 4, 31); // 15/4 Âm lịch năm 2026
-            const targetTrungThu = new Date(2026, 8, 25); // 15/8 Âm lịch năm 2026
+            const targetPhậtĐản = new Date(2026, 4, 31); 
+            const targetTrungThu = new Date(2026, 8, 25); 
 
             const daysToTetAm = Math.ceil((targetTetAm - now) / (1000 * 60 * 60 * 24));
             const daysToNoel = Math.ceil((targetNoel - now) / (1000 * 60 * 60 * 24));
             const daysToTetDuong = Math.ceil((targetTetDuong - now) / (1000 * 60 * 60 * 24));
             const daysToQuocKhanh = Math.ceil((targetQuocKhanh - now) / (1000 * 60 * 60 * 24));
-            const daysToPhatDan = Math.ceil((targetPhậtĐản - now) / (1000 * 60 * 60 * 24));
+            const daysToPhatDan = Math.ceil((targetPhatDan - now) / (1000 * 60 * 60 * 24));
             const daysToTrungThu = Math.ceil((targetTrungThu - now) / (1000 * 60 * 60 * 24));
 
-            // KHO SỰ KIỆN LỄ HỘI ĐA DẠNG (Xoay tua theo từng bức ảnh)
             const eventPool = [];
             if (daysToTetAm > 0) eventPool.push(`🧧 Còn ${daysToTetAm} ngày đến Tết Nguyên Đán Đinh Mùi 2027`);
             if (daysToTetDuong > 0) eventPool.push(`🌸 Còn ${daysToTetDuong} ngày đến Tết Dương Lịch 2027`);
@@ -487,17 +474,15 @@
             if (daysToPhatDan > 0) eventPool.push(`🙏 Còn ${daysToPhatDan} ngày đến Đại lễ Phật Đản bên Phật Giáo (15/4 AL)`);
             if (daysToQuocKhanh > 0) eventPool.push(`🇨🇳 Còn ${daysToQuocKhanh} ngày đến Đại lễ Quốc Khánh Việt Nam 2/9`);
             
-            // Các sự kiện văn hóa, địa phương và mốc chu kỳ trăng âm lịch hằng tháng
             eventPool.push("🌕 Sắp đến ngày Rằm Âm Lịch hằng tháng - Thành kính hướng về tổ tiên");
             eventPool.push("🌱 Sắp đến ngày Mùng 1 Âm Lịch đầu tháng - Khởi đầu tháng mới bình an");
             eventPool.push("☕ Thác Dray Nur Đắk Lắk mùa này nước đổ tung bọt trắng xóa vĩ đại");
             eventPool.push("🏮 Đón chờ mùa Lễ hội Đua voi Bản Đôn Đắk Lắk đậm đà bản sắc đại ngàn");
-            eventPool.push("⛪ Sắp đến kỳ lễ Phục Sinh thanh khiết trang nghiêm bên Thiên Chúa Giáo");
+            eventPool.push("A Sắp đến kỳ lễ Phục Sinh thanh khiết trang nghiêm bên Thiên Chúa Giáo");
             eventPool.push("🌾 Sắp đến mùa Lễ mừng lúa mới đón vụ mùa ấm no của đồng bào Ê Đê");
             eventPool.push("⛵ Sắp diễn ra hội đua thuyền rồng truyền thống trên sông Krông Ana địa phương");
             eventPool.push("🍲 Mùa lễ Vu Lan báo hiếu tháng 7 Âm lịch - Thắt đóa hoa hồng cài áo tri ân");
 
-            // KHO ĐẶC SẢN, ẨM THỰC VÀ ĐỊA ĐIỂM DU LỊCH THEO MÙA VIỆT NAM (Xoay tua theo từng bức ảnh)
             const quotePool = [
                 "Mùa bơ sáp Đắk Lắk chín quả vàng, ruột dẻo thơm béo ngậy đặc sản đất đỏ Tây Nguyên.",
                 "Thưởng thức ly cà phê Buôn Ma Thuột đậm đặc đắng nồng giữa đại ngàn lộng gió.",
@@ -513,7 +498,6 @@
                 "Bình yên đến từ bên trong tâm hồn, hãy trân trọng những điều giản đơn đang có."
             ];
 
-            // Trích xuất nội dung tương thích theo số thứ tự bức ảnh hiện tại (currentIndex)
             const activeEventText = eventPool[currentIndex % eventPool.length];
             const activeQuoteText = quotePool[currentIndex % quotePool.length];
 
@@ -521,33 +505,27 @@
             document.getElementById('quote-text').innerText = `"${activeQuoteText}"`;
         }
 
-        // Cập nhật Đồng hồ, Quản lý mốc giờ kích hoạt Night Mode/Chuông báo giờ hằng tiếng
         function updateClock() {
             const now = new Date();
             const hours = now.getHours();
             const minutes = now.getMinutes();
             
-            // 1. Đồng hồ chính
             let hrStr = String(hours).padStart(2, '0');
             let minStr = String(minutes).padStart(2, '0');
             document.getElementById('time').innerHTML = `<span class="hours-style">${hrStr}</span><span class="minutes-style">${minStr}</span>`;
 
-            // 2. Lịch Dương và Lịch Âm nhảy số đều đặn hằng ngày
             const days = ['Chủ Nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
             document.getElementById('date').innerText = `${days[now.getDay()]} ${now.getDate()}-${now.getMonth() + 1}`;
             document.getElementById('lunar-date').innerHTML = calculateLunarHtml(now);
 
-            // 3. TỰ ĐỘNG BẬT NỀN ĐEN KHÓA ẢNH BAN ĐÊM (21:00 tối - 05:00 sáng)
             if (hours >= 21 || hours < 5) {
                 document.body.classList.add('night-active');
             } else {
                 document.body.classList.remove('night-active');
             }
 
-            // Đồng bộ lại vị trí nhảy số của đồng hồ
             applyDynamicPositions();
 
-            // 4. BÁO CHUÔNG HẰNG TIẾNG KHI PHÚT NHẢY VỀ 00
             if (minutes === 0 && hours !== lastChimeHour) {
                 playHourlyChime(hours);
                 lastChimeHour = hours;
@@ -556,12 +534,10 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // CẬP NHẬT THỜI TIẾT ĐẮK LẮK VÀ HỘP ĐỔI MÀU AQI CHUẨN XÁC
         function updateWeatherAndAQI() {
             const lat = 12.6667; 
             const lon = 108.0500;
             
-            // Gọi thời tiết thực tế
             fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m`)
                 .then(res => res.json())
                 .then(data => {
@@ -572,7 +548,6 @@
                     document.getElementById('weather-temp').innerText = '--°C';
                 });
 
-            // Gọi chỉ số không khí AQI và phối màu nền chuẩn xác sạch sẽ không kèm icon
             fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=us_aqi`)
                 .then(res => res.json())
                 .then(data => {
@@ -599,7 +574,6 @@
         updateWeatherAndAQI();
         setInterval(updateWeatherAndAQI, 600000);
 
-        // Hệ thống quét và gọi ảnh từ thư mục Google Drive công khai
         function fetchImagesFromDrive() {
             const query = encodeURIComponent(`'${FOLDER_ID}' in parents and mimeType contains 'image/'`);
             const url = `https://www.googleapis.com/drive/v3/files?q=${query}&key=${API_KEY}&fields=files(id)`;
@@ -613,7 +587,6 @@
                     if (data.files && data.files.length > 0) {
                         images = data.files.map(file => `https://drive.google.com/uc?export=view&id=${file.id}`);
                         
-                        // Xáo trộn danh sách ảnh ngẫu nhiên bốc từ Drive công khai hằng ngày
                         for (var i = images.length - 1; i > 0; i--) {
                             var j = Math.floor(Math.random() * (i + 1));
                             var temp = images[i];
@@ -630,7 +603,6 @@
                 });
         }
 
-        // Vòng lặp quản lý trình chiếu hình nền
         function initSlideshow() {
             const container = document.getElementById('photo-container');
             container.innerHTML = ''; 
@@ -643,16 +615,13 @@
                 container.appendChild(img);
             });
 
-            // KÍCH HOẠT CHẠY MẶC ĐỊNH MỐC 3 PHÚT (INTERVAL MODE = 2) KHI MỞ ỨNG DỤNG LÊN
             changeIntervalMode(currentActiveMode);
         }
 
-        // HÀM QUẢN LÝ PHÍM BẤM THAY THẾ CHO THANH TRƯỢT SLIDER CŨ
         function changeIntervalMode(modeVal) {
             currentActiveMode = modeVal;
             const seconds = stepSeconds[modeVal];
             
-            // Làm sáng phím bấm đang được lựa chọn và tắt màu các phím khác
             for (let i = 1; i <= 4; i++) {
                 const btn = document.getElementById(`speed-${i}`);
                 if (btn) {
@@ -661,10 +630,7 @@
                 }
             }
 
-            // Xóa bộ đếm cũ, tạo chu kỳ đếm thời gian lật ảnh mới hằng phút
             if (slideInterval) clearInterval(slideInterval);
-            
-            // Chạy đổi chữ lần đầu tiên ngay khi đổi tốc độ hoặc khởi chạy app
             updateDynamicContentBySlide();
 
             slideInterval = setInterval(() => {
@@ -675,7 +641,6 @@
                 currentIndex = (currentIndex + 1) % slides.length;
                 slides[currentIndex].classList.add('active');
                 
-                // CỨ MỖI KHI ẢNH CHUYỂN TRANG -> HÀM SẼ TỰ ĐỘNG ĐỔI DANH NGÔN VÀ LỄ HỘI THEO ẢNH
                 updateDynamicContentBySlide();
             }, seconds * 1000);
         }
