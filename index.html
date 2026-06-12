@@ -20,12 +20,12 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: #fff; /* Nền trắng kết hợp thanh địa chỉ Safari tạo khung matte tranh nghệ thuật */
+            background-color: #fff; /* Nền trắng kết hợp thanh địa chỉ tạo khung tranh gỗ nghệ thuật */
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             cursor: pointer;
         }
         
-        /* KHUNG VIỀN TRANH BẢN DÀY 60PX ĐỐI XỨNG CÂN BẰNG VỚI THANH ĐỊA CHỈ SAFARI */
+        /* KHUNG VIỀN TRANH BẢN DÀY 60PX ĐỐI XỨNG THANH ĐỊA CHỈ SAFARI */
         #frame-wrapper {
             position: absolute;
             top: 0;
@@ -35,6 +35,7 @@
             background-color: #000;
             overflow: hidden;
             box-shadow: 0 0 20px rgba(0,0,0,0.05); 
+            transition: background-color 1s ease;
         }
 
         /* Khung chứa ảnh tràn viền */
@@ -45,9 +46,10 @@
             width: 100%;
             height: 100%;
             z-index: 1;
+            transition: opacity 1s ease;
         }
         
-        /* Hiển thị ảnh thực tế, ép crop ảnh dọc tràn ngang vừa khít viền */
+        /* Hiển thị ảnh mượt mà, ép crop ảnh dọc tràn ngang vừa khít viền */
         .slide {
             position: absolute;
             top: 0;
@@ -56,7 +58,7 @@
             height: 100%;
             object-fit: cover !important;
             opacity: 0;
-            transition: opacity 4s ease-in-out; /* Chuyển cảnh chậm rãi, nghệ thuật hơn 50% */
+            transition: opacity 4s ease-in-out; /* Hoạt cảnh lật trang chậm cinematic */
         }
         .slide.active {
             opacity: 1;
@@ -69,21 +71,22 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.22);
             z-index: 2;
+            transition: background 1s ease;
         }
 
-        /* GÓC DƯỚI TRÁI: ĐỒNG HỒ & NGÀY THÁNG CĂN GIỮA ĐỒNG TRỤC TUYỆT ĐỐI */
+        /* GÓC TRÊN CÙNG BÊN TRÁI: ĐỒNG HỒ & NGÀY THÁNG CĂN GIỮA ĐỒNG TRỤC */
         #info-container {
             position: absolute;
-            bottom: 40px;
+            top: 40px; /* Di chuyển lên trên cùng */
             left: 40px;
             z-index: 3;
             color: #ffffff;
             text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.7);
             display: flex;
             flex-direction: column;
-            align-items: center; /* Căn giữa trục dọc */
-            text-align: center;   /* Căn giữa chữ */
-            transition: transform 0.5s ease-out; /* Nhích vị trí chống lưu màn hình */
+            align-items: center; 
+            text-align: center;
+            transition: transform 0.5s ease-out; /* Phục vụ nhích vị trí chống lưu ảnh */
         }
         #time {
             font-size: 8.5rem; 
@@ -126,34 +129,118 @@
             line-height: 1.3; 
         }
 
-        /* GÓC TRÊN TRÁI: THỜI TIẾT PHÓNG LỚN CĂN GIỮA ĐỒNG TRỤC (ĐÃ BỎ ICON NHIỆT KẾ) */
-        #weather-container {
+        /* DƯỚI CÙNG BÊN SÁT CẠNH: THANH THANH ĐA NĂNG TRẢI DÀI SANG PHẢI */
+        #bottom-bar {
             position: absolute;
-            top: 40px;
+            bottom: 40px; /* Cài sát cạnh dưới */
             left: 40px;
+            right: 40px;
             z-index: 3;
             color: #ffffff;
             text-shadow: 0px 3px 10px rgba(0, 0, 0, 0.8);
             display: flex;
-            flex-direction: column;
-            align-items: center; 
-            text-align: center;
+            flex-direction: row;
+            align-items: flex-end; /* Căn đều chân đạo cụ */
+            justify-content: flex-start;
+            gap: 50px; /* Khoảng cách rộng rãi giữa các khối tính năng */
             transition: transform 0.5s ease-out; 
         }
+
+        /* Khối thời tiết góc dưới bên trái */
+        .weather-cluster {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            min-width: 120px;
+        }
         #weather-temp {
-            font-size: 3.8rem; /* Đạt tỷ lệ cân bằng 50% cụm đồng hồ */
+            font-size: 3.8rem; /* Đạt chuẩn tỷ lệ 50% cụm đồng hồ */
             font-weight: 700;
             color: #ffffff;
             line-height: 1;
         }
         #weather-status {
-            font-size: 1.8rem; 
+            font-size: 1.6rem; 
             font-weight: 400;
             color: #e0e0e0;
             margin-top: 6px;
+            white-space: nowrap;
         }
 
-        /* THANH ĐIỀU KHIỂN TỐC ĐỘ: Hiện mờ mờ 20% tinh tế */
+        /* Khối chỉ số chất lượng không khí AQI */
+        .aqi-cluster {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border-left: 1px solid rgba(255,255,255,0.2);
+            padding-left: 40px;
+        }
+        #aqi-value {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #55efc4; /* Màu xanh lá tươi mát bảo vệ sức khỏe */
+            line-height: 1;
+        }
+        #aqi-status {
+            font-size: 1.4rem;
+            font-weight: 400;
+            color: #e0e0e0;
+            margin-top: 6px;
+            white-space: nowrap;
+        }
+
+        /* Khối câu chào & Danh ngôn ý nghĩa cuộc sống */
+        .quote-cluster {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: left;
+            border-left: 1px solid rgba(255,255,255,0.2);
+            padding-left: 40px;
+            max-width: 40%;
+        }
+        #greeting-text {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+        #quote-text {
+            font-size: 1.2rem;
+            font-weight: 300;
+            color: #ccc;
+            margin-top: 5px;
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        /* Khối đếm ngược sự kiện quan trọng */
+        .countdown-cluster {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-left: auto; /* Đẩy khối đếm ngược tinh tế về sát góc phải hàng */
+            border-left: 1px solid rgba(255,255,255,0.2);
+            padding-left: 40px;
+        }
+        #countdown-days {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #ff7675; /* Tông đỏ cam nổi bật */
+            line-height: 1;
+        }
+        #countdown-label {
+            font-size: 1.4rem;
+            font-weight: 400;
+            color: #e0e0e0;
+            margin-top: 6px;
+            white-space: nowrap;
+        }
+
+        /* THANH ĐIỀU KHIỂN TỐC ĐỘ: Hiện mờ mờ 20% thẩm mỹ */
         #control-panel {
             position: absolute;
             top: 20px;
@@ -176,6 +263,26 @@
             margin-top: 5px;
             width: 140px;
         }
+
+        /* СẤU HÌNH GIAO DIỆN CHẾ ĐỘ BAN ĐÊM (AUTO NIGHT MODE TRÊN IPAD ĐỜI CŨ) */
+        .night-active #photo-container {
+            opacity: 0 !important; /* Ẩn sạch ảnh nền */
+        }
+        .night-active #frame-wrapper {
+            background-color: #000000 !important; /* Nền đen sâu thẳm */
+        }
+        .night-active .overlay {
+            background: rgba(0, 0, 0, 1) !important;
+        }
+        /* Chuyển đổi toàn bộ font chữ sang màu cam hổ phách dịu mắt, giảm mờ chống chói */
+        .night-active #info-container, .night-active #bottom-bar {
+            opacity: 0.25 !important; /* Giảm độ mờ xuống còn 25% */
+            text-shadow: none !important;
+        }
+        .night-active * {
+            color: #ff9900 !important; /* Ép đồng bộ màu hổ phách dịu phòng ngủ */
+            border-color: rgba(255, 153, 0, 0.2) !important;
+        }
     </style>
 </head>
 <body ontouchstart="activateControls()" onclick="activateControls()">
@@ -183,11 +290,6 @@
     <div id="frame-wrapper">
         <div id="photo-container"></div>
         <div class="overlay"></div>
-
-        <div id="weather-container">
-            <div id="weather-temp">--°C</div>
-            <div id="weather-status">Đang cập nhật...</div>
-        </div>
 
         <div id="info-container">
             <div id="time">
@@ -200,6 +302,28 @@
             </div>
         </div>
 
+        <div id="bottom-bar">
+            <div class="weather-cluster">
+                <div id="weather-temp">--°C</div>
+                <div id="weather-status">Đang cập nhật...</div>
+            </div>
+            
+            <div class="aqi-cluster">
+                <div id="aqi-value">--</div>
+                <div id="aqi-status">Không khí</div>
+            </div>
+
+            <div class="quote-cluster">
+                <div id="greeting-text">Xin chào!</div>
+                <div id="quote-text">"Hạnh phúc là một hành trình, không phải là đích đến."</div>
+            </div>
+
+            <div class="countdown-cluster">
+                <div id="countdown-days">---</div>
+                <div id="countdown-label">Ngày đến Tết 2027</div>
+            </div>
+        </div>
+
         <div id="control-panel" onclick="event.stopPropagation();" ontouchstart="event.stopPropagation();">
             <label>Đổi ảnh: <span id="speedLabel">1 phút</span></label>
             <input type="range" id="speedSlider" min="1" max="4" value="1">
@@ -207,7 +331,7 @@
     </div>
 
     <script>
-        // Hệ thống bảo mật mã hóa Base64
+        // Hệ thống bảo mật mã hóa chuỗi API
         const SECRET_ENCODED = 'QUl6YVN5REwyRm1VQzkxMUtBTnFwN3VPbnZKcU5xVHltb1R2SkxF';
         const API_KEY = atob(SECRET_ENCODED);
         const FOLDER_ID = '1r1WUIKwAPAnsyIh-Zot7AevEW0uEZ-Hl'; 
@@ -216,9 +340,20 @@
         let currentIndex = 0;
         let slideInterval;
         let hideTimeout;
+        let lastChimeHour = -1;
 
         const stepSeconds = { 1: 60, 2: 180, 3: 300, 4: 600 };
         const stepLabels = { 1: "1 phút", 2: "3 phút", 3: "5 phút", 4: "10 phút" };
+
+        // Kho danh ngôn cuộc sống tuyển chọn xoay vòng tự động hằng ngày
+        const quotesPool = [
+            "Gia đình là nơi cuộc sống bắt đầu và tình yêu không bao giờ kết thúc.",
+            "Nhà là nơi bão dừng sau cánh cửa, nơi bình yên nhất để trở về.",
+            "Hãy sống trọn vẹn từng phút giây, trân trọng những điều giản đơn đang có.",
+            "Một nụ cười bằng mười thang thuốc bổ, hãy luôn mỉm cười với cuộc đời.",
+            "Trân trọng quá khứ, hướng tới tương lai, sống hết mình cho hiện tại.",
+            "Bình yên đến từ bên trong tâm hồn, hãy nuôi dưỡng nó mỗi ngày."
+        ];
 
         function activateControls() {
             const panel = document.getElementById('control-panel');
@@ -229,87 +364,151 @@
             }, 3000);
         }
 
-        // TÍNH NĂNG CHỐNG LƯU MÀN HÌNH (ANTI-BURN-IN): Nhích tọa độ ngẫu nhiên bảo vệ phần cứng iPad
+        // TÍNH NĂNG CHỐNG LƯU MÀN HÌNH (ANTI-BURN-IN): Tự nhích nhẹ vị trí chữ sau mỗi 1 phút
         function runAntiBurnIn() {
-            const dx1 = Math.floor(Math.random() * 24) - 12; 
+            const dx1 = Math.floor(Math.random() * 24) - 12; // Nhích ngẫu nhiên từ -12px đến +12px
             const dy1 = Math.floor(Math.random() * 24) - 12;
             const dx2 = Math.floor(Math.random() * 24) - 12;
             const dy2 = Math.floor(Math.random() * 24) - 12;
             
             document.getElementById('info-container').style.transform = `translate(${dx1}px, ${dy1}px)`;
-            document.getElementById('weather-container').style.transform = `translate(${dx2}px, ${dy2}px)`;
+            document.getElementById('bottom-bar').style.transform = `translate(${dx2}px, ${dy2}px)`;
         }
         setInterval(runAntiBurnIn, 60000); 
 
-        // THUẬT TOÁN ĐẾM LỊCH ÂM TỰ ĐỘNG CHUẨN XÁC NĂM BÍNH NGỌ 2026
-        function calculateLunarHtml(now) {
-            const phases = [
-                [2025, 11, 20, 11, "Ất Tỵ"],
-                [2026, 0, 19, 12, "Ất Tỵ"],
-                [2026, 1, 17, 1, "Bính Ngọ"],
-                [2026, 2, 19, 2, "Bính Ngọ"],
-                [2026, 3, 17, 3, "Bính Ngọ"],
-                [2026, 4, 17, 4, "Bính Ngọ"],
-                [2026, 5, 15, 5, "Bính Ngọ"],
-                [2026, 6, 14, 6, "Bính Ngọ"],
-                [2026, 7, 12, 7, "Bính Ngọ"],
-                [2026, 8, 11, 8, "Bính Ngọ"],
-                [2026, 9, 11, 9, "Bính Ngọ"],
-                [2026, 10, 9, 10, "Bính Ngọ"],
-                [2026, 11, 9, 11, "Bính Ngọ"],
-                [2027, 0, 8, 12, "Bính Ngọ"],
-                [2027, 1, 6, 1, "Đinh Mùi"]
-            ];
+        // TÍNH NĂNG TIẾNG CHUÔNG BÁO GIỜ (HOURLY CHIME): Tạo tiếng Đinh-Đoong bằng thuật toán âm tần tần số
+        function playHourlyChime(currentHour) {
+            // Chỉ phát chuông từ 6h sáng đến 9h tối (06:00 - 21:00) để không làm phiền giấc ngủ ban đêm
+            if (currentHour < 6 || currentHour > 21) return;
             
-            let activePhase = phases[0];
-            const checkTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
-            
-            for (let i = 0; i < phases.length; i++) {
-                const d = new Date(phases[i][0], phases[i][1], phases[i][2], 0, 0, 0);
-                if (checkTime >= d) {
-                    activePhase = phases[i];
-                } else {
-                    break;
-                }
-            }
-            
-            const startDate = new Date(activePhase[0], activePhase[1], activePhase[2], 0, 0, 0);
-            const diffTime = checkTime - startDate;
-            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
-            
-            // Đã ngắt dòng chữ Bính Ngọ xuống phía dưới tinh tế gọn gàng
-            return `AL ${diffDays}-${activePhase[3]}<br><span style="font-size: 1.4rem; opacity: 0.8; font-weight:300;">${activePhase[4]}</span>`;
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                const ctx = new AudioContext();
+                
+                // Tiếng Đinh (Âm cao)
+                const osc1 = ctx.createOscillator();
+                const gain1 = ctx.createGain();
+                osc1.type = 'sine';
+                osc1.frequency.setValueAtTime(880, ctx.currentTime); // Tần số nốt A5
+                gain1.gain.setValueAtTime(0.2, ctx.currentTime);
+                gain1.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.8);
+                osc1.connect(gain1);
+                gain1.connect(ctx.destination);
+                osc1.start();
+                osc1.stop(ctx.currentTime + 0.8);
+                
+                // Tiếng Đoong (Âm trầm ngân vang sau 350 mili giây)
+                setTimeout(() => {
+                    const osc2 = ctx.createOscillator();
+                    const gain2 = ctx.createGain();
+                    osc2.type = 'sine';
+                    osc2.frequency.setValueAtTime(659.25, ctx.currentTime); // Tần số nốt E5
+                    gain2.gain.setValueAtTime(0.2, ctx.currentTime);
+                    gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.2);
+                    osc2.connect(gain2);
+                    gain2.connect(ctx.destination);
+                    osc2.start();
+                    osc2.stop(ctx.currentTime + 1.2);
+                }, 350);
+            } catch(e) { console.log("Chime error:", e); }
         }
 
-        // Cập nhật Đồng hồ siêu lớn tinh gọn
+        // THUẬT TOÁN ĐẾM LỊCH ÂM TỰ ĐỘNG NĂM BÍNH NGỌ 2026 CHUẨN XÁC
+        function calculateLunarHtml(now) {
+            const phases = [
+                [2025, 11, 20, 11, "Ất Tỵ"], [2026, 0, 19, 12, "Ất Tỵ"],
+                [2026, 1, 17, 1, "Bính Ngọ"], [2026, 2, 19, 2, "Bính Ngọ"],
+                [2026, 3, 17, 3, "Bính Ngọ"], [2026, 4, 17, 4, "Bính Ngọ"],
+                [2026, 5, 15, 5, "Bính Ngọ"], [2026, 6, 14, 6, "Bính Ngọ"],
+                [2026, 7, 12, 7, "Bính Ngọ"], [2026, 8, 11, 8, "Bính Ngọ"],
+                [2026, 9, 11, 9, "Bính Ngọ"], [2026, 10, 9, 10, "Bính Ngọ"],
+                [2026, 11, 9, 11, "Bính Ngọ"], [2027, 0, 8, 12, "Bính Ngọ"],
+                [2027, 1, 6, 1, "Đinh Mùi"]
+            ];
+            let activePhase = phases[0];
+            const checkTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+            for (let i = 0; i < phases.length; i++) {
+                const d = new Date(phases[i][0], phases[i][1], phases[i][2], 0, 0, 0);
+                if (checkTime >= d) activePhase = phases[i];
+                else break;
+            }
+            const startDate = new Date(activePhase[0], activePhase[1], activePhase[2], 0, 0, 0);
+            const diffDays = Math.floor((checkTime - startDate) / (1000 * 60 * 60 * 24)) + 1;
+            return `AL ${diffDays}-${activePhase[3]}<br><span style="font-size: 1.4rem; opacity: 0.8; font-weight:300;">Năm ${activePhase[4]}</span>`;
+        }
+
+        // Cập nhật Đồng hồ, Câu chào, Đếm ngược sự kiện và Kích hoạt chuông/Night Mode
         function updateClock() {
             const now = new Date();
-            let hours = String(now.getHours()).padStart(2, '0');
-            let minutes = String(now.getMinutes()).padStart(2, '0');
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
             
-            document.getElementById('time').innerHTML = `
-                <span class="hours-style">${hours}</span>
-                <span class="minutes-style">${minutes}</span>
-            `;
+            // 1. Đồng hồ chính
+            let hrStr = String(hours).padStart(2, '0');
+            let minStr = String(minutes).padStart(2, '0');
+            document.getElementById('time').innerHTML = `<span class="hours-style">${hrStr}</span><span class="minutes-style">${minStr}</span>`;
 
+            // 2. Ngày Dương lịch và Âm lịch
             const days = ['Chủ Nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
             document.getElementById('date').innerText = `${days[now.getDay()]} ${now.getDate()}-${now.getMonth() + 1}`;
             document.getElementById('lunar-date').innerHTML = calculateLunarHtml(now);
+
+            // 3. TÍNH NĂNG CHẾ ĐỘ BAN ĐÊM (AUTO NIGHT MODE): Tự kích hoạt từ 22h đêm đến 6h sáng
+            if (hours >= 22 || hours < 6) {
+                document.body.classList.add('night-active');
+            } else {
+                document.body.classList.remove('night-active');
+            }
+
+            // 4. KÍCH HOẠT CHUÔNG BÁO GIỜ: Khi phút bằng 00
+            if (minutes === 0 && hours !== lastChimeHour) {
+                playHourlyChime(hours);
+                lastChimeHour = hours;
+            }
+
+            // 5. Câu chào động theo thời gian thực
+            let greeting = "Chào bạn!";
+            if (hours >= 5 && hours < 11) greeting = "Chào buổi sáng! Năng lượng mới. ☀️";
+            else if (hours >= 11 && hours < 17) greeting = "Chúc bạn một ngày tốt lành! 🌤️";
+            else if (hours >= 17 && hours < 22) greeting = "Chào buổi tối ấm áp bên gia đình! 🌙";
+            else greeting = "Chúc ngủ ngon, giấc mơ đẹp! 💤";
+            document.getElementById('greeting-text').innerText = greeting;
+
+            // Xoay vòng danh ngôn dựa trên số phút để giữ độ ổn định cho iPad
+            const quoteIdx = Math.floor(minutes / 10) % quotesPool.length;
+            document.getElementById('quote-text').innerText = `"${quotesPool[quoteIdx]}"`;
+
+            // 6. TÍNH NĂNG ĐẾM NGƯỢC: Tính số ngày còn lại đến Tết Nguyên Đán Đinh Mùi (06/02/2027)
+            const tet2027 = new Date(2027, 1, 6, 0, 0, 0);
+            const todayZero = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+            const daysToTet = Math.ceil((tet2027 - todayZero) / (1000 * 60 * 60 * 24));
+            if (daysToTet > 0) {
+                document.getElementById('countdown-days').innerText = daysToTet;
+                document.getElementById('countdown-label').innerText = "Ngày đến Tết 2027 🧧";
+            } else if (daysToTet === 0) {
+                document.getElementById('countdown-days').innerText = "🎉";
+                document.getElementById('countdown-label').innerText = "Mừng Tết Đinh Mùi!";
+            } else {
+                document.getElementById('countdown-days').innerText = "✨";
+                document.getElementById('countdown-label').innerText = "Năm mới an khang!";
+            }
         }
         setInterval(updateClock, 1000);
         updateClock();
 
-        // Cập nhật thời tiết Đắk Lắk tinh gọn
-        function updateWeather() {
+        // TÍNH NĂNG THỜI TIẾT & CHẤT LƯỢNG KHÔNG KHÍ (AQI) ĐẮK LẮK THỰC TẾ TRÊN HÀNG NGANG
+        function updateWeatherAndAQI() {
             const lat = 12.6667; 
             const lon = 108.0500;
+            
+            // Gọi dữ liệu thời tiết
             fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code`)
                 .then(res => res.json())
                 .then(data => {
                     const temp = Math.round(data.current.temperature_2m);
                     const code = data.current.weather_code;
                     let status = 'Trời đẹp';
-                    
                     if (code === 0) status = 'Trời quang';
                     else if (code <= 3) status = 'Nhiều mây';
                     else if (code <= 48) status = 'Có sương mù';
@@ -317,19 +516,42 @@
                     else if (code <= 82) status = 'Mưa rào';
                     else status = 'Có dông bão';
 
-                    // Đã loại bỏ icon nhiệt kế đầu dòng theo ý bạn
                     document.getElementById('weather-temp').innerText = `${temp}°C`;
                     document.getElementById('weather-status').innerText = `☀️ ${status}`;
                 })
                 .catch(() => {
                     document.getElementById('weather-temp').innerText = '--°C';
-                    document.getElementById('weather-status').innerText = 'Không tải được dữ liệu';
+                });
+
+            // Gọi dữ liệu chất lượng không khí AQI chuẩn xác từ trạm khí tượng
+            fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=us_aqi`)
+                .then(res => res.json())
+                .then(data => {
+                    const aqi = data.current.us_aqi;
+                    document.getElementById('aqi-value').innerText = aqi;
+                    
+                    let aqiLabel = "Tốt 🌱";
+                    if (aqi <= 50) {
+                        aqiLabel = "Tốt 🌱";
+                        document.getElementById('aqi-value').style.color = "#55efc4";
+                    } else if (aqi <= 100) {
+                        aqiLabel = "Vừa phải 🌤️";
+                        document.getElementById('aqi-value').style.color = "#ffeaa7";
+                    } else {
+                        aqiLabel = "Kém 😷";
+                        document.getElementById('aqi-value').style.color = "#ff7675";
+                    }
+                    document.getElementById('aqi-status').innerText = `AQI: ${aqiLabel}`;
+                })
+                .catch(() => {
+                    document.getElementById('aqi-value').innerText = "--";
+                    document.getElementById('aqi-status').innerText = "Không khí";
                 });
         }
-        updateWeather();
-        setInterval(updateWeather, 600000);
+        updateWeatherAndAQI();
+        setInterval(updateWeatherAndAQI, 600000); // 10 phút cập nhật dữ liệu một lần
 
-        // Nạp tệp tự động từ Drive
+        // Hệ thống nạp ảnh tự động từ Google Drive
         function fetchImagesFromDrive() {
             const query = encodeURIComponent(`'${FOLDER_ID}' in parents and mimeType contains 'image/'`);
             const url = `https://www.googleapis.com/drive/v3/files?q=${query}&key=${API_KEY}&fields=files(id)`;
@@ -343,17 +565,16 @@
                     if (data.files && data.files.length > 0) {
                         images = data.files.map(file => `https://drive.google.com/uc?export=view&id=${file.id}`);
                         
-                        // TÍNH NĂNG CHẠY RANDOM: Đảo lộn danh sách ảnh ngẫu nhiên bốc từ Drive
+                        // Xáo trộn danh sách ảnh ngẫu nhiên chuẩn giải thuật Fisher-Yates cho iPad cũ
                         for (var i = images.length - 1; i > 0; i--) {
                             var j = Math.floor(Math.random() * (i + 1));
                             var temp = images[i];
                             images[i] = images[j];
                             images[j] = temp;
                         }
-                        
                         initSlideshow();
                     } else {
-                        document.getElementById('photo-container').innerHTML = '<div style="color:white;padding:40px;">Thư mục trống!</div>';
+                        document.getElementById('photo-container').innerHTML = '<div style="color:white;padding:40px;">Thư mục Drive đang trống!</div>';
                     }
                 })
                 .catch(err => {
@@ -361,7 +582,7 @@
                 });
         }
 
-        // Vòng lặp trình chiếu hình nền (Đã dọn dẹp dòng typo thừa khiến iPad bị crash)
+        // Khởi tạo vòng lặp quản lý trình chiếu ảnh nền
         function initSlideshow() {
             const container = document.getElementById('photo-container');
             container.innerHTML = ''; 
