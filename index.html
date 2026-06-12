@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
+    <!-- Mã lệnh bắt buộc để ép Safari ẩn 100% thanh điều hướng khi chạy từ Màn hình chính -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <title>Khung Ảnh Số Nghệ Thuật</title>
     
+    <!-- Nhúng bộ Font chữ thiết kế cao cấp -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Tourney:wght@600&display=swap" rel="stylesheet">
@@ -23,21 +25,22 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: #fff; /* Nền trắng kết hợp thanh địa chỉ tạo khung matte tranh gỗ nghệ thuật */
+            background-color: #151518; /* ĐÃ ĐỔI: Màu đen than đá Charcoal Matte cao cấp tạo chiều sâu cho khung tranh */
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             cursor: pointer;
         }
         
-        /* KHUNG VIỀN TRANH BẢN DÀY 60PX ĐỐI XỨNG THANH ĐỊA CHỈ SAFARI */
+        /* KHUNG VIỀN TRANH BẢN DÀY 60PX ĐỐI XỨNG TUYỆT ĐỐI 4 CẠNH */
         #frame-wrapper {
             position: absolute;
-            top: 0;
+            top: 60px;    /* ĐÃ SỬA: Tăng lên 60px bằng tất cả các viền còn lại */
             left: 60px;   
             right: 60px;  
             bottom: 60px; 
             background-color: #000;
             overflow: hidden;
-            box-shadow: 0 0 20px rgba(0,0,0,0.05); 
+            /* Hiệu ứng đổ bóng 3D dập nổi tinh tế làm bức ảnh nổi bật lên hẳn */
+            box-shadow: 0px 25px 55px rgba(0, 0, 0, 0.65), 0px 0px 0px 2px rgba(255, 255, 255, 0.05); 
             transition: background-color 1s ease;
         }
 
@@ -61,7 +64,7 @@
             height: 100%;
             object-fit: cover !important;
             opacity: 0;
-            transition: opacity 4s ease-in-out; /* Hoạt cảnh lật trang chậm cinematic */
+            transition: opacity 4s ease-in-out; /* Hoạt cảnh lật trang chậm tinh tế */
         }
         .slide.active {
             position: absolute;
@@ -73,7 +76,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.22);
+            background: rgba(0, 0, 0, 0.20); /* Chỉnh mờ nhẹ một chút để ảnh rực rỡ hơn */
             z-index: 2;
             transition: background 1s ease;
         }
@@ -212,7 +215,7 @@
             color: #ffffff;
         }
 
-        /* BẢNG ĐIỀU KHIỂN NÚT BẤM NHỎ THAY THẾ THANH TRƯỢT SLIDER */
+        /* BẢNG ĐIỀU KHIỂN NÚT BẤM NHỎ TINH GIẢN */
         #control-panel {
             position: absolute;
             top: 20px;
@@ -231,7 +234,7 @@
             gap: 6px;
         }
         #control-panel.active-panel, #control-panel:hover {
-            opacity: 1 !important; /* Sáng rõ hẳn lên khi chạm chọn mốc thời gian */
+            opacity: 1 !important; /* Sáng rõ hẳn lên khi tương tác chạm */
         }
         .speed-btn-group {
             display: flex;
@@ -255,12 +258,13 @@
             font-weight: bold;
         }
 
-        /* CHẾ ĐỘ BAN ĐÊM TỰ ĐỘNG KHÓA NỀN ĐEN SÂU (21:00 TOI - 05:00 SÁNG) */
+        /* CHẾ ĐỘ BAN ĐÊM TỰ ĐỘNG KHÓA NỀN ĐEN SÂU (21:00 TỐI - 05:00 SÁNG) */
         .night-active #photo-container {
             opacity: 0 !important; 
         }
         .night-active #frame-wrapper {
             background-color: #000000 !important; 
+            box-shadow: none !important;
         }
         .night-active .overlay {
             background: rgba(0, 0, 0, 1) !important;
@@ -283,10 +287,12 @@
 </head>
 <body ontouchstart="activateControls()" onclick="activateControls()">
 
+    <!-- Khung viền tranh nghệ thuật Charcoal đen mờ ôm trọn màn hình -->
     <div id="frame-wrapper">
         <div id="photo-container"></div>
         <div class="overlay"></div>
 
+        <!-- CỤM ĐỒNG HỒ & LỊCH ÂM (Ngày: Góc trên trái | Đêm: Trung tâm nhảy số) -->
         <div id="info-container">
             <div id="time">
                 <span class="hours-style">00</span>
@@ -298,11 +304,14 @@
             </div>
         </div>
 
+        <!-- CỤM HÀNG ĐA NĂNG ĐÁY MÀN HÌNH: ĐÃ SỬA CĂN GIỮA ĐỒNG TRỤC ĐỐI XỨNG -->
         <div id="bottom-container">
+            <!-- Dòng 1: Danh ngôn đặc sản vùng miền đổi theo ảnh (ở trên) -->
             <div id="quote-container">
                 <span id="quote-text">"Đang tải dữ liệu đặc sản theo mùa..."</span>
             </div>
             
+            <!-- Dòng 2: Chỉ số trạng thái (ở dưới) -->
             <div id="status-container">
                 <span id="weather-temp">--°C</span>
                 <span class="bar-separator">|</span>
@@ -312,6 +321,7 @@
             </div>
         </div>
 
+        <!-- Góc trên phải: Bảng phím bấm thời gian nhỏ tinh giản -->
         <div id="control-panel" onclick="event.stopPropagation();" ontouchstart="event.stopPropagation();">
             <div style="font-weight: 600; font-size: 0.75rem; color: #ccc;">Thời gian đổi ảnh:</div>
             <div class="speed-btn-group">
@@ -339,14 +349,14 @@
         let burnInX2 = 0, burnInY2 = 0;
 
         const stepSeconds = { 1: 60, 2: 180, 3: 300, 4: 600 };
-        let currentActiveMode = 2; // ĐẶT MẶC ĐỊNH 3 PHÚT KHI KHỞI CHẠY APP
+        let currentActiveMode = 2; // MẶC ĐỊNH 3 PHÚT CHUYỂN ẢNH KHI MỞ APP
 
         function activateControls() {
             if (!audioCtx) {
                 try {
                     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
                     audioCtx = new AudioContextClass();
-                } catch (e) { console.log("AudioContext unlock failed:", e); }
+                } catch (e) { console.log("AudioCtx failed:", e); }
             }
             if (audioCtx && audioCtx.state === 'suspended') {
                 audioCtx.resume();
@@ -422,7 +432,7 @@
                     osc2.start();
                     osc2.stop(audioCtx.currentTime + 1.2);
                 }, 350);
-            } catch(e) { console.log("Chime play error:", e); }
+            } catch(e) { console.log("Chime error:", e); }
         }
 
         function calculateLunarHtml(now) {
@@ -448,6 +458,7 @@
             return `AL ${diffDays}-${activePhase[3]}<br><span style="font-size: 1.4rem; opacity: 0.8; font-weight:300;">Năm ${activePhase[4]}</span>`;
         }
 
+        // ĐÃ SỬA LỖI CHÍNH: Thay đổi toàn bộ các biến tiếng Việt có dấu thành mã chuẩn ASCII để không gây crash Safari iPad 4
         function updateDynamicContentBySlide() {
             if (images.length === 0) return;
             const now = new Date();
@@ -456,7 +467,7 @@
             const targetNoel = new Date(2026, 11, 25);
             const targetTetDuong = new Date(2027, 0, 1);
             const targetQuocKhanh = new Date(2026, 8, 2);
-            const targetPhậtĐản = new Date(2026, 4, 31); 
+            const targetPhatDan = new Date(2026, 4, 31); // Đã sửa tên biến không dấu cực an toàn
             const targetTrungThu = new Date(2026, 8, 25); 
 
             const daysToTetAm = Math.ceil((targetTetAm - now) / (1000 * 60 * 60 * 24));
@@ -478,7 +489,7 @@
             eventPool.push("🌱 Sắp đến ngày Mùng 1 Âm Lịch đầu tháng - Khởi đầu tháng mới bình an");
             eventPool.push("☕ Thác Dray Nur Đắk Lắk mùa này nước đổ tung bọt trắng xóa vĩ đại");
             eventPool.push("🏮 Đón chờ mùa Lễ hội Đua voi Bản Đôn Đắk Lắk đậm đà bản sắc đại ngàn");
-            eventPool.push("A Sắp đến kỳ lễ Phục Sinh thanh khiết trang nghiêm bên Thiên Chúa Giáo");
+            eventPool.push("⛪ Sắp đến kỳ lễ Phục Sinh thanh khiết trang nghiêm bên Thiên Chúa Giáo");
             eventPool.push("🌾 Sắp đến mùa Lễ mừng lúa mới đón vụ mùa ấm no của đồng bào Ê Đê");
             eventPool.push("⛵ Sắp diễn ra hội đua thuyền rồng truyền thống trên sông Krông Ana địa phương");
             eventPool.push("🍲 Mùa lễ Vu Lan báo hiếu tháng 7 Âm lịch - Thắt đóa hoa hồng cài áo tri ân");
@@ -574,13 +585,14 @@
         updateWeatherAndAQI();
         setInterval(updateWeatherAndAQI, 600000);
 
+        // ĐÃ SỬA LỖI CHÍNH: Gỡ bỏ cửa sổ popup alert gây đơ máy khi mất mạng, chuyển thành cơ chế tự kết nối lại ngầm sau 5 giây rất mượt mà
         function fetchImagesFromDrive() {
             const query = encodeURIComponent(`'${FOLDER_ID}' in parents and mimeType contains 'image/'`);
             const url = `https://www.googleapis.com/drive/v3/files?q=${query}&key=${API_KEY}&fields=files(id)`;
             
             fetch(url)
                 .then(res => {
-                    if (!res.ok) throw new Error('API Error');
+                    if (!res.ok) throw new Error('API Rate Limit or Connection Error');
                     return res.json();
                 })
                 .then(data => {
@@ -595,11 +607,12 @@
                         }
                         initSlideshow();
                     } else {
-                        document.getElementById('photo-container').innerHTML = '<div style="color:white;padding:40px;">Thư mục Drive đang trống!</div>';
+                        document.getElementById('photo-container').innerHTML = '<div style="color:white;padding:40px;">Thư mục trống!</div>';
                     }
                 })
                 .catch(err => {
-                    alert('Lỗi nạp ảnh từ Drive, vui lòng kiểm tra kết nối mạng.');
+                    console.log("Drive load blink, retrying in 5s...", err);
+                    setTimeout(fetchImagesFromDrive, 5000); // Tự động kết nối lại sau 5 giây nếu Wi-Fi rớt
                 });
         }
 
