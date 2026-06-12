@@ -20,12 +20,12 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: #fff; /* Nền trắng kết hợp thanh địa chỉ Safari tạo khung matte tranh gỗ */
+            background-color: #fff; /* Nền trắng kết hợp thanh địa chỉ Safari tạo khung matte tranh nghệ thuật */
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             cursor: pointer;
         }
         
-        /* KHUNG VIỀN TRANH BẢN DÀY ĐỐI XỨNG THANH ĐỊA CHỈ SAFARI */
+        /* KHUNG VIỀN TRANH BẢN DÀY 60PX ĐỐI XỨNG CÂN BẰNG VỚI THANH ĐỊA CHỈ SAFARI */
         #frame-wrapper {
             position: absolute;
             top: 0;
@@ -47,7 +47,7 @@
             z-index: 1;
         }
         
-        /* Hiển thị ảnh mượt mà, ép crop ảnh dọc tràn ngang khít màn hình */
+        /* Hiển thị ảnh thực tế, ép crop ảnh dọc tràn ngang vừa khít viền */
         .slide {
             position: absolute;
             top: 0;
@@ -56,7 +56,7 @@
             height: 100%;
             object-fit: cover !important;
             opacity: 0;
-            transition: opacity 4s ease-in-out; /* Chuyển ảnh chậm rãi, nghệ thuật */
+            transition: opacity 4s ease-in-out; /* Chuyển cảnh chậm rãi, nghệ thuật hơn 50% */
         }
         .slide.active {
             opacity: 1;
@@ -71,7 +71,7 @@
             z-index: 2;
         }
 
-        /* GÓC DƯỚI TRÁI: ĐỒNG HỒ & NGÀY THÁNG CĂN GIỮA ĐỒNG TRỤC */
+        /* GÓC DƯỚI TRÁI: ĐỒNG HỒ & NGÀY THÁNG CĂN GIỮA ĐỒNG TRỤC TUYỆT ĐỐI */
         #info-container {
             position: absolute;
             bottom: 40px;
@@ -81,7 +81,7 @@
             text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.7);
             display: flex;
             flex-direction: column;
-            align-items: center; /* ĐÃ SỬA: Căn giữa tất cả thành phần bên trong */
+            align-items: center; /* Căn giữa trục dọc */
             text-align: center;   /* Căn giữa chữ */
             transition: transform 0.5s ease-out; /* Nhích vị trí chống lưu màn hình */
         }
@@ -123,10 +123,10 @@
             color: #e0e0e0;
             margin-top: 6px;
             letter-spacing: 0.5px;
-            line-height: 1.3; /* Phục vụ ngắt dòng chữ Bính Ngọ */
+            line-height: 1.3; 
         }
 
-        /* GÓC TRÊN TRÁI: THỜI TIẾT ĐÃ CĂN GIỮA & BỎ ICON NHIỆT KẾ */
+        /* GÓC TRÊN TRÁI: THỜI TIẾT PHÓNG LỚN CĂN GIỮA ĐỒNG TRỤC (ĐÃ BỎ ICON NHIỆT KẾ) */
         #weather-container {
             position: absolute;
             top: 40px;
@@ -136,12 +136,12 @@
             text-shadow: 0px 3px 10px rgba(0, 0, 0, 0.8);
             display: flex;
             flex-direction: column;
-            align-items: center; /* ĐÃ SỬA: Căn giữa đồng trục cân đối */
+            align-items: center; 
             text-align: center;
             transition: transform 0.5s ease-out; 
         }
         #weather-temp {
-            font-size: 3.8rem; /* Đạt tỷ lệ 50% cụm đồng hồ */
+            font-size: 3.8rem; /* Đạt tỷ lệ cân bằng 50% cụm đồng hồ */
             font-weight: 700;
             color: #ffffff;
             line-height: 1;
@@ -153,7 +153,7 @@
             margin-top: 6px;
         }
 
-        /* THANH ĐIỀU KHIỂN TỐC ĐỘ: Hiện mờ mờ 20% đúng yêu cầu */
+        /* THANH ĐIỀU KHIỂN TỐC ĐỘ: Hiện mờ mờ 20% tinh tế */
         #control-panel {
             position: absolute;
             top: 20px;
@@ -229,7 +229,7 @@
             }, 3000);
         }
 
-        // TÍNH NĂNG CHỐNG LƯU MÀN HÌNH (ANTI-BURN-IN): Nhích tọa độ ngẫu nhiên bảo vệ phần cứng
+        // TÍNH NĂNG CHỐNG LƯU MÀN HÌNH (ANTI-BURN-IN): Nhích tọa độ ngẫu nhiên bảo vệ phần cứng iPad
         function runAntiBurnIn() {
             const dx1 = Math.floor(Math.random() * 24) - 12; 
             const dy1 = Math.floor(Math.random() * 24) - 12;
@@ -241,7 +241,7 @@
         }
         setInterval(runAntiBurnIn, 60000); 
 
-        // THUẬT TOÁN ĐẾM LỊCH ÂM TỰ ĐỘNG CHUẨN XÁC NĂM 2026
+        // THUẬT TOÁN ĐẾM LỊCH ÂM TỰ ĐỘNG CHUẨN XÁC NĂM BÍNH NGỌ 2026
         function calculateLunarHtml(now) {
             const phases = [
                 [2025, 11, 20, 11, "Ất Tỵ"],
@@ -277,7 +277,7 @@
             const diffTime = checkTime - startDate;
             const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
             
-            // ĐÃ SỬA: Ngắt dòng chữ Bính Ngọ xuống phía dưới với cỡ chữ nhỏ gọn tinh tế
+            // Đã ngắt dòng chữ Bính Ngọ xuống phía dưới tinh tế gọn gàng
             return `AL ${diffDays}-${activePhase[3]}<br><span style="font-size: 1.4rem; opacity: 0.8; font-weight:300;">${activePhase[4]}</span>`;
         }
 
@@ -317,7 +317,7 @@
                     else if (code <= 82) status = 'Mưa rào';
                     else status = 'Có dông bão';
 
-                    // ĐÃ SỬA: Bỏ icon nhiệt kế đầu dòng chữ nhiệt độ theo ý bạn
+                    // Đã loại bỏ icon nhiệt kế đầu dòng theo ý bạn
                     document.getElementById('weather-temp').innerText = `${temp}°C`;
                     document.getElementById('weather-status').innerText = `☀️ ${status}`;
                 })
@@ -343,7 +343,7 @@
                     if (data.files && data.files.length > 0) {
                         images = data.files.map(file => `https://drive.google.com/uc?export=view&id=${file.id}`);
                         
-                        // GIỮ NGUYÊN TÍNH NĂNG CHẠY RANDOM: Giải thuật Fisher-Yates xáo mảng ngẫu nhiên
+                        // TÍNH NĂNG CHẠY RANDOM: Đảo lộn danh sách ảnh ngẫu nhiên bốc từ Drive
                         for (var i = images.length - 1; i > 0; i--) {
                             var j = Math.floor(Math.random() * (i + 1));
                             var temp = images[i];
@@ -361,7 +361,7 @@
                 });
         }
 
-        // Vòng lặp trình chiếu hình nền
+        // Vòng lặp trình chiếu hình nền (Đã dọn dẹp dòng typo thừa khiến iPad bị crash)
         function initSlideshow() {
             const container = document.getElementById('photo-container');
             container.innerHTML = ''; 
@@ -370,7 +370,6 @@
                 const img = document.createElement('img');
                 img.src = src;
                 img.classList.add('slide');
-                if (index === 0) img.createElement('img');
                 if (index === 0) img.classList.add('active');
                 container.appendChild(img);
             });
