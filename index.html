@@ -6,6 +6,7 @@
     
     <title>Khung Ảnh Số Nghệ Thuật</title>
     
+    <!-- Nhúng bộ Font chữ thiết kế cao cấp -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Tourney:wght@600&display=swap" rel="stylesheet">
@@ -74,7 +75,7 @@
             transition: background 1s ease;
         }
 
-        /* GÓC TRÊN CÙNG BÊN TRÁI: ĐỒNG HỒ & NGÀY THÁNG CĂN GIỮA ĐỒNG TRỤC */
+        /* KHỐI ĐỒNG HỒ & NGÀY THÁNG (Mặc định ở Góc trên bên trái, Đêm tự căn giữa) */
         #info-container {
             position: absolute;
             top: 40px; 
@@ -86,7 +87,7 @@
             flex-direction: column;
             align-items: center; 
             text-align: center;
-            transition: transform 0.5s ease-out; /* Nhích vị trí chống lưu ảnh */
+            transition: transform 0.5s ease-out, top 0.8s ease-in-out, left 0.8s ease-in-out; 
         }
         #time {
             font-size: 8.5rem; 
@@ -101,6 +102,7 @@
             font-weight: 700;
             color: #F4B41A;
             letter-spacing: -2px;
+            transition: color 0.8s ease;
         }
         .minutes-style {
             font-family: 'Tourney', sans-serif;
@@ -119,6 +121,7 @@
             font-weight: 700;
             letter-spacing: 0.5px;
             color: #ffffff;
+            transition: color 0.8s ease;
         }
         #lunar-date {
             font-size: 1.8rem; 
@@ -127,49 +130,76 @@
             margin-top: 6px;
             letter-spacing: 0.5px;
             line-height: 1.3; 
+            transition: color 0.8s ease;
         }
 
-        /* THANH TRẠNG THÁI GỒM: NHIỆT ĐỘ KHỔNG LỒ, HỘP MÀU AQI VÀ ĐẾM NGƯỢC TẾT */
-        #status-container {
+        /* KHỐI ĐA NĂNG ĐÁY MÀN HÌNH: CĂN GIỮA TUYỆT ĐỐI, ĐẨY SÁT VIỀN 15PX */
+        #bottom-container {
             position: absolute;
-            bottom: 65px; /* Nhấc cao lên nhường chỗ cho dòng danh ngôn dưới đáy */
-            left: 40px;
-            right: 40px;
+            bottom: 15px; /* Sửa đổi: Đẩy cực sát viền dưới để tăng diện tích ảnh */
+            left: 0;
+            right: 0;
+            width: 100%;
             z-index: 3;
-            color: #ffffff;
-            text-shadow: 0px 2px 10px rgba(0, 0, 0, 0.85);
             display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: flex-start; /* Giữ chắc vị trí ở góc dưới bên trái */
-            gap: 20px;
+            flex-direction: column;
+            align-items: center; /* Căn giữa đồng trục dọc */
+            justify-content: center;
+            gap: 8px; /* Khoảng cách hẹp tinh tế giữa 2 dòng */
+            text-shadow: 0px 2px 10px rgba(0, 0, 0, 0.85);
             transition: transform 0.5s ease-out; 
         }
 
-        /* 1. Thiết kế dòng Nhiệt độ phóng lớn bằng kích thước dòng Ngày tháng */
+        /* Dòng 1: Danh ngôn nằm phía trên */
+        #quote-container {
+            width: 100%;
+            text-align: center;
+        }
+        #quote-text {
+            font-size: 1.4rem;
+            font-weight: 300;
+            font-style: italic;
+            color: #e0e0e0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: inline-block;
+            max-width: 90%;
+        }
+
+        /* Dòng 2: Trạng thái nằm phía dưới (Nhiệt độ | AQI | Tết) */
+        #status-container {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center; /* Căn giữa tuyệt đối hàng ngang */
+            gap: 20px;
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: #ffffff;
+        }
+
+        /* Nhiệt độ khổng lồ đơn lập */
         #weather-temp {
             font-size: 2.4rem; 
             font-weight: 700;
             color: #ffffff;
-            white-space: nowrap;
         }
 
-        /* 2. Thiết kế Hộp màu nền AQI thông minh tự đổi sắc thái màu */
+        /* Hộp màu nền AQI thông minh tự đổi sắc thái màu */
         #aqi-badge {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 700;
-            padding: 4px 12px;
-            border-radius: 6px;
+            padding: 3px 10px;
+            border-radius: 5px;
             white-space: nowrap;
-            text-shadow: none; /* Tắt bóng chữ để hiển thị sắc nét trên nền màu */
+            text-shadow: none; 
             display: inline-block;
             transition: background-color 0.5s ease, color 0.5s ease;
         }
 
-        /* 3. Dòng chữ đếm ngược sự kiện */
         #countdown-text {
-            font-size: 1.5rem;
-            font-weight: 400;
             white-space: nowrap;
         }
 
@@ -177,27 +207,6 @@
             opacity: 0.4;
             font-weight: 300;
             color: #ffffff;
-        }
-
-        /* DÒNG DANH NGÔN RIÊNG BIỆT NẰM Ở DƯỚI CÙNG MÀN HÌNH (LẤP ĐẦY KHOẢNG TRỐNG) */
-        #quote-container {
-            position: absolute;
-            bottom: 25px; /* Sát dưới đáy viền ảnh cực kỳ gọn gàng */
-            left: 40px;
-            right: 40px;
-            z-index: 3;
-            text-align: center; /* Căn giữa tạo sự cân bằng cân đối */
-            transition: transform 0.5s ease-out;
-        }
-        #quote-text {
-            font-size: 1.4rem;
-            font-weight: 300;
-            font-style: italic;
-            color: #e0e0e0;
-            text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.85);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
 
         /* THANH ĐIỀU KHIỂN TỐC ĐỘ: Hiện mờ mờ 20% thẩm mỹ */
@@ -224,37 +233,40 @@
             width: 140px;
         }
 
-        /* CHẾ ĐỘ BAN ĐÊM TỰ ĐỘNG KHÔNG GÂY CHÓI (AUTO NIGHT MODE TỪ 22:00 - 06:00) */
+        /* THIẾT LẬP CHẾ ĐỘ BAN ĐÊM TỰ ĐỘNG CHUẨN CẤP CAO (21:00 - 05:00) */
         .night-active #photo-container {
-            opacity: 0 !important; 
+            opacity: 0 !important; /* Ẩn sạch ảnh nền */
         }
         .night-active #frame-wrapper {
-            background-color: #000000 !important; 
+            background-color: #000000 !important; /* Nền đen sâu thẳm */
         }
         .night-active .overlay {
             background: rgba(0, 0, 0, 1) !important;
         }
-        .night-active #info-container, .night-active #status-container, .night-active #quote-container {
-            opacity: 0.25 !important; /* Giảm độ sáng tổng thể xuống 25% */
+        /* Ẩn hoàn toàn dải thông tin dưới đáy vào ban đêm để tránh sáng phòng */
+        .night-active #bottom-container {
+            display: none !important;
+        }
+        /* Chuyển đồng hồ sang màu TRẮNG tinh khôi chống chói, chống lưu ảnh */
+        .night-active .hours-style {
+            color: #ffffff !important;
+        }
+        .night-active #date, .night-active #lunar-date {
+            color: #aaaaaa !important;
+        }
+        .night-active #info-container {
             text-shadow: none !important;
-        }
-        .night-active * {
-            color: #ff9900 !important; /* Toàn bộ chữ chuyển sang màu hổ phách ấm áp */
-        }
-        /* Đêm xuống hộp màu AQI tự xả nền biến thành dạng viền để chống chói mắt */
-        .night-active #aqi-badge {
-            background-color: transparent !important;
-            border: 1px solid #ff9900 !important;
-            color: #ff9900 !important;
         }
     </style>
 </head>
 <body ontouchstart="activateControls()" onclick="activateControls()">
 
+    <!-- Khung viền matte dày dặn ôm trọn tác phẩm nghệ thuật -->
     <div id="frame-wrapper">
         <div id="photo-container"></div>
         <div class="overlay"></div>
 
+        <!-- CỤM ĐỒNG HỒ & LỊCH ÂM (Ngày: Góc trên trái | Đêm: Giữa màn hình) -->
         <div id="info-container">
             <div id="time">
                 <span class="hours-style">00</span>
@@ -266,22 +278,24 @@
             </div>
         </div>
 
-        <div id="status-container">
-            <span id="weather-temp">--°C</span>
+        <!-- CỤM ĐA NĂNG ĐÁY MÀN HÌNH: ĐÃ SỬA CĂN GIỮA ĐỒNG TRỤC 100% -->
+        <div id="bottom-container">
+            <!-- Dòng 1: Danh ngôn (ở trên) -->
+            <div id="quote-container">
+                <span id="quote-text">"Hạnh phúc là một hành trình..."</span>
+            </div>
             
-            <span class="bar-separator">|</span>
-            
-            <span id="aqi-badge">AQI: --</span>
-            
-            <span class="bar-separator">|</span>
-
-            <span id="countdown-text">Tết 2027: -- ngày</span>
+            <!-- Dòng 2: Trạng thái (ở dưới) -->
+            <div id="status-container">
+                <span id="weather-temp">--°C</span>
+                <span class="bar-separator">|</span>
+                <span id="aqi-badge">AQI: --</span>
+                <span class="bar-separator">|</span>
+                <span id="countdown-text">Tết 2027: -- ngày</span>
+            </div>
         </div>
 
-        <div id="quote-container">
-            <span id="quote-text">"Hạnh phúc là một hành trình..."</span>
-        </div>
-
+        <!-- Góc trên phải: Thanh gạt chọn mốc Phút ẩn mờ -->
         <div id="control-panel" onclick="event.stopPropagation();" ontouchstart="event.stopPropagation();">
             <label>Đổi ảnh: <span id="speedLabel">1 phút</span></label>
             <input type="range" id="speedSlider" min="1" max="4" value="1">
@@ -299,6 +313,10 @@
         let slideInterval;
         let hideTimeout;
         let lastChimeHour = -1;
+
+        // Tọa độ phục vụ tính năng chống lưu ảnh (Anti-Burn-In)
+        let burnInX1 = 0, burnInY1 = 0;
+        let burnInX2 = 0, burnInY2 = 0;
 
         const stepSeconds = { 1: 60, 2: 180, 3: 300, 4: 600 };
         const stepLabels = { 1: "1 phút", 2: "3 phút", 3: "5 phút", 4: "10 phút" };
@@ -321,24 +339,45 @@
             }, 3000);
         }
 
-        // TÍNH NĂNG CHỐNG LƯU MÀN HÌNH (ANTI-BURN-IN): Tự nhích ngẫu nhiên tọa độ chữ để bảo vệ phần cứng iPad
+        // TÍNH NĂNG CHỐNG LƯU MÀN HÌNH NÂNG CAO: Tính toán độ nhích ngẫu nhiên
         function runAntiBurnIn() {
-            const dx1 = Math.floor(Math.random() * 24) - 12; // Nhích ngẫu nhiên từ -12px đến +12px
-            const dy1 = Math.floor(Math.random() * 24) - 12;
-            const dx2 = Math.floor(Math.random() * 24) - 12;
-            const dy2 = Math.floor(Math.random() * 24) - 12;
-            const dx3 = Math.floor(Math.random() * 24) - 12;
-            const dy3 = Math.floor(Math.random() * 24) - 12;
-            
-            document.getElementById('info-container').style.transform = `translate(${dx1}px, ${dy1}px)`;
-            document.getElementById('status-container').style.transform = `translate(${dx2}px, ${dy2}px)`;
-            document.getElementById('quote-container').style.transform = `translate(${dx3}px, ${dy3}px)`;
+            burnInX1 = Math.floor(Math.random() * 24) - 12; // -12px đến +12px
+            burnInY1 = Math.floor(Math.random() * 24) - 12;
+            burnInX2 = Math.floor(Math.random() * 24) - 12;
+            burnInY2 = Math.floor(Math.random() * 24) - 12;
+            applyDynamicPositions();
         }
-        setInterval(runAntiBurnIn, 60000); 
+        setInterval(runAntiBurnIn, 60000); // Kích hoạt nhích vị trí mỗi phút một lần
 
-        // TIẾNG CHUÔNG BÁO GIỜ TỰ ĐỘNG (HOURLY CHIME)
+        // HÀM ĐIỀU PHỐI VỊ TRÍ TOÀN DIỆN (XỬ LÝ ĐỒNG HỒ RA GIỮA VÀO BAN ĐÊM)
+        function applyDynamicPositions() {
+            const now = new Date();
+            const hours = now.getHours();
+            const isNightMode = (hours >= 21 || hours < 5); // Đã sửa khung giờ ban đêm từ 21h đến 5h sáng
+
+            const infoNode = document.getElementById('info-container');
+            const bottomNode = document.getElementById('bottom-container');
+
+            if (isNightMode) {
+                // BAN ĐÊM: Đưa đồng hồ vào chính giữa tâm màn hình iPad
+                infoNode.style.top = "50%";
+                infoNode.style.left = "50%";
+                infoNode.style.transform = "translate(-50%, -50%) translate(" + burnInX1 + "px, " + burnInY1 + "px)";
+            } else {
+                // BAN NGÀY: Trả đồng hồ về góc trên cùng bên trái gọn gàng
+                infoNode.style.top = "40px";
+                infoNode.style.left = "40px";
+                infoNode.style.transform = "translate(" + burnInX1 + "px, " + burnInY1 + "px)";
+            }
+
+            if (bottomNode) {
+                bottomNode.style.transform = "translate(" + burnInX2 + "px, " + burnInY2 + "px)";
+            }
+        }
+
+        // TIẾNG CHUÔNG BÁO GIỜ TỰ ĐỘNG (MUTE HOÀN TOÀN TỪ 21H ĐẾN 5H SÁNG)
         function playHourlyChime(currentHour) {
-            if (currentHour < 6 || currentHour > 21) return; // Không đổ chuông đêm
+            if (currentHour < 6 || currentHour >= 21) return; // Bảo vệ giấc ngủ đêm của gia đình
             try {
                 const AudioContext = window.AudioContext || window.webkitAudioContext;
                 if (!AudioContext) return;
@@ -394,7 +433,7 @@
             return `AL ${diffDays}-${activePhase[3]}<br><span style="font-size: 1.4rem; opacity: 0.8; font-weight:300;">Năm ${activePhase[4]}</span>`;
         }
 
-        // Điều khiển hệ thống thời gian thực
+        // Cập nhật Đồng hồ, Quản lý mốc giờ kích hoạt Night Mode/Chuông báo giờ
         function updateClock() {
             const now = new Date();
             const hours = now.getHours();
@@ -410,12 +449,15 @@
             document.getElementById('date').innerText = `${days[now.getDay()]} ${now.getDate()}-${now.getMonth() + 1}`;
             document.getElementById('lunar-date').innerHTML = calculateLunarHtml(now);
 
-            // 3. TỰ ĐỘNG CHUYỂN CHẾ ĐỘ BAN ĐÊM (22:00 - 06:00)
-            if (hours >= 22 || hours < 6) {
+            // 3. ĐÃ SỬA THỜI GIAN BAN ĐÊM: Tự động khóa màn hình nền đen từ 21:00 đến 05:00 sáng
+            if (hours >= 21 || hours < 5) {
                 document.body.classList.add('night-active');
             } else {
                 document.body.classList.remove('night-active');
             }
+
+            // Đồng bộ lại vị trí ngay khi nhảy phút
+            applyDynamicPositions();
 
             // 4. BÁO CHUÔNG HẰNG GIỜ
             if (minutes === 0 && hours !== lastChimeHour) {
@@ -423,7 +465,7 @@
                 lastChimeHour = hours;
             }
 
-            // 5. Cập nhật xoay tua kho danh ngôn theo số phút để tối ưu ram máy iPad
+            // 5. Cập nhật xoay tua danh ngôn hằng phút
             const quoteIdx = Math.floor(minutes / 10) % quotesPool.length;
             document.getElementById('quote-text').innerText = `"${quotesPool[quoteIdx]}"`;
 
@@ -443,12 +485,11 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // CẬP NHẬT THỜI TIẾT ĐẮK LẮK VÀ HỘP ĐỔI MÀU AQI CHUẨN XÁC THEO ẢNH PHÂN CẤP
+        // CẬP NHẬT THỜI TIẾT ĐẮK LẮK VÀ HỘP ĐỔI MÀU AQI CHUẨN XÁC
         function updateWeatherAndAQI() {
             const lat = 12.6667; 
             const lon = 108.0500;
             
-            // Gọi thời tiết thực tế
             fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m`)
                 .then(res => res.json())
                 .then(data => {
@@ -459,7 +500,6 @@
                     document.getElementById('weather-temp').innerText = '--°C';
                 });
 
-            // Gọi chỉ số không khí AQI Đắk Lắk thực tế và tự động phối màu nền chuẩn 100%
             fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=us_aqi`)
                 .then(res => res.json())
                 .then(data => {
@@ -467,7 +507,7 @@
                     const badge = document.getElementById('aqi-badge');
                     
                     let aqiLabel = "Tốt";
-                    let bgColor = "#2ecc71"; // Xanh lá
+                    let bgColor = "#2ecc71"; 
                     let textColor = "#ffffff";
                     
                     if (aqi <= 50) {
@@ -475,23 +515,23 @@
                         bgColor = "#2ecc71";
                     } else if (aqi <= 100) {
                         aqiLabel = "Trung bình";
-                        bgColor = "#f1c40f"; // Vàng nắng
-                        textColor = "#000000"; // Chữ đen trên nền vàng để lộ chữ rõ ràng
+                        bgColor = "#f1c40f"; 
+                        textColor = "#000000"; 
                     } else if (aqi <= 150) {
                         aqiLabel = "Kém";
-                        bgColor = "#e67e22"; // Cam
+                        bgColor = "#e67e22"; 
                     } else if (aqi <= 200) {
                         aqiLabel = "Xấu";
-                        bgColor = "#e74c3c"; // Đỏ
+                        bgColor = "#e74c3c"; 
                     } else if (aqi <= 300) {
                         aqiLabel = "Rất xấu";
-                        bgColor = "#9b59b6"; // Tím
+                        bgColor = "#9b59b6"; 
                     } else {
                         aqiLabel = "Nguy hiểm";
-                        bgColor = "#795548"; // Nâu
+                        bgColor = "#795548"; 
                     }
                     
-                    // Sửa đổi: Ghi text sạch sẽ, không kèm icon thô kệch phía sau
+                    // Ghi text sạch sẽ, loại bỏ icon thừa sau chữ (Vừa phải) theo ý bạn
                     badge.innerText = `AQI: ${aqi} (${aqiLabel})`;
                     badge.style.backgroundColor = bgColor;
                     badge.style.color = textColor;
