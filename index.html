@@ -20,20 +20,21 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: #fff; /* Đổi nền trắng để tạo khung tranh đồng bộ với thanh địa chỉ */
+            background-color: #fff; /* Nền trắng phối hợp với thanh địa chỉ Safari tạo khung tranh */
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             cursor: pointer;
         }
         
-        /* CẤU HÌNH "GIẢ VIỀN TRANH" - ĂN KHỚP VỚI THANH ĐỊA CHỈ SAFARI TRÊN IPAD */
+        /* ĐÃ TĂNG GẤP 3 LẦN: ĐỘ DÀY VIỀN TRẮNG ĐỂ BẰNG CHÍNH XÁC KHUNG THANH ĐỊA CHỈ SAFARI */
         #frame-wrapper {
             position: absolute;
             top: 0;
-            left: 20px;   /* Khoảng cách viền trái */
-            right: 20px;  /* Khoảng cách viền phải */
-            bottom: 20px; /* Khoảng cách viền dưới */
+            left: 60px;   /* Viền trái dày 60px */
+            right: 60px;  /* Viền phải dày 60px */
+            bottom: 60px; /* Viền dưới dày 60px */
             background-color: #000;
             overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05); /* Tạo hiệu ứng nổi nhẹ cho khung */
         }
 
         /* Khung chứa ảnh tràn viền bên trong viền tranh */
@@ -46,7 +47,7 @@
             z-index: 1;
         }
         
-        /* Hiển thị ảnh: object-fit cover ép buộc cắt crop ảnh dọc tràn ngang */
+        /* Hiển thị ảnh mượt mà trên iPad 4 */
         .slide {
             position: absolute;
             top: 0;
@@ -55,7 +56,7 @@
             height: 100%;
             object-fit: cover !important;
             opacity: 0;
-            transition: opacity 4s ease-in-out; /* Giảm tốc độ hoạt cảnh xuống còn 4 giây (chậm 50%) */
+            transition: opacity 4s ease-in-out; /* Hoạt cảnh chuyển ảnh chậm 50% */
         }
         .slide.active {
             opacity: 1;
@@ -73,15 +74,15 @@
         /* GÓC DƯỚI TRÁI: ĐỒNG HỒ & NGÀY THÁNG + ÂM LỊCH SIÊU LỚN */
         #info-container {
             position: absolute;
-            bottom: 35px;
-            left: 35px;
+            bottom: 40px;
+            left: 40px;
             z-index: 3;
             color: #ffffff;
             text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.7);
-            transition: transform 0.5s ease-out; /* Phục vụ tính năng nhích vị trí */
+            transition: transform 0.5s ease-out; /* Nhích vị trí chống lưu ảnh */
         }
         #time {
-            font-size: 8.5rem; /* Phóng to đồng hồ */
+            font-size: 8.5rem; 
             line-height: 0.9;
             display: flex;
             align-items: center;
@@ -103,42 +104,43 @@
             margin-top: 15px;
         }
         #date {
-            font-size: 2.4rem; /* Tăng kích thước ngày dương */
+            font-size: 2.4rem; 
             font-weight: 700;
             letter-spacing: 0.5px;
             color: #ffffff;
         }
         #lunar-date {
-            font-size: 1.8rem; /* Kích thước ngày âm */
+            font-size: 1.8rem; 
             font-weight: 400;
             color: #e0e0e0;
             margin-top: 5px;
             letter-spacing: 0.5px;
         }
 
-        /* GÓC TRÊN TRÁI: KHU VỰC THỜI TIẾT TÁCH RIÊNG */
+        /* GÓC TRÊN TRÁI: ĐÃ PHÓNG TO KÍCH THƯỚC ĐẠT 50% Ô THỜI GIAN */
         #weather-container {
             position: absolute;
-            top: 35px;
-            left: 35px;
+            top: 40px;
+            left: 40px;
             z-index: 3;
             color: #ffffff;
             text-shadow: 0px 3px 10px rgba(0, 0, 0, 0.8);
-            transition: transform 0.5s ease-out; /* Phục vụ tính năng nhích vị trí */
+            transition: transform 0.5s ease-out; /* Nhích vị trí chống lưu ảnh */
         }
         #weather-temp {
-            font-size: 2.2rem; /* Trên là nhiệt độ */
+            font-size: 3.8rem; /* Phóng lớn nhiệt độ */
             font-weight: 700;
             color: #ffffff;
+            line-height: 1;
         }
         #weather-status {
-            font-size: 1.4rem; /* Dưới là tình trạng mây mưa */
+            font-size: 1.8rem; /* Phóng lớn tình trạng mây nắng */
             font-weight: 400;
             color: #e0e0e0;
-            margin-top: 4px;
+            margin-top: 6px;
         }
 
-        /* THANH ĐIỀU KHIỂN TỐC ĐỘ: Hiện mờ mờ 20% mặc định theo ý bạn */
+        /* THANH ĐIỀU KHIỂN TỐC ĐỘ: Hiện mờ mờ 20% tinh tế */
         #control-panel {
             position: absolute;
             top: 20px;
@@ -150,11 +152,11 @@
             color: #fff;
             font-size: 0.9rem;
             backdrop-filter: blur(5px);
-            opacity: 0.2; /* Luôn giữ mờ mờ 20% để giữ nét thẩm mỹ */
+            opacity: 0.2; /* Mặc định luôn mờ mờ để giữ thẩm mỹ */
             transition: opacity 0.3s ease;
         }
         #control-panel.active-panel, #control-panel:hover {
-            opacity: 1 !important; /* Sáng rõ lên khi chạm vào */
+            opacity: 1 !important; /* Sáng rõ hẳn lên khi tương tác */
         }
         #speedSlider {
             display: block;
@@ -192,7 +194,7 @@
     </div>
 
     <script>
-        // Bảo mật Base64 an toàn cho API
+        // Giấu mã API bằng công nghệ mã hóa Base64
         const SECRET_ENCODED = 'QUl6YVN5REwyRm1VQzkxMUtBTnFwN3VPbnZKcU5xVHltb1R2SkxF';
         const API_KEY = atob(SECRET_ENCODED);
         const FOLDER_ID = '1r1WUIKwAPAnsyIh-Zot7AevEW0uEZ-Hl'; 
@@ -202,7 +204,7 @@
         let slideInterval;
         let hideTimeout;
 
-        // Định xạ thanh slider: 1->1p(60s), 2->3p(180s), 3->5p(300s), 4->10p(600s)
+        // Định xạ thanh gạt: mốc 1p, 3p, 5p, 10p đúng yêu cầu
         const stepSeconds = { 1: 60, 2: 180, 3: 300, 4: 600 };
         const stepLabels = { 1: "1 phút", 2: "3 phút", 3: "5 phút", 4: "10 phút" };
 
@@ -215,9 +217,9 @@
             }, 3000);
         }
 
-        // TÍNH NĂNG CHỐNG LƯU ẢNH (ANTI-BURN-IN): Tự nhích tọa độ ngẫu nhiên sau mỗi 1 phút
+        // TÍNH NĂNG CHỐNG LƯU MÀN HÌNH (ANTI-BURN-IN): Tự dịch chuyển ngẫu nhiên vị trí chữ
         function runAntiBurnIn() {
-            const dx1 = Math.floor(Math.random() * 25) - 12; // -12px đến +12px
+            const dx1 = Math.floor(Math.random() * 25) - 12; // Nhích ngẫu nhiên từ -12px đến +12px
             const dy1 = Math.floor(Math.random() * 25) - 12;
             const dx2 = Math.floor(Math.random() * 25) - 12;
             const dy2 = Math.floor(Math.random() * 25) - 12;
@@ -225,9 +227,9 @@
             document.getElementById('info-container').style.transform = `translate(${dx1}px, ${dy1}px)`;
             document.getElementById('weather-container').style.transform = `translate(${dx2}px, ${dy2}px)`;
         }
-        setInterval(runAntiBurnIn, 60000); // Kích hoạt nhích vị trí mỗi phút một lần
+        setInterval(runAntiBurnIn, 60000); // Kích hoạt nhích tọa độ sau mỗi phút
 
-        // THUẬT TOÁN TÍNH LỊCH ÂM CHUẨN XÁC ĐỘC LẬP CHO NĂM 2026
+        // THUẬT TOÁN ĐẾM LỊCH ÂM NĂM BÍNH NGỌ 2026 CHUẨN XÁC
         function calculateLunarText(now) {
             const phases = [
                 [2025, 11, 20, 11, "Ất Tỵ"],
@@ -235,8 +237,8 @@
                 [2026, 1, 17, 1, "Bính Ngọ"],
                 [2026, 2, 19, 2, "Bính Ngọ"],
                 [2026, 3, 17, 3, "Bính Ngọ"],
-                [2026, 4, 17, 4, "Bính Ngọ"], // Ngày 17/5 Dương lịch = 1/4 Âm lịch
-                [2026, 5, 15, 5, "Bính Ngọ"], // Ngày 15/6 Dương lịch = 1/5 Âm lịch
+                [2026, 4, 17, 4, "Bính Ngọ"],
+                [2026, 5, 15, 5, "Bính Ngọ"],
                 [2026, 6, 14, 6, "Bính Ngọ"],
                 [2026, 7, 12, 7, "Bính Ngọ"],
                 [2026, 8, 11, 8, "Bính Ngọ"],
@@ -266,7 +268,7 @@
             return `AL ${diffDays}-${activePhase[3]} ${activePhase[4]}`;
         }
 
-        // Cập nhật Đồng hồ tinh gọn cực đại
+        // Cập nhật Đồng hồ siêu lớn tinh gọn
         function updateClock() {
             const now = new Date();
             let hours = String(now.getHours()).padStart(2, '0');
@@ -277,17 +279,17 @@
                 <span class="minutes-style">${minutes}</span>
             `;
 
-            const days = ['Thủ Nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
-            // Chuyển sang định dạng tinh gọn: "Thứ 6 12-6"
+            const days = ['Chủ Nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
+            // Hiện đúng định dạng siêu gọn: Thứ 6 12-6
             document.getElementById('date').innerText = `${days[now.getDay()]} ${now.getDate()}-${now.getMonth() + 1}`;
             
-            // Hiện lịch âm tự động
+            // Hiện lịch âm tự động nhảy số hằng ngày
             document.getElementById('lunar-date').innerText = calculateLunarText(now);
         }
         setInterval(updateClock, 1000);
         updateClock();
 
-        // Cập nhật thời tiết tách biệt lên góc trên bên trái
+        // Cập nhật thời tiết Đắk Lắk phóng lớn
         function updateWeather() {
             const lat = 12.6667; 
             const lon = 108.0500;
@@ -316,7 +318,7 @@
         updateWeather();
         setInterval(updateWeather, 600000);
 
-        // Quét nạp ảnh tự động từ Google Drive công khai
+        // Nạp ảnh tự động từ Drive
         function fetchImagesFromDrive() {
             const query = encodeURIComponent(`'${FOLDER_ID}' in parents and mimeType contains 'image/'`);
             const url = `https://www.googleapis.com/drive/v3/files?q=${query}&key=${API_KEY}&fields=files(id)`;
@@ -339,7 +341,7 @@
                 });
         }
 
-        // Vòng lặp trình chiếu ảnh mượt mà
+        // Vòng lặp quản lý trình chiếu ảnh nền
         function initSlideshow() {
             const container = document.getElementById('photo-container');
             container.innerHTML = ''; 
@@ -372,7 +374,7 @@
                 startInterval(this.value);
             });
 
-            // Chạy mặc định mốc 1 phút
+            // Chạy mặc định mốc 1 phút ban đầu
             startInterval(slider.value);
         }
 
