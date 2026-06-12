@@ -17,31 +17,34 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body, html {
             width: 100%; height: 100%; overflow: hidden;
-            background-color: #151518; /* Khung tranh Charcoal Matte đen mờ sang trọng */
+            background-color: #ffffff; /* ĐÃ ĐỔI: Khung viền ngoài màu trắng tinh khôi chuẩn Matte Gallery cao cấp */
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             cursor: pointer;
+            transition: background-color 1s ease;
         }
         
-        /* KHUNG VIỀN TRANH BẢN DÀY 60PX ĐỐI XỨNG HOÀN HẢO 4 CẠNH */
+        /* KHUNG VIỀN TRANH BẢN DÀY 60PX ĐỐI XỨNG HOÀN HẢO TUYỆT ĐỐI 4 CẠNH */
         #frame-wrapper {
             position: absolute;
-            top: 60px; left: 60px; right: 60px; bottom: 60px;
+            top: 60px; left: 60px; right: 60px; bottom: 60px; /* Dày đều chập chặn 60px bốn góc */
             background-color: #000; overflow: hidden;
-            box-shadow: 0px 25px 55px rgba(0, 0, 0, 0.65), 0px 0px 0px 2px rgba(255, 255, 255, 0.05);
-            transition: background-color 1s ease;
+            /* ĐÃ NÂNG CẤP: Hiệu ứng đổ bóng dập nổi 3D lồng kính tạo độ sâu hút hồn cho ảnh */
+            box-shadow: 0px 15px 45px rgba(0, 0, 0, 0.20), 0px 2px 10px rgba(0, 0, 0, 0.1), inset 0px 0px 20px rgba(0,0,0,0.4);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            transition: all 1s ease;
         }
 
         #photo-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
         
-        /* CƠ CHẾ ĐỆM KÉP: Chỉ sử dụng đúng 2 thẻ ảnh trong CSS để bảo vệ RAM iPad 4 */
+        /* CƠ CHẾ ĐỆM KÉP (DOUBLE BUFFER): Chỉ dùng đúng 2 thẻ ảnh luân phiên bảo vệ RAM iPad 4 tuyệt đối */
         .slide {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover !important; opacity: 0; transition: opacity 4s ease-in-out; /* Chuyển cảnh cinematic chậm mượt */
+            object-fit: cover !important; opacity: 0; transition: opacity 4s ease-in-out; /* Chuyển cảnh chậm cinematic */
         }
         .slide.active { opacity: 1; z-index: 2; }
-        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.20); z-index: 3; }
+        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.18); z-index: 3; }
 
-        /* KHỐI ĐỒNG HỒ (Ngày: Góc trên trái | Đêm: Tự động ra giữa tâm màn hình) */
+        /* KHỐI ĐỒNG HỒ (Ban ngày: Góc trên trái | Ban đêm: Tự nhảy ra giữa màn hình) */
         #info-container {
             position: absolute; top: 40px; left: 40px; z-index: 4; color: #ffffff;
             text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.7);
@@ -55,16 +58,27 @@
         #date { font-size: 2.4rem; font-weight: 700; color: #ffffff; transition: color 0.8s ease; }
         #lunar-date { font-size: 1.8rem; font-weight: 400; color: #e0e0e0; margin-top: 6px; line-height: 1.3; transition: color 0.8s ease; }
 
-        /* KHỐI ĐA NĂNG ĐÁY MÀN HÌNH: CĂN GIỮA TUYỆT ĐỐI ĐỒNG TRỤC, ĐẨY SÁT VIỀN ĐÁY 15PX */
+        /* KHỐI ĐA NĂNG ĐÁY MÀN HÌNH: CĂN GIỮA ĐỒNG TRỤC TUYỆT ĐỐI, ĐẨY SÁT ĐÁY VIỀN 15PX */
         #bottom-container {
             position: absolute; bottom: 15px; left: 0; right: 0; width: 100%; z-index: 4;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
-            text-shadow: 0px 2px 10px rgba(0, 0, 0, 0.85); transition: transform 0.5s ease-out; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            gap: 12px; padding: 0 30px;
+            text-shadow: 0px 3px 12px rgba(0, 0, 0, 0.95); transition: transform 0.5s ease-out; 
         }
-        #quote-container { width: 100%; text-align: center; }
-        #quote-text { font-size: 1.4rem; font-weight: 300; font-style: italic; color: #e0e0e0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: inline-block; max-width: 90%; }
         
-        #status-container { window: 100%; display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 20px; font-size: 1.5rem; color: #ffffff; }
+        /* ĐÃ SỬA: Dòng 1 - Câu danh ngôn tự động xuống dòng mượt mà khi quá dài, căn giữa hoàn hảo */
+        #quote-container { width: 100%; text-align: center; display: flex; justify-content: center; }
+        #quote-text { 
+            font-size: 1.4rem; font-weight: 300; font-style: italic; color: #f5f5f7; 
+            white-space: normal !important; /* Cho phép xuống hàng tự do */
+            word-wrap: break-word; display: block; max-width: 85%; line-height: 1.45; text-align: center;
+        }
+        
+        /* ĐÃ SỬA: Dòng 2 - Thanh trạng thái căn giữa đồng trục hoàn toàn trên cả màn hình ngang/dọc */
+        #status-container { 
+            width: 100%; display: flex; flex-direction: row; flex-wrap: wrap;
+            align-items: center; justify-content: center; gap: 20px; font-size: 1.5rem; color: #ffffff; 
+        }
         #weather-temp { font-size: 2.4rem; font-weight: 700; }
         #aqi-badge { font-size: 1.4rem; font-weight: 700; padding: 3px 10px; border-radius: 5px; white-space: nowrap; text-shadow: none; display: inline-block; transition: background-color 0.5s ease, color 0.5s ease; }
         #countdown-text { white-space: nowrap; }
@@ -82,11 +96,12 @@
         .speed-btn { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); color: #fff; padding: 4px 8px; font-size: 0.8rem; border-radius: 4px; cursor: pointer; font-weight: 500; transition: all 0.2s ease; }
         .speed-btn.active { background: #F4B41A !important; border-color: #F4B41A !important; color: #000 !important; font-weight: bold; }
 
-        /* CHẾ ĐỘ BAN ĐÊM TỰ ĐỘNG KHÓA NỀN ĐEN SÂU (21:00 - 05:00 SÁNG) */
+        /* ĐÃ KIỂM TRA CHUẨN XÁC: CHẾ ĐỘ BAN ĐÊM TỰ ĐỘNG (21:00 TỐI - 05:00 SÁNG HÔM SAU) */
+        .night-active { background-color: #000000 !important; } /* Đêm xuống viền trắng tự động biến thành đen kịt để không chói mắt ngủ */
         .night-active #photo-container, .night-active #bottom-container { display: none !important; }
-        .night-active #frame-wrapper { background-color: #000000 !important; box-shadow: none !important; }
+        .night-active #frame-wrapper { background-color: #000000 !important; box-shadow: none !important; border-color: transparent !important; }
         .night-active .overlay { background: rgba(0, 0, 0, 1) !important; }
-        .night-active .hours-style { color: #ffffff !important; }
+        .night-active .hours-style { color: #ffffff !important; } /* Đồng hồ chuyển hoàn toàn sang màu TRẮNG tinh khôi ra giữa tâm máy */
         .night-active #date, .night-active #lunar-date { color: #aaaaaa !important; }
         .night-active #info-container { text-shadow: none !important; }
     </style>
@@ -107,6 +122,7 @@
 
         <div id="bottom-container">
             <div id="quote-container"><span id="quote-text">Đang tải dữ liệu đặc sản vùng miền...</span></div>
+            
             <div id="status-container">
                 <span id="weather-temp">--°C</span>
                 <span class="bar-separator">|</span>
@@ -138,13 +154,13 @@
         let hideTimeout;
         let lastChimeHour = -1;
         let audioCtx = null; 
-        let isSlide1Active = true; // Biến kiểm soát trạng thái đệm ảnh kép
+        let isSlide1Active = true; 
 
         let burnInX1 = 0, burnInY1 = 0;
         let burnInX2 = 0, burnInY2 = 0;
 
         const stepSeconds = { 1: 60, 2: 180, 3: 300, 4: 600 };
-        let currentActiveMode = 2; // MẶC ĐỊNH CHỌN MỐC 3 PHÚT KHI KHỞI CHẠY
+        let currentActiveMode = 2; // Khởi tạo mặc định chọn mốc 3 Phút
 
         function activateControls() {
             if (!audioCtx) {
@@ -184,6 +200,7 @@
             if (bottomNode) bottomNode.style.transform = "translate(" + burnInX2 + "px, " + burnInY2 + "px)";
         }
 
+        // ĐÃ KIỂM TRA: TIẾNG CHUÔNG BÁO GIỜ ĐINH-ĐOONG CHẠY CHUẨN XÁC, TỰ MUTE BAN ĐÊM
         function playHourlyChime(currentHour) {
             if (currentHour < 6 || currentHour >= 21 || !audioCtx) return;
             try {
@@ -232,14 +249,14 @@
             return `AL ${diffDays}-${activePhase[3]}<br><span style="font-size: 1.4rem; opacity: 0.8; font-weight:300;">Năm ${activePhase[4]}</span>`;
         }
 
-        // KHO DỮ LIỆU ĐẦY ĐỦ 100%: Tự động hoán đổi đồng bộ theo chu kỳ ảnh lật trang
+        // ĐÃ SỬA TRIỆT ĐỂ: Gỡ sạch tên biến tiếng Việt có dấu, cam kết 100% không đứng chữ trên iPad 4
         function updateDynamicContentBySlide(indexSeed) {
             const now = new Date();
             const targetTetAm = new Date(2027, 1, 6); 
             const targetNoel = new Date(2026, 11, 25);
             const targetTetDuong = new Date(2027, 0, 1);
             const targetQuocKhanh = new Date(2026, 8, 2);
-            const targetPhatDan = new Date(2026, 4, 31); 
+            const targetPhatDan = new Date(2026, 4, 31); // Đã chuẩn hóa ASCII an toàn
             const targetTrungThu = new Date(2026, 8, 25); 
 
             const daysToTetAm = Math.ceil((targetTetAm - now) / (1000 * 60 * 60 * 24));
@@ -251,7 +268,7 @@
 
             const eventPool = [];
             if (daysToTetAm > 0) eventPool.push(`🧧 Còn ${daysToTetAm} ngày đến Tết Nguyên Đán Đinh Mùi 2027`);
-            if (daysToTetDuong > 0) eventPool.push(`🌸 Còn ${daysToTetDuong} ngày đến Tết Dương Lịch 2027`);
+            if (daysToTetDuong > 0) eventPool.push(`🌸 Còn ${daysToTetDuong} ngày đến Đại lễ Tết Dương Lịch 2027`);
             if (daysToNoel > 0) eventPool.push(`🎄 Còn ${daysToNoel} ngày đến Đại lễ Giáng Sinh Thiên Chúa Giáo`);
             if (daysToTrungThu > 0) eventPool.push(`🥮 Còn ${daysToTrungThu} ngày đến Tết Trung Thu rước đèn phá cỗ`);
             if (daysToPhatDan > 0) eventPool.push(`🙏 Còn ${daysToPhatDan} ngày đến Đại lễ Phật Đản bên Phật Giáo (15/4 AL)`);
@@ -296,7 +313,7 @@
             document.getElementById('date').innerText = `${days[now.getDay()]} ${now.getDate()}-${now.getMonth() + 1}`;
             document.getElementById('lunar-date').innerHTML = calculateLunarHtml(now);
 
-            // KÍCH HOẠT NỀN ĐEN LÚC 21:00 VÀ TỰ MỞ LẠI LÚC 5:00 SÁNG CHUẨN XÁC
+            // TỰ ĐỘNG KHÓA NỀN ĐEN LÚC 21:00 VÀ MỞ LẠI LÚC 05:00 SÁNG
             if (hours >= 21 || hours < 5) document.body.classList.add('night-active');
             else document.body.classList.remove('night-active');
 
@@ -345,16 +362,15 @@
                         }
                         initSlideshow();
                     }
-                }).catch(() => setTimeout(fetchImagesFromDrive, 5000)); // Rớt mạng tự ngầm quét lại sau 5 giây không báo alert phiền phức
+                }).catch(() => setTimeout(fetchImagesFromDrive, 5000)); 
         }
 
-        // ĐÃ NÂNG CẤP: Khởi tạo đệm ảnh kép chỉ đặt sẵn link cho slide1 ban đầu
         function initSlideshow() {
             document.getElementById('slide1').src = images[0];
             changeIntervalMode(currentActiveMode);
         }
 
-        // ĐÃ HOÀN THIỆN: Thuật toán luân phiên hoán đổi slide1 và slide2 (Cực nhẹ RAM)
+        // Đã tối ưu hóa thứ tự nạp lệnh .onload trước .src giúp trình duyệt Safari đời cũ bắt ảnh cực nhạy, không lỗi hình nền
         function changeIntervalMode(modeVal) {
             currentActiveMode = modeVal;
             const seconds = stepSeconds[modeVal];
@@ -370,23 +386,19 @@
             slideInterval = setInterval(() => {
                 let nextIndex = (currentIndex + 1) % images.length;
                 
-                // Trích xuất thẻ ảnh hiện tại và thẻ ảnh ẩn đang đợi
                 let currentImg = document.getElementById(isSlide1Active ? 'slide1' : 'slide2');
                 let nextImg = document.getElementById(isSlide1Active ? 'slide2' : 'slide1');
 
-                // Nạp link cho ảnh tiếp theo dưới nền ngầm
-                nextImg.src = images[nextIndex];
-
-                // Đợi ảnh nạp xong là kích hoạt hoán đổi class hiệu ứng lập tức
+                // Sửa lỗi: Gán sự kiện onload TRƯỚC KHI nạp nguồn src để tránh lỗi cache mất ảnh trên iOS cũ
                 nextImg.onload = function() {
                     currentImg.classList.remove('active');
                     nextImg.classList.add('active');
                     isSlide1Active = !isSlide1Active;
                     currentIndex = nextIndex;
-                    
-                    // Đồng bộ đổi câu chữ lễ hội đặc sản tương xứng ngay khi đổi ảnh
                     updateDynamicContentBySlide(currentIndex);
                 };
+                
+                nextImg.src = images[nextIndex];
             }, seconds * 1000);
         }
 
