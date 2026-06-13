@@ -7,10 +7,13 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="referrer" content="no-referrer">
-    <title>Khung Ảnh Số Thông Minh - V63 Pro</title>
+    
+    <title>Khung Ảnh Số Thông Minh - V65</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Tourney:wght@600&display=swap" rel="stylesheet">
+
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body, html { width: 100%; height: 100%; overflow: hidden; background-color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; cursor: pointer; transition: background-color 1s ease; }
@@ -18,56 +21,92 @@
         #photo-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
         .slide-group { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 3s ease-in-out; display: block; }
         .slide-group.active { opacity: 1; z-index: 2; }
+        
         .background-blur { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover !important; -webkit-filter: blur(40px) brightness(0.85); filter: blur(40px) brightness(0.85); transform: scale(1.3); z-index: 1; display: none; }
         .foreground-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; flex-shrink: 0; -webkit-filter: drop-shadow(0px 15px 35px rgba(0,0,0,0.6)); filter: drop-shadow(0px 15px 35px rgba(0,0,0,0.6)); transition: all 0.5s ease; }
         .slide-group.show-blur .background-blur { display: block; }
         .fit-cover { object-fit: cover !important; width: 100% !important; height: 100% !important; }
         .fit-contain { object-fit: contain !important; width: 100% !important; height: 100% !important; }
+
         .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.15); z-index: 3; pointer-events: none; }
+
+        /* 🛡️ KHU VỰC CỘT TRÁI (GIỜ + DƯƠNG LỊCH + ÂM LỊCH + NGÀY GIỖ) */
         #info-container { position: absolute; top: 35px; left: 35px; z-index: 4; text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.8); display: flex; flex-direction: column; align-items: center; transition: transform 0.8s ease-in-out; }
         .hours-style { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #F4B41A; font-size: 7.5rem; letter-spacing: -2px; display: block; line-height: 0.82; }
         .minutes-style { font-family: 'Tourney', sans-serif; font-weight: 600; color: #ffffff; font-size: 7.5rem; letter-spacing: -1px; display: block; margin-top: -5px; line-height: 0.82; }
+        
         #date-solar-top { font-size: 1.7rem; font-weight: 700; color: #ffffff; margin-top: 14px; white-space: nowrap; }
+        #date-lunar-top { font-size: 1.7rem; font-weight: 700; color: #ffffff; margin-top: 2px; white-space: nowrap; }
         .highlight-yellow { color: #F4B41A; font-weight: 700; }
+
+        #death-events-container { display: flex; flex-direction: column; align-items: center; gap: 3px; width: 100%; margin-top: 6px; }
+        .death-event-item { font-size: 1.25rem; color: rgba(255, 255, 255, 0.9); font-weight: 500; text-align: center; padding: 3px 12px; border-radius: 4px; background: rgba(0, 0, 0, 0.35); }
+        .death-event-passed { opacity: 0.35; font-size: 1.05rem; }
+        .death-event-urgent { color: #ff9500 !important; font-weight: 700; background: rgba(0, 0, 0, 0.6); -webkit-animation: pulseGlow 2s infinite; animation: pulseGlow 2s infinite; }
+        .death-event-today { color: #ff9500 !important; font-weight: 700; font-size: 1.35rem; background: rgba(0, 0, 0, 0.7); }
+
+        /* 🛡️ GÓC PHẢI TRÊN (SINH NHẬT - ĐÃ LÀM GỌN) */
         #right-event-container { position: absolute; top: 35px; right: 35px; z-index: 4; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; max-width: 350px; text-shadow: 0px 2px 10px rgba(0,0,0,0.95); }
         .event-header { font-size: 1.1rem; color: #F4B41A; font-weight: 700; text-align: right; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; display: flex; align-items: center; justify-content: flex-end; }
         .event-item { font-size: 1.25rem; color: rgba(255, 255, 255, 0.9); font-weight: 500; text-align: right; padding: 3px 10px; border-radius: 4px; background: rgba(0, 0, 0, 0.35); margin-bottom: 2px; }
         .event-passed { opacity: 0.35; font-size: 1.05rem; }
         .event-urgent { color: #F4B41A !important; font-weight: 700; background: rgba(0, 0, 0, 0.6); -webkit-animation: pulseGlow 2s infinite; animation: pulseGlow 2s infinite; }
         .event-today-birth { color: #2ecc71 !important; font-weight: 700; font-size: 1.35rem; background: rgba(0, 0, 0, 0.7); }
-        .event-today-death { color: #ff9500 !important; font-weight: 700; font-size: 1.35rem; background: rgba(0, 0, 0, 0.7); }
+        
         @-webkit-keyframes pulseGlow { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
         @keyframes pulseGlow { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
-        #bottom-container { position: absolute; bottom: 30px; left: 35px; right: 35px; z-index: 4; display: flex; flex-direction: row; justify-content: space-between; align-items: flex-end; text-shadow: 0px 3px 12px rgba(0, 0, 0, 0.95); transition: transform 0.5s ease; }
-        #bottom-left { display: flex; flex-direction: row; align-items: center; gap: 20px; width: 60%; }
-        #temp-wrapper { position: relative; display: flex; align-items: center; justify-content: center; flex-shrink: 0; min-width: 90px; padding-right: 20px; }
+
+        /* KHU VỰC ĐÁY MÀN HÌNH */
+        #bottom-container { position: absolute; bottom: 35px; left: 35px; right: 35px; z-index: 4; display: flex; flex-direction: row; justify-content: space-between; align-items: flex-end; text-shadow: 0px 3px 12px rgba(0, 0, 0, 0.95); transition: transform 0.5s ease; }
+        #bottom-left { display: flex; flex-direction: row; align-items: center; gap: 25px; width: 55%; }
+        #temp-wrapper { position: relative; display: flex; align-items: center; justify-content: center; flex-shrink: 0; min-width: 90px; padding-right: 15px; }
         #weather-val { font-size: 4.5rem; font-weight: 700; color: #ffffff; letter-spacing: -2px; line-height: 1; }
         .degree-symbol { position: absolute; top: 0px; right: -2px; font-size: 2rem; font-weight: 700; color: #ffffff; }
-        #quote-row { flex: 1; font-size: 1.3rem; font-weight: 300; font-style: italic; color: #f5f5f7; line-height: 1.45; word-wrap: break-word; }
-        #bottom-right { display: flex; flex-direction: column; align-items: flex-end; text-align: right; max-width: 40%; gap: 6px; }
-        #date-lunar-corner { font-size: 1.6rem; font-weight: 700; color: #F4B41A; letter-spacing: 0.5px; }
-        #event-env-corner { font-size: 1.25rem; font-weight: 500; color: #ffffff; line-height: 1.4; opacity: 0.95; }
+        #quote-row { flex: 1; font-size: 1.4rem; font-weight: 600; font-style: normal; color: #f5f5f7; line-height: 1.45; word-wrap: break-word; }
+        
+        #bottom-right { display: flex; flex-direction: column; align-items: flex-end; text-align: right; width: 42%; gap: 6px; }
+        #festival-corner { font-size: 1.25rem; font-weight: 600; color: #F4B41A; line-height: 1.3; word-wrap: break-word; text-align: right; }
+        #env-corner { font-size: 1.15rem; font-weight: 500; color: #ffffff; opacity: 0.95; margin-top: 2px; }
+
+        /* BẢNG ĐIỀU KHIỂN */
         #control-panel { position: absolute; top: 50%; right: 20px; transform: translateY(-50%); z-index: 999; background: rgba(0, 0, 0, 0.85); padding: 18px; border-radius: 12px; color: #fff; font-size: 0.85rem; backdrop-filter: blur(5px); opacity: 0; pointer-events: none; transition: opacity 0.3s ease; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; justify-items: center; width: 220px; }
         #control-panel.active-panel { opacity: 1; pointer-events: auto; }
         .panel-label { grid-column: span 2; font-weight: 600; font-size: 0.95rem; color: #bbb; margin-bottom: 4px; text-align: center; }
         .btn-interactive { -webkit-tap-highlight-color: transparent; outline: none; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 6px; cursor: pointer; transition: background 0.1s; }
         .speed-btn { background: rgba(255, 255, 255, 0.15); color: #fff; padding: 14px 0; width: 100%; font-size: 1rem; font-weight: 600; }
         .speed-btn.active { background: #F4B41A !important; border-color: #F4B41A !important; color: #000 !important; font-weight: bold; }
+        
+        /* CHẾ ĐỘ BAN ĐÊM */
         #night-clock-box { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: none; z-index: 4; text-shadow: none; }
         .night-active { background-color: #000000 !important; } 
-        .night-active #photo-container, .night-active #bottom-container, .night-active #date-solar-top, .night-active #right-event-container, .night-active #info-container { display: none !important; }
+        .night-active #photo-container, .night-active #bottom-container, .night-active #right-event-container, .night-active #info-container { display: none !important; }
         .night-active #frame-wrapper { background-color: #000000 !important; box-shadow: none !important; border-color: transparent !important; }
         .night-active #night-clock-box { display: flex; align-items: center; justify-content: center; flex-direction: row; }
+        
         .night-hours, .night-minutes { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #ff9500; font-size: 46vmin; line-height: 0.9; margin: 0 1vmin; letter-spacing: -2vmin; }
         .night-minutes { font-family: 'Tourney', sans-serif; font-weight: 600; }
+
         @media (orientation: portrait) {
             #frame-wrapper { top: 50px; bottom: 50px; left: 35px; right: 35px; } 
-            .hours-style { font-size: 7.5rem; } .minutes-style { font-size: 7.5rem; } #date-solar-top { font-size: 1.7rem; }
+            .hours-style { font-size: 7.5rem; } .minutes-style { font-size: 7.5rem; } 
+            #date-solar-top { font-size: 1.7rem; } #date-lunar-top { font-size: 1.7rem; }
             .event-header { font-size: 1.1rem; } .event-item { font-size: 1.25rem; }
-            #weather-val { font-size: 3.5rem; } .degree-symbol { font-size: 1.5rem; } #quote-row { font-size: 1.15rem; }
-            #date-lunar-corner { font-size: 1.4rem; } #event-env-corner { font-size: 1.1rem; }
+            .death-event-item { font-size: 1.25rem; }
+            #weather-val { font-size: 3.5rem; } .degree-symbol { font-size: 1.5rem; } 
+            #quote-row { font-size: 1.25rem; }
+            #festival-corner { font-size: 1.15rem; } #env-corner { font-size: 1.05rem; }
+
             .night-active #night-clock-box { flex-direction: column; }
             .night-hours, .night-minutes { font-size: 42vmin; margin: 0; line-height: 0.85; letter-spacing: -2vmin; }
+        }
+
+        @media (max-width: 480px) {
+            html { font-size: 9.5px; } 
+            #frame-wrapper { top: 15px; left: 15px; right: 15px; bottom: 15px; } 
+            #info-container { top: 20px; left: 15px; } 
+            #bottom-container { flex-direction: column; align-items: flex-start; bottom: 15px; left: 15px; right: 15px; gap: 15px; }
+            #bottom-left, #bottom-right { max-width: 100%; width: 100%; text-align: left; align-items: flex-start; }
+            #right-event-container { display: none !important; }
         }
     </style>
 </head>
@@ -79,23 +118,33 @@
             <div id="group2" class="slide-group"><img id="bg2" class="background-blur"><img id="fg2" class="foreground-image"></div>
         </div>
         <div class="overlay"></div>
+
         <div id="info-container">
             <span class="hours-style" id="hr-node" ontouchstart="handleShortcut(event, 'night')" onclick="handleShortcut(event, 'night')">00</span>
             <span class="minutes-style" id="min-node" ontouchstart="handleShortcut(event, 'chime')" onclick="handleShortcut(event, 'chime')">00</span>
             <div id="date-solar-top">Th 0 00/00</div>
+            <div id="date-lunar-top"><span class="highlight-yellow">AL</span> 00/00</div>
+            <div id="death-events-container"></div>
         </div>
+        
         <div id="night-clock-box">
             <span class="night-hours" id="night-hr-node" ontouchstart="handleShortcut(event, 'night')" onclick="handleShortcut(event, 'night')">00:</span>
             <span class="night-minutes" id="night-min-node" ontouchstart="handleShortcut(event, 'chime')" onclick="handleShortcut(event, 'chime')">00</span>
         </div>
+
         <div id="right-event-container"></div>
+        
         <div id="bottom-container">
             <div id="bottom-left">
                 <div id="temp-wrapper" ontouchstart="handleShortcut(event, 'next')" onclick="handleShortcut(event, 'next')"><span id="weather-val">--</span><span class="degree-symbol">°</span></div>
                 <div id="quote-row">Đang tải cấu hình điện toán đám mây...</div>
             </div>
-            <div id="bottom-right"><div id="date-lunar-corner">--/-- Âm Lịch</div><div id="event-env-corner">Đang tính lịch sự kiện...</div></div>
+            <div id="bottom-right">
+                <div id="festival-corner">Đang tính lịch sự kiện...</div>
+                <div id="env-corner">Đang đo thời tiết...</div>
+            </div>
         </div>
+        
         <div id="control-panel">
             <div class="panel-label">Thời gian đổi ảnh:</div>
             <button class="btn-interactive speed-btn" ontouchstart="handleBtn(event, 'speed', 1)" onclick="handleBtn(event, 'speed', 1)" id="speed-1">3 P</button>
@@ -224,14 +273,9 @@
 
         function handleShortcut(e, action) {
             e.preventDefault(); e.stopPropagation(); 
-            if (!audioUnlocked) {
-                try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); var osc = audioCtx.createOscillator(); osc.connect(audioCtx.destination); osc.start(0); osc.stop(0.001); audioUnlocked = true; } catch (err) {}
-            }
+            if (!audioUnlocked) { try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); var osc = audioCtx.createOscillator(); osc.connect(audioCtx.destination); osc.start(0); osc.stop(0.001); audioUnlocked = true; } catch (err) {} }
             if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-            
-            if (action === 'night') { toggleNightMode(); }
-            else if (action === 'chime') { forcePlayChime(); }
-            else if (action === 'next') { forceNextSlide(); }
+            if (action === 'night') { toggleNightMode(); } else if (action === 'chime') { forcePlayChime(); } else if (action === 'next') { forceNextSlide(); }
         }
 
         function handleBtn(e, action, val) { e.preventDefault(); e.stopPropagation(); if (action === 'speed') { changeIntervalMode(val); } }
@@ -249,16 +293,10 @@
         function toggleNightMode() {
             var body = document.body;
             if (body.classList.contains('night-active')) { 
-                forceNightMode = false; 
-                body.classList.remove('night-active'); 
-                // GỌI ĐỒNG BỘ DỮ LIỆU KHI THOÁT CHẾ ĐỘ BAN ĐÊM (CẢ THỦ CÔNG LẪN TỰ ĐỘNG)
+                forceNightMode = false; body.classList.remove('night-active'); 
                 document.getElementById('quote-row').innerText = 'Đang làm mới dữ liệu và ảnh từ Drive...';
                 syncDriveData();
-            } 
-            else { 
-                forceNightMode = true; 
-                body.classList.add('night-active'); 
-            }
+            } else { forceNightMode = true; body.classList.add('night-active'); }
             applyDynamicPositions();
         }
 
@@ -272,43 +310,47 @@
             else { clockBox.style.transform = "none"; infoNode.style.transform = "translate(" + burnInX1 + "px, " + burnInY1 + "px)"; }
         }
 
-        var lotusIcon = '<svg width="26" height="26" viewBox="0 0 24 24" fill="#F4B41A" style="display:inline-block; vertical-align:-5px; margin-left:8px;"><path d="M12 22C12 22 15 14 15 10C15 6 12 2 12 2C12 2 9 6 9 10C9 14 12 22 12 22Z"/><path d="M12 22C12 22 19 16 19 11C19 7 15 6 15 10C15 14 12 22 12 22Z" opacity="0.85"/><path d="M12 22C12 22 5 16 5 11C5 7 9 6 9 10C9 14 12 22 12 22Z" opacity="0.85"/><path d="M12 22C12 22 24 18 24 13C24 9 19 8 19 12C19 16 12 22 12 22Z" opacity="0.6"/><path d="M12 22C12 22 0 18 0 13C0 9 5 8 5 12C5 16 12 22 12 22Z" opacity="0.6"/></svg>';
+        // 🛡️ PHÂN TÁCH GIAO DIỆN TRÁI/PHẢI
+        var lotusIcon = '<svg width="26" height="26" viewBox="0 0 24 24" fill="#F4B41A" style="display:inline-block; vertical-align:-5px;"><path d="M12 22C12 22 15 14 15 10C15 6 12 2 12 2C12 2 9 6 9 10C9 14 12 22 12 22Z"/><path d="M12 22C12 22 19 16 19 11C19 7 15 6 15 10C15 14 12 22 12 22Z" opacity="0.85"/><path d="M12 22C12 22 5 16 5 11C5 7 9 6 9 10C9 14 12 22 12 22Z" opacity="0.85"/><path d="M12 22C12 22 24 18 24 13C24 9 19 8 19 12C19 16 12 22 12 22Z" opacity="0.6"/><path d="M12 22C12 22 0 18 0 13C0 9 5 8 5 12C5 16 12 22 12 22Z" opacity="0.6"/></svg>';
 
-        function renderRightEvents(sMonth, lMonth, sDay, lDay) {
-            var html = "";
+        function renderEvents(sMonth, lMonth, sDay, lDay) {
+            // -- Cột Phải (Sinh Nhật) --
+            var rightHtml = "";
             var currentBirths = [];
             for (var b = 0; b < birthdays.length; b++) { if (birthdays[b].m === sMonth) currentBirths.push(birthdays[b]); }
             currentBirths.sort(function(a, b) { return a.d - b.d; });
 
             if (currentBirths.length > 0) {
-                html += '<div class="event-header">SINH NHẬT <span style="font-size:1.3rem; margin-left:8px;">🎂</span></div>';
+                rightHtml += '<div class="event-header">SINH NHẬT</div>';
                 for (var i = 0; i < currentBirths.length; i++) {
                     var birth = currentBirths[i]; var diff = birth.d - sDay; var cls = "event-item"; var txt = birth.d + "/" + birth.m + " " + birth.name;
                     if (diff < 0) { cls += " event-passed"; } else if (diff === 0) { cls += " event-today-birth"; txt += " (Hôm nay!)"; } else if (diff <= 3) { cls += " event-urgent"; txt += " (Còn " + diff + " ngày)"; }
-                    html += '<div class="' + cls + '">' + txt + '</div>';
+                    rightHtml += '<div class="' + cls + '">' + txt + '</div>';
                 }
             }
-            
+            document.getElementById('right-event-container').innerHTML = rightHtml;
+
+            // -- Cột Trái (Dưới đồng hồ: Ngày Giỗ) --
+            var leftHtml = "";
             var currentDeaths = [];
             for (var a = 0; a < anniversaries.length; a++) { if (anniversaries[a].m === lMonth) currentDeaths.push(anniversaries[a]); }
             currentDeaths.sort(function(a, b) { return a.d - b.d; });
 
             if (currentDeaths.length > 0) {
-                html += '<div class="event-header" style="margin-top: 10px; height: 1.5rem;">' + lotusIcon + '</div>';
+                leftHtml += '<div class="event-header" style="justify-content: center; margin-top: 8px; margin-bottom: 4px; height: 1.5rem;">' + lotusIcon + '</div>';
                 for (var j = 0; j < currentDeaths.length; j++) {
-                    var ann = currentDeaths[j]; var diff = ann.d - lDay; var cls = "event-item";
+                    var ann = currentDeaths[j]; var diff = ann.d - lDay; var cls = "death-event-item";
                     var shortName = ann.name.split(" (")[0]; var txt = ann.d + "/" + ann.m + " " + shortName;
-                    if (diff < 0) { cls += " event-passed"; } else if (diff === 0) { cls += " event-today-death"; txt += " (Hôm nay!)"; } else if (diff <= 3) { cls += " event-urgent"; txt += " (Còn " + diff + " ngày)"; }
-                    html += '<div class="' + cls + '">' + txt + '</div>';
+                    if (diff < 0) { cls += " death-event-passed"; } else if (diff === 0) { cls += " death-event-today"; txt += " (Hôm nay!)"; } else if (diff <= 3) { cls += " death-event-urgent"; txt += " (Còn " + diff + " ngày)"; }
+                    leftHtml += '<div class="' + cls + '">' + txt + '</div>';
                 }
             }
-            document.getElementById('right-event-container').innerHTML = html;
+            document.getElementById('death-events-container').innerHTML = leftHtml;
         }
 
         function updateClock() {
             var now = new Date(); var hours = now.getHours(); var minutes = now.getMinutes(); var seconds = now.getSeconds();
             
-            // Xử lý nạp dữ liệu lúc 5h sáng tự động (tắt đêm và nạp)
             if (hours === 5 && minutes === 0 && seconds === 0) { 
                 forceNightMode = null; 
                 document.getElementById('quote-row').innerText = 'Đang làm mới dữ liệu và ảnh ngày mới...';
@@ -334,9 +376,11 @@
 
             var shortDays = ['CN', 'Th 2', 'Th 3', 'Th 4', 'Th 5', 'Th 6', 'Th 7'];
             document.getElementById('date-solar-top').innerHTML = '<span class="highlight-yellow">' + shortDays[now.getDay()] + '</span> ' + now.getDate() + '/' + (now.getMonth() + 1);
-            document.getElementById('date-lunar-corner').innerText = currentLunarDay + '/' + currentLunarMonth + ' Âm Lịch';
+            
+            // CẬP NHẬT ĐỊNH DẠNG ÂM LỊCH SANG TRÁI DƯỚI DƯƠNG LỊCH
+            document.getElementById('date-lunar-top').innerHTML = '<span class="highlight-yellow">AL</span> ' + currentLunarDay + '/' + currentLunarMonth;
 
-            renderRightEvents(now.getMonth() + 1, currentLunarMonth, now.getDate(), currentLunarDay);
+            renderEvents(now.getMonth() + 1, currentLunarMonth, now.getDate(), currentLunarDay);
             applyDynamicPositions();
 
             if (hours === 8 && minutes === 0 && seconds === 0) {
@@ -388,25 +432,26 @@
                 var fest = festivalsData[f];
                 if(fest.type === 's' && fest.m === currentSolarMonth && fest.d >= sDay) {
                     var diff = fest.d - sDay;
-                    if(diff < minDiff) { minDiff = diff; nextActiveFestivalText = (diff === 0 ? "Hôm nay: " : "Còn " + diff + " ngày đến ") + fest.text + " (" + fest.d + "/" + fest.m + ")"; }
+                    if(diff < minDiff) { minDiff = diff; nextActiveFestivalText = (diff === 0 ? "Hôm nay diễn ra: " : "Còn " + diff + " ngày đến ") + fest.text + " (" + fest.d + "/" + fest.m + ")"; }
                 }
                 if(fest.type === 'l' && fest.m === currentLunarMonth && fest.d >= lDay) {
                     var diffL = fest.d - lDay;
-                    if(diffL < minDiff) { minDiff = diffL; nextActiveFestivalText = (diffL === 0 ? "Hôm nay: " : "Còn " + diffL + " ngày đến ") + fest.text + " (" + fest.d + "/" + fest.m + " ÂL)"; }
+                    if(diffL < minDiff) { minDiff = diffL; nextActiveFestivalText = (diffL === 0 ? "Hôm nay diễn ra: " : "Còn " + diffL + " ngày đến ") + fest.text + " (" + fest.d + "/" + fest.m + " ÂL)"; }
                 }
             }
 
-            document.getElementById('event-env-corner').innerHTML = nextActiveFestivalText + ' &nbsp;&nbsp; ' + currentEnv; 
+            document.getElementById('festival-corner').innerText = nextActiveFestivalText;
+            document.getElementById('env-corner').innerHTML = currentEnv; 
             
             var activeSpecialties = [];
             for(var s=0; s<specialtiesData.length; s++) { if(specialtiesData[s].m === currentSolarMonth || specialtiesData[s].m === 0) activeSpecialties.push(specialtiesData[s].text); }
 
             var finalQuote = ""; var dice = Math.random(); 
-            if (dice < 0.5 && activeSpecialties.length > 0) { finalQuote = "🌾 Mùa này... " + activeSpecialties[Math.floor(Math.random() * activeSpecialties.length)]; } 
+            if (dice < 0.5 && activeSpecialties.length > 0) { finalQuote = "🌾 Mùa này " + activeSpecialties[Math.floor(Math.random() * activeSpecialties.length)]; } 
             else if (quotePool.length > 0) { finalQuote = quotePool[Math.floor(Math.random() * quotePool.length)]; }
             else { finalQuote = "Nhà là nơi bão dừng sau cánh cửa, nơi bình yên ấm áp nhất để trở về."; }
 
-            document.getElementById('quote-row').innerText = '"' + finalQuote + '"';
+            document.getElementById('quote-row').innerText = finalQuote;
         }
 
         function syncDriveData() {
