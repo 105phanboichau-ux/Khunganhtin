@@ -258,8 +258,9 @@
 
         var burnInX1 = 0, burnInY1 = 0, burnInX2 = 0, burnInY2 = 0;
         var stepSeconds = { 1: 60, 2: 180, 3: 300, 4: 600 };
-        var currentActiveMode = 2; // Mặc định 3 phút
+        var currentActiveMode = 2; 
 
+        // CƠ SỞ DỮ LIỆU SINH NHẬT (DƯƠNG LỊCH)
         var birthdays = [
             {m: 2, d: 2, name: "Mẹ Kiền"}, {m: 6, d: 12, name: "Bà nội"}, {m: 11, d: 12, name: "Ông nội"},
             {m: 6, d: 24, name: "Miu"}, {m: 12, d: 1, name: "Suri Hồng"}, {m: 6, d: 2, name: "Tín"},
@@ -267,6 +268,7 @@
             {m: 1, d: 25, name: "Chị Thảo"}, {m: 10, d: 30, name: "Chị Bích"}
         ];
 
+        // CƠ SỞ DỮ LIỆU NGÀY GIỖ (ÂM LỊCH)
         var anniversaries = [
             {m: 12, d: 7, name: "Ông cố nội (DƯƠNG XUÂN LUÂN)"},
             {m: 10, d: 17, name: "Bà cố nội (NGÔ THỊ ĐƯỜNG)"},
@@ -278,6 +280,7 @@
             {m: 9, d: 25, name: "Ba (DƯƠNG XUÂN BẢO)"}
         ];
 
+        // MẢNG PHASES TÍNH TOÁN LỊCH KÉP OFFLINE ĐẾN NĂM 2040
         var phases = [
             [2025, 11, 20, 11, "Ất Tỵ"], [2026, 0, 19, 12, "Ất Tỵ"], [2026, 1, 17, 1, "Bính Ngọ"], [2026, 2, 19, 2, "Bính Ngọ"], [2026, 3, 17, 3, "Bính Ngọ"], [2026, 4, 16, 4, "Bính Ngọ"], [2026, 5, 15, 5, "Bính Ngọ"], [2026, 6, 14, 6, "Bính Ngọ"], [2026, 7, 13, 7, "Bính Ngọ"], [2026, 8, 11, 8, "Bính Ngọ"], [2026, 9, 11, 9, "Bính Ngọ"], [2026, 10, 10, 10, "Bính Ngọ"], [2026, 11, 9, 11, "Bính Ngọ"],
             [2027, 0, 8, 12, "Bính Ngọ"], [2027, 1, 6, 1, "Đinh Mùi"], [2027, 2, 8, 2, "Đinh Mùi"], [2027, 3, 7, 3, "Đinh Mùi"], [2027, 4, 6, 4, "Đinh Mùi"], [2027, 5, 5, 5, "Đinh Mùi"], [2027, 6, 4, 6, "Đinh Mùi"], [2027, 7, 2, 7, "Đinh Mùi"], [2027, 7, 31, 7, "Đinh Mùi"], [2027, 8, 29, 8, "Đinh Mùi"], [2027, 9, 29, 9, "Đinh Mùi"], [2027, 10, 28, 10, "Đinh Mùi"], [2027, 11, 27, 11, "Đinh Mùi"],
@@ -439,6 +442,11 @@
             
             if (hours === 5 && minutes === 0) { forceNightMode = null; document.getElementById('night-btn').innerText = "Bật Đêm 🌙"; }
 
+            // 🆕 TÍNH NĂNG ĐỘC QUYỀN V48: TỰ ĐỘNG LÀM MỚI ẢNH DRIVE VÀO ĐÚNG 05:00:00 SÁNG
+            if (hours === 5 && minutes === 0 && seconds === 0) {
+                fetchImagesFromDrive();
+            }
+
             var hrStr = hours < 10 ? '0' + hours : hours; var minStr = minutes < 10 ? '0' + minutes : minutes;
             if (document.body.classList.contains('night-active')) {
                 document.getElementById('hr-node').innerText = hrStr + ":";
@@ -470,6 +478,7 @@
             renderRightEvents(now.getMonth() + 1, currentLunarMonth, now.getDate(), currentLunarDay);
             applyDynamicPositions();
 
+            // TỰ ĐỘNG PHÁT NHẠC ĐÚNG 8:00 SÁNG
             if (hours === 8 && minutes === 0 && seconds === 0) {
                 for (var b = 0; b < birthdays.length; b++) {
                     if (birthdays[b].m === (now.getMonth() + 1) && birthdays[b].d === now.getDate()) { playHappyBirthday(); }
@@ -483,7 +492,6 @@
         updateClock();
 
         function updateWeatherAndAQI() {
-            // TỌA ĐỘ MỚI: XÃ EA KTUR, CƯ KUIN, ĐẮK LẮK
             var lat = 12.6283; var lon = 108.1464;
             var xhrWeather = new XMLHttpRequest();
             xhrWeather.open('GET', 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon + '&current=temperature_2m,relative_humidity_2m,precipitation_probability&daily=sunrise,sunset&timezone=Asia%2FHo_Chi_Minh', true);
@@ -518,7 +526,7 @@
         function updateDynamicContentBySlide() {
             var now = new Date();
             var envPool = [
-                'AQI Đắk Lắk: <span class="highlight-yellow">' + globalAQI + '</span>',
+                'AQI Ea Ktur: <span class="highlight-yellow">' + globalAQI + '</span>',
                 'Độ ẩm: <span class="highlight-yellow">' + globalHum + '</span>',
                 'Tỷ lệ mưa: <span class="highlight-yellow">' + globalRain + '</span>',
                 'Bình minh: <span class="highlight-yellow">' + globalSunrise + '</span>',
@@ -536,7 +544,10 @@
             var daysToNoel = Math.floor((targetNoel - now) / 86400000); if (daysToNoel > 0) eventPool.push('Còn ' + daysToNoel + ' ngày đến Giáng Sinh');
             var daysToTrungThu = Math.floor((targetTrungThu - now) / 86400000); if (daysToTrungThu > 0) eventPool.push('Còn ' + daysToTrungThu + ' ngày đến Tết Trung Thu');
             var daysToPhatDan = Math.floor((targetPhatDan - now) / 86400000); if (daysToPhatDan > 0) eventPool.push('Còn ' + daysToPhatDan + ' ngày đến Lễ Phật Đản');
-            var daysToQuocKhanh = Math.floor((targetQuocKhanh - now) / 86400000); if (daysToQuocKhanh > 0) eventPool.push('Còn ' + daysToQuocKhanh + ' ngày đến Quốc Khánh 2/9');
+            
+            // ĐÃ FIX: Đổi cờ chuẩn Việt Nam 🇻🇳
+            var daysToQuocKhanh = Math.floor((targetQuocKhanh - now) / 86400000); if (daysToQuocKhanh > 0) eventPool.push('Còn ' + daysToQuocKhanh + ' ngày đến Quốc Khánh 2/9 🇻🇳');
+            
             eventPool.push("Sắp đến Rằm Âm Lịch"); eventPool.push("Sắp đến Mùng 1 Âm Lịch");
 
             var quotePool = [
