@@ -60,7 +60,7 @@
 
         .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.15); z-index: 3; pointer-events: none; }
 
-        /* KHU VỰC 1: GÓC TRÁI TRÊN (ĐỒNG HỒ + DƯƠNG LỊCH) */
+        /* GÓC TRÁI TRÊN */
         #info-container {
             position: absolute; top: 35px; left: 35px; z-index: 4; 
             text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.8);
@@ -152,7 +152,7 @@
         }
         #next-btn:active { opacity: 0.8; }
         
-        /* CHẾ ĐỘ BAN ĐÊM */
+        /* CHẾ ĐỘ BAN ĐÊM (CẬP NHẬT ĐỒNG HỒ KHỔNG LỒ) */
         .night-active { background-color: #000000 !important; } 
         .night-active #photo-container, .night-active #bottom-container, .night-active #date-solar-top, .night-active #next-btn, .night-active #right-event-container { display: none !important; }
         .night-active #frame-wrapper { background-color: #000000 !important; box-shadow: none !important; border-color: transparent !important; }
@@ -161,8 +161,9 @@
             flex-direction: row !important; justify-content: center !important; 
             align-items: center !important; width: 100% !important; left: 0 !important; text-shadow: none !important;
         }
+        /* PHÓNG TO 45vw CHO CHẾ ĐỘ BAN ĐÊM */
         .night-active .hours-style, .night-active .minutes-style { 
-            font-size: 26vw !important; color: #ff9500 !important; margin: 0 1vw !important; letter-spacing: 0 !important; line-height: 1;
+            font-size: 45vw !important; color: #ff9500 !important; margin: 0 1vw !important; letter-spacing: -1vw !important; line-height: 1;
         }
 
         /* RESPONSIVE */
@@ -258,7 +259,7 @@
 
         var burnInX1 = 0, burnInY1 = 0, burnInX2 = 0, burnInY2 = 0;
         var stepSeconds = { 1: 60, 2: 180, 3: 300, 4: 600 };
-        var currentActiveMode = 2; 
+        var currentActiveMode = 2; // Mặc định 3 phút
 
         // CƠ SỞ DỮ LIỆU SINH NHẬT (DƯƠNG LỊCH)
         var birthdays = [
@@ -442,7 +443,7 @@
             
             if (hours === 5 && minutes === 0) { forceNightMode = null; document.getElementById('night-btn').innerText = "Bật Đêm 🌙"; }
 
-            // 🆕 TÍNH NĂNG ĐỘC QUYỀN V48: TỰ ĐỘNG LÀM MỚI ẢNH DRIVE VÀO ĐÚNG 05:00:00 SÁNG
+            // LÀM MỚI ẢNH TỪ GOOGLE DRIVE LÚC 5H SÁNG (MỖI NGÀY 1 LẦN)
             if (hours === 5 && minutes === 0 && seconds === 0) {
                 fetchImagesFromDrive();
             }
@@ -478,7 +479,7 @@
             renderRightEvents(now.getMonth() + 1, currentLunarMonth, now.getDate(), currentLunarDay);
             applyDynamicPositions();
 
-            // TỰ ĐỘNG PHÁT NHẠC ĐÚNG 8:00 SÁNG
+            // PHÁT NHẠC
             if (hours === 8 && minutes === 0 && seconds === 0) {
                 for (var b = 0; b < birthdays.length; b++) {
                     if (birthdays[b].m === (now.getMonth() + 1) && birthdays[b].d === now.getDate()) { playHappyBirthday(); }
@@ -492,7 +493,7 @@
         updateClock();
 
         function updateWeatherAndAQI() {
-            var lat = 12.6283; var lon = 108.1464;
+            var lat = 12.6283; var lon = 108.1464; // XÃ EA KTUR ĐẮK LẮK
             var xhrWeather = new XMLHttpRequest();
             xhrWeather.open('GET', 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon + '&current=temperature_2m,relative_humidity_2m,precipitation_probability&daily=sunrise,sunset&timezone=Asia%2FHo_Chi_Minh', true);
             xhrWeather.onerror = function() { document.getElementById('weather-val').innerText = "28"; };
@@ -544,26 +545,29 @@
             var daysToNoel = Math.floor((targetNoel - now) / 86400000); if (daysToNoel > 0) eventPool.push('Còn ' + daysToNoel + ' ngày đến Giáng Sinh');
             var daysToTrungThu = Math.floor((targetTrungThu - now) / 86400000); if (daysToTrungThu > 0) eventPool.push('Còn ' + daysToTrungThu + ' ngày đến Tết Trung Thu');
             var daysToPhatDan = Math.floor((targetPhatDan - now) / 86400000); if (daysToPhatDan > 0) eventPool.push('Còn ' + daysToPhatDan + ' ngày đến Lễ Phật Đản');
-            
-            // ĐÃ FIX: Đổi cờ chuẩn Việt Nam 🇻🇳
             var daysToQuocKhanh = Math.floor((targetQuocKhanh - now) / 86400000); if (daysToQuocKhanh > 0) eventPool.push('Còn ' + daysToQuocKhanh + ' ngày đến Quốc Khánh 2/9 🇻🇳');
-            
             eventPool.push("Sắp đến Rằm Âm Lịch"); eventPool.push("Sắp đến Mùng 1 Âm Lịch");
 
+            var randomEvent = eventPool[Math.floor(Math.random() * eventPool.length)];
+            
+            // KHO DANH NGÔN ĐÃ MỞ RỘNG (15 CÂU)
             var quotePool = [
                 "Mùa bơ sáp Đắk Lắk chín quả vàng, ruột dẻo thơm béo ngậy đặc sản đất đỏ Tây Nguyên.",
                 "Thưởng thức ly cà phê Buôn Ma Thuột đậm đặc đắng nồng giữa đại ngàn lộng gió.",
                 "Mùa sầu riêng Dona Đắk Lắk thơm nức mũi, cơm dày hạt lép ngọt ngào say đắm.",
-                "Mùa thu Hà Nội nồng nàn hương cốm Vòng mộc mạc xanh non gói trong lá sen.",
+                "Hương cốm Vòng Hà Nội nồng nàn mộc mạc xanh non gói trong lá sen mùa thu.",
                 "Ghé thăm Sa Pa mùa lúa chín vàng óng ả đổ tràn trên những ruộng bậc thang kì vĩ.",
-                "Thưởng thức gỏi lá Kon Tum - Hội tụ tinh hoa ẩm thực của hơn 40 loại lá rừng núi.",
-                "Mùa hoa dã quỳ nở rực rỡ nhuộm vàng rực khắp các cung đường đất đỏ bazan Tây Nguyên.",
-                "Thưởng thức cá bống thác kho tộ đậm đà cay nồng ăn cùng cơm lam Bản Đôn dẻo thơm.",
+                "Gỏi lá Kon Tum - Hội tụ tinh hoa ẩm thực của hơn 40 loại lá rừng núi Tây Nguyên.",
+                "Mùa hoa dã quỳ nhuộm vàng rực khắp các cung đường đất đỏ bazan cao nguyên.",
                 "Gia đình là nơi cuộc sống bắt đầu và tình yêu không bao giờ kết thúc.",
-                "Nhà là nơi bão dừng sau cánh cửa, nơi bình yên ấm áp nhất để trở về."
+                "Nhà là nơi bình yên ấm áp nhất để trở về sau những bão giông cuộc đời.",
+                "Mùa vải thiều Lục Ngạn ngọt lịm, hương vị đậm đà của nắng vàng miền Bắc.",
+                "Tết đến xuân về, cành mai vàng nở rộ báo hiệu một năm mới bình an tài lộc.",
+                "Trung thu rằm tháng 8, tiếng trống lân rộn ràng, ánh trăng tròn ấm áp đoàn viên.",
+                "Hạnh phúc là khi được nhìn thấy những nụ cười của người thân yêu mỗi ngày.",
+                "Sống chậm lại, yêu thương nhiều hơn, để thấy đời mình luôn tràn đầy ý nghĩa.",
+                "Cà phê phố núi Buôn Ma Thuột, nét văn hóa đặc trưng khó quên nơi đại ngàn."
             ];
-
-            var randomEvent = eventPool[Math.floor(Math.random() * eventPool.length)];
             var randomQuote = quotePool[Math.floor(Math.random() * quotePool.length)];
 
             document.getElementById('event-env-corner').innerHTML = randomEvent + ' <span class="bar-separator">|</span> ' + currentEnv; 
