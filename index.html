@@ -8,21 +8,21 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="referrer" content="no-referrer">
     
-    <title>Khung Ảnh Số Thông Minh - V74 Border Protection</title>
+    <title>Khung Ảnh Số Thông Minh - V75 Perfect UI</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Tourney:wght@600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
 
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body, html { width: 100%; height: 100%; overflow: hidden; background-color: #000000; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; cursor: pointer; }
         
-        /* 🛡️ CẤU TRÚC LỚP VIỀN BẢO VỆ MÀN HÌNH */
+        /* 🛡️ CẤU TRÚC LỚP VIỀN BẢO VỆ MÀN HÌNH CHỐNG BURN-IN */
         #outer-blur-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; filter: blur(45px) brightness(0.6); z-index: 0; transform: scale(1.2); }
         #white-border-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #ffffff; z-index: 1; transition: opacity 1.5s ease-in-out; }
         
-        /* CĂN CHỈNH VIỀN 4 CẠNH 45px */
+        /* CĂN CHỈNH VIỀN 4 CẠNH 45px ĐỀU TĂM TẮP */
         #frame-wrapper { position: absolute; top: 45px; bottom: 45px; left: 45px; right: 45px; background-color: #000; overflow: hidden; box-shadow: 0px 15px 45px rgba(0, 0, 0, 0.15), inset 0px 0px 30px rgba(0,0,0,0.85); border: 1px solid #eaeaea; transition: all 0.5s ease; z-index: 5; }
         
         #photo-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
@@ -38,47 +38,51 @@
         .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.15); z-index: 3; pointer-events: none; }
         #brightness-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0); z-index: 998; pointer-events: none; transition: background 0.5s ease; }
 
-        /* CỘT TRÁI */
-        #info-container { position: absolute; top: 35px; left: 35px; z-index: 4; text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.8); display: flex; flex-direction: column; align-items: flex-start; transition: transform 2s ease-in-out; }
-        .hours-style { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #F4B41A; font-size: 7.5rem; letter-spacing: -2px; display: block; line-height: 0.82; margin-left: -5px; } 
-        .minutes-style { font-family: 'Tourney', sans-serif; font-weight: 600; color: #ffffff; font-size: 7.5rem; letter-spacing: -1px; display: block; margin-top: -5px; line-height: 0.82; margin-left: -2px;}
-        #date-solar-top { font-size: 1.7rem; font-weight: 700; color: #ffffff; margin-top: 14px; white-space: nowrap; }
-        #date-lunar-top { font-size: 1.7rem; font-weight: 700; color: #ffffff; margin-top: 4px; white-space: nowrap; cursor: pointer; transition: opacity 0.2s; }
+        /* 🛡️ CỘT TRÁI (ĐÃ LÀM SẠCH BÓNG DƠ, ĐỒNG BỘ FONT CHỮ VÀ CĂN TRÁI TUYỆT ĐỐI) */
+        #info-container { position: absolute; top: 35px; left: 35px; z-index: 4; text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.6); display: flex; flex-direction: column; align-items: flex-start; transition: transform 2s ease-in-out; }
+        
+        .hours-style { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #F4B41A; font-size: 7.5rem; letter-spacing: -3px; display: block; line-height: 0.8; } 
+        .minutes-style { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #ffffff; font-size: 7.5rem; letter-spacing: -3px; display: block; margin-top: 2px; line-height: 0.8;}
+        
+        #date-solar-top { font-size: 1.6rem; font-weight: 700; color: #ffffff; margin-top: 14px; white-space: nowrap; }
+        #date-lunar-top { font-size: 1.6rem; font-weight: 700; color: #ffffff; margin-top: 4px; white-space: nowrap; cursor: pointer; transition: opacity 0.2s; }
         #date-lunar-top:active { opacity: 0.6; }
         .highlight-yellow { color: #F4B41A; font-weight: 700; }
         
         #death-events-container { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; width: 100%; margin-top: 8px; }
-        .death-event-item { font-size: 1.25rem; color: rgba(255, 255, 255, 0.9); font-weight: 500; text-align: left; padding: 3px 12px; border-radius: 4px; background: rgba(0, 0, 0, 0.35); }
-        .death-event-passed { opacity: 0.35; font-size: 1.05rem; }
-        .death-event-urgent { color: #ff9500 !important; font-weight: 700; background: rgba(0, 0, 0, 0.6); -webkit-animation: pulseGlow 2s infinite; animation: pulseGlow 2s infinite; }
-        .death-event-today { color: #ff9500 !important; font-weight: 700; font-size: 1.35rem; background: rgba(0, 0, 0, 0.7); }
+        .death-event-item { font-size: 1.15rem; color: rgba(255, 255, 255, 0.95); font-weight: 600; text-align: left; padding: 3px 12px; border-radius: 4px; background: rgba(0, 0, 0, 0.4); }
+        .death-event-passed { opacity: 0.35; font-size: 1rem; }
+        .death-event-urgent { color: #ff9500 !important; font-weight: 700; background: rgba(0, 0, 0, 0.7); -webkit-animation: pulseGlow 2s infinite; animation: pulseGlow 2s infinite; }
+        .death-event-today { color: #ff9500 !important; font-weight: 700; font-size: 1.25rem; background: rgba(0, 0, 0, 0.8); }
 
-        /* CỘT PHẢI */
-        #top-right-wrapper { position: absolute; top: 35px; right: 35px; z-index: 4; display: flex; flex-direction: column; align-items: flex-end; gap: 15px; max-width: 350px; text-shadow: 0px 2px 10px rgba(0,0,0,0.95); transition: transform 2s ease-in-out; }
+        /* 🛡️ CỘT PHẢI (SINH NHẬT & THỜI TIẾT LUÂN PHIÊN - ĐỒNG BỘ CHIỀU NGANG) */
+        #top-right-wrapper { position: absolute; top: 35px; right: 35px; z-index: 4; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; max-width: 350px; text-shadow: 0px 2px 8px rgba(0,0,0,0.6); transition: transform 2s ease-in-out; }
         
-        #right-event-container { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; width: 100%; }
+        #right-event-container { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; width: 100%; }
         .event-header { font-size: 1.1rem; color: #F4B41A; font-weight: 700; text-align: right; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; display: flex; align-items: center; justify-content: flex-end; }
-        .event-item { font-size: 1.25rem; color: rgba(255, 255, 255, 0.9); font-weight: 500; text-align: right; padding: 3px 10px; border-radius: 4px; background: rgba(0, 0, 0, 0.35); margin-bottom: 2px; }
-        .event-passed { opacity: 0.35; font-size: 1.05rem; }
-        .event-urgent { color: #F4B41A !important; font-weight: 700; background: rgba(0, 0, 0, 0.6); -webkit-animation: pulseGlow 2s infinite; animation: pulseGlow 2s infinite; }
-        .event-today-birth { color: #2ecc71 !important; font-weight: 700; font-size: 1.35rem; background: rgba(0, 0, 0, 0.7); }
+        .event-item { font-size: 1.15rem; color: rgba(255, 255, 255, 0.95); font-weight: 600; text-align: right; padding: 4px 12px; border-radius: 4px; background: rgba(0, 0, 0, 0.4); }
+        .event-passed { opacity: 0.35; font-size: 1rem; }
+        .event-urgent { color: #F4B41A !important; font-weight: 700; background: rgba(0, 0, 0, 0.7); -webkit-animation: pulseGlow 2s infinite; animation: pulseGlow 2s infinite; }
+        .event-today-birth { color: #2ecc71 !important; font-weight: 700; font-size: 1.25rem; background: rgba(0, 0, 0, 0.8); }
         
-        #right-env-container { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; width: 100%; }
-        .env-stat-row { font-size: 1.05rem; color: rgba(255, 255, 255, 0.95); font-weight: 500; text-align: right; padding: 3px 10px; border-radius: 4px; background: rgba(0, 0, 0, 0.35); margin-bottom: 1px; display: flex; justify-content: space-between; gap: 15px; }
+        /* 🛡️ CHỈ SỐ THỜI TIẾT LUÂN PHIÊN (DƯỚI CÙNG CỘT PHẢI) */
+        #right-env-container { display: flex; flex-direction: column; align-items: flex-end; width: 100%; margin-top: 4px; }
+        .env-rotating-item { font-size: 1.1rem; color: rgba(255, 255, 255, 0.95); font-weight: 600; text-align: right; padding: 4px 12px; border-radius: 4px; background: rgba(0, 0, 0, 0.4); }
 
         @-webkit-keyframes pulseGlow { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
         @keyframes pulseGlow { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
 
-        /* KHU VỰC ĐÁY */
-        #bottom-container { position: absolute; bottom: 35px; left: 35px; right: 35px; z-index: 4; display: flex; flex-direction: row; align-items: flex-end; justify-content: flex-start; text-shadow: 0px 3px 12px rgba(0, 0, 0, 0.95); transition: transform 2s ease-in-out; }
-        #bottom-left { display: flex; flex-direction: row; align-items: flex-end; gap: 25px; width: 100%; }
+        /* 🛡️ KHU VỰC ĐÁY: TRẢI DÀI FULL, NHIỆT ĐỘ TỰ ĐỘNG THAY ĐỔI SIZE THEO SỐ DÒNG CỦA TEXT */
+        #bottom-container { position: absolute; bottom: 35px; left: 35px; right: 35px; z-index: 4; display: flex; flex-direction: row; align-items: flex-end; justify-content: flex-start; gap: 0; text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.7); transition: transform 2s ease-in-out; }
         
-        #temp-wrapper { display: flex; flex-direction: row; align-items: flex-start; justify-content: flex-start; flex-shrink: 0; cursor: pointer; margin-left: -5px; } 
-        #weather-val { font-weight: 700; color: #ffffff; letter-spacing: -2px; line-height: 0.82; transition: font-size 0.3s ease; }
-        .degree-symbol { position: relative; font-weight: 700; color: #ffffff; margin-left: 2px; transition: font-size 0.3s ease, margin-top 0.3s ease; }
+        #temp-wrapper { position: relative; display: flex; align-items: flex-start; justify-content: flex-start; flex-shrink: 0; cursor: pointer; } 
+        #weather-val { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #ffffff; letter-spacing: -2px; line-height: 0.8; transition: font-size 0.3s ease; }
+        .degree-symbol { position: absolute; font-weight: 700; color: #ffffff; transition: all 0.3s ease; }
         
+        /* Danh ngôn và Đếm ngược nối tiếp - Đã giảm kích thước, làm thanh lịch hơn */
         #quote-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; }
-        #quote-row { font-size: 1.45rem; font-weight: 600; font-style: normal; color: #f5f5f7; line-height: 1.45; word-wrap: break-word; text-align: left; }
+        #quote-row { font-size: 1.15rem; font-weight: 500; font-style: normal; color: #f5f5f7; line-height: 1.5; word-wrap: break-word; text-align: left; }
+        .countdown-highlight { color: #F4B41A; font-weight: 700; }
 
         /* BẢNG ĐIỀU KHIỂN & ĐỘ SÁNG MÀN HÌNH */
         #control-panel { position: absolute; top: 50%; right: 20px; transform: translateY(-50%); z-index: 9999; background: rgba(0, 0, 0, 0.85); padding: 18px; border-radius: 12px; color: #fff; font-size: 0.85rem; backdrop-filter: blur(5px); opacity: 0; pointer-events: none; transition: opacity 0.3s ease; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; justify-items: center; width: 280px; }
@@ -95,7 +99,7 @@
         #toast-msg { position: absolute; top: 15%; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.85); color: #F4B41A; border: 1px solid #F4B41A; padding: 12px 24px; border-radius: 8px; font-size: 1.2rem; font-weight: 700; z-index: 10000; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; text-align: center; box-shadow: 0px 4px 15px rgba(0,0,0,0.5); }
         #toast-msg.show { opacity: 1; }
 
-        /* ĐỒNG HỒ BAN ĐÊM & HIỆU ỨNG TRÔI NỔI */
+        /* ĐỒNG HỒ BAN ĐÊM (CŨNG DÙNG MONTSERRAT CHO SẠCH SẼ) */
         #night-clock-box { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: none; z-index: 4; text-shadow: none; transition: transform 2s ease-in-out; }
         
         /* KHI VÀO CHẾ ĐỘ ĐÊM, VIỀN TRẮNG CŨNG CHUYỂN ĐEN */
@@ -104,18 +108,16 @@
         .night-active #frame-wrapper { background-color: transparent !important; box-shadow: none !important; border-color: transparent !important; }
         .night-active #night-clock-box { display: flex; align-items: center; justify-content: center; flex-direction: row; }
         .night-hours, .night-minutes { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #ff9500; font-size: 46vmin; line-height: 0.9; margin: 0 1vmin; letter-spacing: -2vmin; }
-        .night-minutes { font-family: 'Tourney', sans-serif; font-weight: 600; }
 
         @media (orientation: portrait) {
-            #frame-wrapper { top: 45px; bottom: 45px; left: 45px; right: 45px; } 
-            #info-container { align-items: flex-start; }
             .hours-style { font-size: 7.5rem; } .minutes-style { font-size: 7.5rem; } 
-            #date-solar-top { font-size: 1.7rem; } #date-lunar-top { font-size: 1.7rem; }
-            .event-header { font-size: 1.1rem; } .event-item { font-size: 1.25rem; }
-            .death-event-item { font-size: 1.25rem; }
+            #date-solar-top { font-size: 1.6rem; } #date-lunar-top { font-size: 1.6rem; }
+            .event-header { font-size: 1.1rem; } .event-item { font-size: 1.15rem; }
+            .death-event-item { font-size: 1.15rem; }
+            .env-rotating-item { font-size: 1.1rem; }
             
             #bottom-container { flex-direction: row; } 
-            #quote-row { font-size: 1.3rem; }
+            #quote-row { font-size: 1.1rem; line-height: 1.4; }
 
             .night-active #night-clock-box { flex-direction: column; }
             .night-hours, .night-minutes { font-size: 42vmin; margin: 0; line-height: 0.85; letter-spacing: -2vmin; }
@@ -155,13 +157,11 @@
         </div>
         
         <div id="bottom-container">
-            <div id="bottom-left">
-                <div id="temp-wrapper" class="btn-interactive" ontouchstart="handleShortcut(event, 'next')" onclick="handleShortcut(event, 'next')">
-                    <span id="weather-val">--</span><span class="degree-symbol">°</span>
-                </div>
-                <div id="quote-wrapper">
-                    <span id="quote-row">Đang tải cấu hình điện toán đám mây...</span>
-                </div>
+            <div id="temp-wrapper" class="btn-interactive" ontouchstart="handleShortcut(event, 'next')" onclick="handleShortcut(event, 'next')">
+                <span id="weather-val">--</span><span class="degree-symbol">°</span>
+            </div>
+            <div id="quote-wrapper">
+                <span id="quote-row">Đang tải cấu hình đám mây...</span>
             </div>
         </div>
         
@@ -190,6 +190,7 @@
         
         var globalAQI = "--", globalHum = "--", globalRain = "--", globalSunrise = "--", globalSunset = "--"; 
         var globalWind = "--", globalUV = "--", globalAlt = "--";
+        var envDisplayIndex = 0;
         
         var bX1 = 0, bY1 = 0; var bX2 = 0, bY2 = 0; var bX3 = 0, bY3 = 0;
         var stepSeconds = { 1: 180, 2: 300, 3: 600, 4: 900 }; var currentActiveMode = 2; 
@@ -423,7 +424,7 @@
             applyDynamicPositions();
         }
 
-        // 🌟 TÍNH NĂNG "HƠI THỞ MÀN HÌNH" (CHỐNG CHÁY VIỀN TRẮNG MỖI 10 PHÚT)
+        // 🌟 "HƠI THỞ MÀN HÌNH" (CHỐNG CHÁY VIỀN TRẮNG MỖI 10 PHÚT)
         function triggerBorderBurnInProtection() {
             if (document.body.classList.contains('night-active')) return;
             var activeImg = document.querySelector('.slide-group.active .background-blur');
@@ -433,12 +434,10 @@
             if(activeImg && activeImg.src) {
                 outerBlur.src = activeImg.src;
                 whiteBorder.style.opacity = '0';
-                setTimeout(function() {
-                    whiteBorder.style.opacity = '1';
-                }, 1500);
+                setTimeout(function() { whiteBorder.style.opacity = '1'; }, 1500);
             }
         }
-        setInterval(triggerBorderBurnInProtection, 600000); // Kích hoạt hiệu ứng thở viền mỗi 10 phút
+        setInterval(triggerBorderBurnInProtection, 600000); 
 
         // ANTI-BURN-IN CHO CHỮ TRÊN MÀN HÌNH
         function runAntiBurnIn() { 
@@ -565,22 +564,37 @@
             xhrAQI.send();
         }
 
+        // 🌟 THUẬT TOÁN TÍNH TOÁN KÍCH THƯỚC NHIỆT ĐỘ CỰC KỲ CHÍNH XÁC
         function syncTempSize() {
             var quoteRow = document.getElementById('quote-row');
             var weatherVal = document.getElementById('weather-val');
             var degreeSymbol = document.querySelector('.degree-symbol');
+            var tempWrapper = document.getElementById('temp-wrapper');
             
-            if(quoteRow && weatherVal && degreeSymbol) {
+            if(quoteRow && weatherVal && degreeSymbol && tempWrapper) {
                 setTimeout(function() {
                     var quoteHeight = quoteRow.offsetHeight;
-                    var baseHeight = Math.max(quoteHeight, 50); 
-                    var effectiveHeight = Math.min(baseHeight, 110); 
-                    var newFontSize = effectiveHeight * 0.85; 
+                    
+                    // Tính font-size nhiệt độ bằng đúng chiều cao của text bên cạnh (bù trừ line-height ~0.9)
+                    var newFontSize = quoteHeight * 0.9;
+                    
+                    // Giới hạn kích thước để không bị quá to hay quá nhỏ
+                    if (newFontSize < 45) newFontSize = 45;
+                    if (newFontSize > 130) newFontSize = 130;
                     
                     weatherVal.style.fontSize = newFontSize + 'px';
-                    degreeSymbol.style.fontSize = (newFontSize * 0.4) + 'px';
-                    degreeSymbol.style.marginTop = (newFontSize * 0.05) + 'px';
-                }, 50); 
+                    
+                    // Tính toán vị trí dấu độ
+                    var degreeSize = newFontSize * 0.4;
+                    degreeSymbol.style.fontSize = degreeSize + 'px';
+                    degreeSymbol.style.top = '0px';
+                    
+                    // Tính độ rộng của dấu độ để làm mốc cách lề (Luôn dư ra đúng 25px khoảng cách)
+                    var offsetRight = degreeSize * 0.7;
+                    degreeSymbol.style.right = '-' + offsetRight + 'px';
+                    tempWrapper.style.marginRight = (offsetRight + 25) + 'px';
+                    
+                }, 100); // Chờ 100ms để text render và ngắt dòng xong mới tiến hành đo đạc
             }
         }
 
@@ -591,15 +605,22 @@
             var currentLunarMonth = (activePhase[1] === 0 ? 12 : activePhase[1]);
             var lDay = Math.floor((checkTime - new Date(activePhase[0], activePhase[1], activePhase[2], 0, 0, 0)) / (1000 * 60 * 60 * 24)) + 1;
 
-            var envHtml = '<div id="right-env-container">';
-            envHtml += '<div class="env-stat-row"><span>💧 Ẩm: ' + globalHum + '</span><span>🌧️ Mưa: ' + globalRain + '</span></div>';
-            envHtml += '<div class="env-stat-row"><span>🌬️ Gió: ' + globalWind + '</span><span>☀️ UV: ' + globalUV + '</span></div>';
-            envHtml += '<div class="env-stat-row"><span>🌅 ' + globalSunrise + ' - ' + globalSunset + '</span><span>⛰️ ' + globalAlt + '</span></div>';
-            if(globalAQI !== "--") envHtml += '<div class="env-stat-row" style="justify-content:flex-end">AQI ' + clientLocalName + ': &nbsp;<span style="color:#F4B41A; font-weight:700">' + globalAQI + '</span></div>';
-            envHtml += '</div>';
-            
-            document.getElementById('top-right-wrapper').innerHTML = '<div id="right-event-container"></div>' + envHtml;
+            // 🌟 ĐÓNG GÓI THỜI TIẾT VÀO LUÂN PHIÊN (Nằm khít ở góc phải)
+            var envPool = [
+                'AQI: <span style="color:#F4B41A; font-weight:700">' + globalAQI + '</span>',
+                '💧 Ẩm: ' + globalHum,
+                '🌧️ Mưa: ' + globalRain,
+                '🌬️ Gió: ' + globalWind,
+                '☀️ UV: ' + globalUV,
+                '🌅 ' + globalSunrise + ' - ' + globalSunset,
+                '⛰️ Cao: ' + globalAlt
+            ];
+            var currentEnv = envPool[envDisplayIndex % envPool.length]; envDisplayIndex++; 
 
+            var envHtml = '<div class="env-rotating-item">' + currentEnv + '</div>';
+            document.getElementById('right-env-container').innerHTML = envHtml;
+
+            // XỬ LÝ ĐẾM NGƯỢC LỄ HỘI
             var nextActiveFestivalText = "";
             var minDiff = 365;
 
@@ -623,9 +644,10 @@
             else if (quotePool.length > 0) { finalQuote = quotePool[Math.floor(Math.random() * quotePool.length)]; }
             else { finalQuote = "Nhà là nơi bão dừng sau cánh cửa, nơi bình yên ấm áp nhất để trở về."; }
 
+            // 🌟 NỐI ĐUÔI ĐẾM NGƯỢC VÀO DANH NGÔN
             var fullText = finalQuote;
             if(nextActiveFestivalText !== "") {
-                fullText += ' <span style="color:#F4B41A; font-weight:700;">&nbsp; | &nbsp;' + nextActiveFestivalText + '</span>';
+                fullText += ' <span class="countdown-highlight">&nbsp; | &nbsp;' + nextActiveFestivalText + '</span>';
             }
             
             document.getElementById('quote-row').innerHTML = fullText;
