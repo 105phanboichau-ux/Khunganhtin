@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="referrer" content="no-referrer">
-    <title>Khung Ảnh Số Thông Minh - V62 Pro</title>
+    <title>Khung Ảnh Số Thông Minh - V63 Pro</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Tourney:wght@600&display=swap" rel="stylesheet">
@@ -111,7 +111,6 @@
         var globalAQI = "--", globalHum = "--", globalRain = "--", globalSunrise = "--", globalSunset = "--"; var envDisplayIndex = 0; var burnInX1 = 0, burnInY1 = 0;
         var stepSeconds = { 1: 180, 2: 300, 3: 600, 4: 900 }; var currentActiveMode = 2; 
 
-        // BIẾN CẤU HÌNH ĐỘNG KHỞI TẠO MẶC ĐỊNH
         var clientLatitude = 12.6792; var clientLongitude = 108.0694; var clientLocalName = "Tân Lập";
         var birthdays = []; var anniversaries = []; var festivalsData = []; var specialtiesData = []; var quotePool = [];
 
@@ -133,7 +132,6 @@
             [2040, 0, 14, 11, "Kỷ Mùi"], [2040, 1, 12, 12, "Kỷ Mùi"], [2040, 2, 12, 1, "Canh Thân"], [2040, 3, 13, 2, "Canh Thân"], [2040, 4, 11, 3, "Canh Thân"], [2040, 5, 11, 4, "Canh Thân"], [2040, 6, 9, 5, "Canh Thân"], [2040, 7, 9, 6, "Canh Thân"], [2040, 8, 7, 7, "Canh Thân"], [2040, 9, 6, 8, "Canh Thân"], [2040, 10, 5, 9, "Canh Thân"], [2040, 11, 4, 10, "Canh Thân"], [2040, 12, 3, 11, "Canh Thân"]
         ];
 
-        // 🛡️ TRÌNH THÔNG DỊCH ĐỌC FILE CAUHINH.TXT (NHẬN DIỆN CỤM MỚI)
         function fetchConfigFromDrive() {
             var query = encodeURIComponent("'" + FOLDER_ID + "' in parents and name = 'cauhinh.txt' and trashed = false");
             var url = 'https://www.googleapis.com/drive/v3/files?q=' + query + '&key=' + API_KEY + '&fields=files(id)';
@@ -143,7 +141,8 @@
                     var data = JSON.parse(xhr.responseText);
                     if (data.files && data.files.length > 0) { downloadConfigFile(data.files[0].id); }
                 }
-            }; xhr.send();
+            };
+            xhr.send();
         }
 
         function downloadConfigFile(fileId) {
@@ -225,9 +224,14 @@
 
         function handleShortcut(e, action) {
             e.preventDefault(); e.stopPropagation(); 
-            if (!audioUnlocked) { try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); var osc = audioCtx.createOscillator(); osc.connect(audioCtx.destination); osc.start(0); osc.stop(0.001); audioUnlocked = true; } catch (err) {} }
+            if (!audioUnlocked) {
+                try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); var osc = audioCtx.createOscillator(); osc.connect(audioCtx.destination); osc.start(0); osc.stop(0.001); audioUnlocked = true; } catch (err) {}
+            }
             if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-            if (action === 'night') { toggleNightMode(); } else if (action === 'chime') { forcePlayChime(); } else if (action === 'next') { forceNextSlide(); }
+            
+            if (action === 'night') { toggleNightMode(); }
+            else if (action === 'chime') { forcePlayChime(); }
+            else if (action === 'next') { forceNextSlide(); }
         }
 
         function handleBtn(e, action, val) { e.preventDefault(); e.stopPropagation(); if (action === 'speed') { changeIntervalMode(val); } }
@@ -244,8 +248,17 @@
 
         function toggleNightMode() {
             var body = document.body;
-            if (body.classList.contains('night-active')) { forceNightMode = false; body.classList.remove('night-active'); } 
-            else { forceNightMode = true; body.classList.add('night-active'); }
+            if (body.classList.contains('night-active')) { 
+                forceNightMode = false; 
+                body.classList.remove('night-active'); 
+                // GỌI ĐỒNG BỘ DỮ LIỆU KHI THOÁT CHẾ ĐỘ BAN ĐÊM (CẢ THỦ CÔNG LẪN TỰ ĐỘNG)
+                document.getElementById('quote-row').innerText = 'Đang làm mới dữ liệu và ảnh từ Drive...';
+                syncDriveData();
+            } 
+            else { 
+                forceNightMode = true; 
+                body.classList.add('night-active'); 
+            }
             applyDynamicPositions();
         }
 
@@ -294,11 +307,17 @@
 
         function updateClock() {
             var now = new Date(); var hours = now.getHours(); var minutes = now.getMinutes(); var seconds = now.getSeconds();
-            if (hours === 5 && minutes === 0) { forceNightMode = null; }
-            if (hours === 5 && minutes === 0 && seconds === 0) { syncDriveData(); }
+            
+            // Xử lý nạp dữ liệu lúc 5h sáng tự động (tắt đêm và nạp)
+            if (hours === 5 && minutes === 0 && seconds === 0) { 
+                forceNightMode = null; 
+                document.getElementById('quote-row').innerText = 'Đang làm mới dữ liệu và ảnh ngày mới...';
+                syncDriveData();
+            }
 
             var hrStr = hours < 10 ? '0' + hours : hours; var minStr = minutes < 10 ? '0' + minutes : minutes;
             document.getElementById('hr-node').innerText = hrStr; document.getElementById('min-node').innerText = minStr;
+            
             if (window.innerWidth > window.innerHeight) { document.getElementById('night-hr-node').innerText = hrStr + ":"; } 
             else { document.getElementById('night-hr-node').innerText = hrStr; }
             document.getElementById('night-min-node').innerText = minStr;
@@ -325,7 +344,7 @@
                 for (var a = 0; a < anniversaries.length; a++) { if (anniversaries[a].m === currentLunarMonth && anniversaries[a].d === currentLunarDay) { playSolemnChime(); } }
             }
         }
-        setInterval(updateClock, 1000);
+        setInterval(updateClock, 1000); updateClock();
 
         function updateWeatherAndAQI() {
             var lat = clientLatitude; var lon = clientLongitude;
@@ -350,7 +369,6 @@
             xhrAQI.send();
         }
 
-        // 🛡️ FORMAT HIỂN THỊ ĐẾM NGƯỢC CHUẨN MỚI
         function getLunarDateStringRaw(d, m) { return d + "/" + m; }
 
         function updateDynamicContentBySlide() {
@@ -363,8 +381,7 @@
             var envPool = ['AQI ' + clientLocalName + ': <span class="highlight-yellow">' + globalAQI + '</span>', 'Độ ẩm: <span class="highlight-yellow">' + globalHum + '</span>', 'Tỷ lệ mưa: <span class="highlight-yellow">' + globalRain + '</span>', 'Bình minh: <span class="highlight-yellow">' + globalSunrise + '</span>', 'Hoàng hôn: <span class="highlight-yellow">' + globalSunset + '</span>'];
             var currentEnv = envPool[envDisplayIndex % envPool.length]; envDisplayIndex++; 
 
-            // TÌM KIẾM NGÀY LỄ CẬP NHẬT GẦN NHẤT ĐỂ ĐẾM NGƯỢC ĐỘNG
-            var nextActiveFestivalText = "Cuộc sống bình an";
+            var nextActiveFestivalText = "Gia đình bình an";
             var minDiff = 365;
 
             for(var f=0; f<festivalsData.length; f++) {
@@ -375,7 +392,7 @@
                 }
                 if(fest.type === 'l' && fest.m === currentLunarMonth && fest.d >= lDay) {
                     var diffL = fest.d - lDay;
-                    if(diffL < minDiff) { minDiff = diffL; nextActiveFestivalText = (diffL === 0 ? "Hôm nay: " : "Còn " + diffL + " ngày đến ") + fest.text + " (" + fest.d + "/" + fest.m + " Âm Lịch)"; }
+                    if(diffL < minDiff) { minDiff = diffL; nextActiveFestivalText = (diffL === 0 ? "Hôm nay: " : "Còn " + diffL + " ngày đến ") + fest.text + " (" + fest.d + "/" + fest.m + " ÂL)"; }
                 }
             }
 
@@ -385,9 +402,9 @@
             for(var s=0; s<specialtiesData.length; s++) { if(specialtiesData[s].m === currentSolarMonth || specialtiesData[s].m === 0) activeSpecialties.push(specialtiesData[s].text); }
 
             var finalQuote = ""; var dice = Math.random(); 
-            if (dice < 0.5 && activeSpecialties.length > 0) { finalQuote = "🌾 Đặc sản mùa này: " + activeSpecialties[Math.floor(Math.random() * activeSpecialties.length)]; } 
+            if (dice < 0.5 && activeSpecialties.length > 0) { finalQuote = "🌾 Mùa này... " + activeSpecialties[Math.floor(Math.random() * activeSpecialties.length)]; } 
             else if (quotePool.length > 0) { finalQuote = quotePool[Math.floor(Math.random() * quotePool.length)]; }
-            else { finalQuote = "Gia đình là bến đỗ bình yên nhất."; }
+            else { finalQuote = "Nhà là nơi bão dừng sau cánh cửa, nơi bình yên ấm áp nhất để trở về."; }
 
             document.getElementById('quote-row').innerText = '"' + finalQuote + '"';
         }
