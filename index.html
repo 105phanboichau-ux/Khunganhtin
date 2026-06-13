@@ -8,7 +8,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="referrer" content="no-referrer">
     
-    <title>Khung Ảnh Số Thông Minh - V70 Final</title>
+    <title>Khung Ảnh Số Thông Minh - V74 Border Protection</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,9 +16,15 @@
 
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body, html { width: 100%; height: 100%; overflow: hidden; background-color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; cursor: pointer; transition: background-color 1s ease; }
+        body, html { width: 100%; height: 100%; overflow: hidden; background-color: #000000; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; cursor: pointer; }
         
-        #frame-wrapper { position: absolute; top: 45px; bottom: 45px; left: 45px; right: 45px; background-color: #000; overflow: hidden; box-shadow: 0px 15px 45px rgba(0, 0, 0, 0.15), inset 0px 0px 30px rgba(0,0,0,0.85); border: 1px solid #eaeaea; transition: all 0.5s ease; }
+        /* 🛡️ CẤU TRÚC LỚP VIỀN BẢO VỆ MÀN HÌNH */
+        #outer-blur-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; filter: blur(45px) brightness(0.6); z-index: 0; transform: scale(1.2); }
+        #white-border-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #ffffff; z-index: 1; transition: opacity 1.5s ease-in-out; }
+        
+        /* CĂN CHỈNH VIỀN 4 CẠNH 45px */
+        #frame-wrapper { position: absolute; top: 45px; bottom: 45px; left: 45px; right: 45px; background-color: #000; overflow: hidden; box-shadow: 0px 15px 45px rgba(0, 0, 0, 0.15), inset 0px 0px 30px rgba(0,0,0,0.85); border: 1px solid #eaeaea; transition: all 0.5s ease; z-index: 5; }
+        
         #photo-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
         .slide-group { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 3s ease-in-out; display: block; }
         .slide-group.active { opacity: 1; z-index: 2; }
@@ -30,51 +36,52 @@
         .fit-contain { object-fit: contain !important; width: 100% !important; height: 100% !important; }
 
         .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.15); z-index: 3; pointer-events: none; }
-        
-        /* LỚP PHỦ ĐIỀU CHỈNH ĐỘ SÁNG MÀN HÌNH */
         #brightness-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0); z-index: 998; pointer-events: none; transition: background 0.5s ease; }
 
-        /* CỘT TRÁI (GIỜ + DƯƠNG LỊCH + ÂM LỊCH + NGÀY GIỖ) */
-        #info-container { position: absolute; top: 35px; left: 35px; z-index: 4; text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.8); display: flex; flex-direction: column; align-items: center; transition: transform 1.5s ease-in-out; }
-        .hours-style { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #F4B41A; font-size: 7.5rem; letter-spacing: -2px; display: block; line-height: 0.82; }
-        .minutes-style { font-family: 'Tourney', sans-serif; font-weight: 600; color: #ffffff; font-size: 7.5rem; letter-spacing: -1px; display: block; margin-top: -5px; line-height: 0.82; }
+        /* CỘT TRÁI */
+        #info-container { position: absolute; top: 35px; left: 35px; z-index: 4; text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.8); display: flex; flex-direction: column; align-items: flex-start; transition: transform 2s ease-in-out; }
+        .hours-style { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #F4B41A; font-size: 7.5rem; letter-spacing: -2px; display: block; line-height: 0.82; margin-left: -5px; } 
+        .minutes-style { font-family: 'Tourney', sans-serif; font-weight: 600; color: #ffffff; font-size: 7.5rem; letter-spacing: -1px; display: block; margin-top: -5px; line-height: 0.82; margin-left: -2px;}
         #date-solar-top { font-size: 1.7rem; font-weight: 700; color: #ffffff; margin-top: 14px; white-space: nowrap; }
-        
-        /* Âm lịch - Thêm hiệu ứng touch nhẹ */
         #date-lunar-top { font-size: 1.7rem; font-weight: 700; color: #ffffff; margin-top: 4px; white-space: nowrap; cursor: pointer; transition: opacity 0.2s; }
         #date-lunar-top:active { opacity: 0.6; }
-        
         .highlight-yellow { color: #F4B41A; font-weight: 700; }
-        #death-events-container { display: flex; flex-direction: column; align-items: center; gap: 3px; width: 100%; margin-top: 8px; }
-        .death-event-item { font-size: 1.25rem; color: rgba(255, 255, 255, 0.9); font-weight: 500; text-align: center; padding: 3px 12px; border-radius: 4px; background: rgba(0, 0, 0, 0.35); }
+        
+        #death-events-container { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; width: 100%; margin-top: 8px; }
+        .death-event-item { font-size: 1.25rem; color: rgba(255, 255, 255, 0.9); font-weight: 500; text-align: left; padding: 3px 12px; border-radius: 4px; background: rgba(0, 0, 0, 0.35); }
         .death-event-passed { opacity: 0.35; font-size: 1.05rem; }
         .death-event-urgent { color: #ff9500 !important; font-weight: 700; background: rgba(0, 0, 0, 0.6); -webkit-animation: pulseGlow 2s infinite; animation: pulseGlow 2s infinite; }
         .death-event-today { color: #ff9500 !important; font-weight: 700; font-size: 1.35rem; background: rgba(0, 0, 0, 0.7); }
 
-        /* CỘT PHẢI (SINH NHẬT) */
-        #right-event-container { position: absolute; top: 35px; right: 35px; z-index: 4; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; max-width: 350px; text-shadow: 0px 2px 10px rgba(0,0,0,0.95); }
+        /* CỘT PHẢI */
+        #top-right-wrapper { position: absolute; top: 35px; right: 35px; z-index: 4; display: flex; flex-direction: column; align-items: flex-end; gap: 15px; max-width: 350px; text-shadow: 0px 2px 10px rgba(0,0,0,0.95); transition: transform 2s ease-in-out; }
+        
+        #right-event-container { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; width: 100%; }
         .event-header { font-size: 1.1rem; color: #F4B41A; font-weight: 700; text-align: right; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; display: flex; align-items: center; justify-content: flex-end; }
         .event-item { font-size: 1.25rem; color: rgba(255, 255, 255, 0.9); font-weight: 500; text-align: right; padding: 3px 10px; border-radius: 4px; background: rgba(0, 0, 0, 0.35); margin-bottom: 2px; }
         .event-passed { opacity: 0.35; font-size: 1.05rem; }
         .event-urgent { color: #F4B41A !important; font-weight: 700; background: rgba(0, 0, 0, 0.6); -webkit-animation: pulseGlow 2s infinite; animation: pulseGlow 2s infinite; }
         .event-today-birth { color: #2ecc71 !important; font-weight: 700; font-size: 1.35rem; background: rgba(0, 0, 0, 0.7); }
         
+        #right-env-container { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; width: 100%; }
+        .env-stat-row { font-size: 1.05rem; color: rgba(255, 255, 255, 0.95); font-weight: 500; text-align: right; padding: 3px 10px; border-radius: 4px; background: rgba(0, 0, 0, 0.35); margin-bottom: 1px; display: flex; justify-content: space-between; gap: 15px; }
+
         @-webkit-keyframes pulseGlow { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
         @keyframes pulseGlow { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
 
         /* KHU VỰC ĐÁY */
-        #bottom-container { position: absolute; bottom: 35px; left: 35px; right: 35px; z-index: 4; display: flex; flex-direction: row; justify-content: space-between; align-items: flex-end; text-shadow: 0px 3px 12px rgba(0, 0, 0, 0.95); transition: transform 0.5s ease; }
-        #bottom-left { display: flex; flex-direction: row; align-items: flex-end; gap: 30px; width: 55%; }
-        #temp-wrapper { position: relative; display: flex; align-items: flex-end; justify-content: center; flex-shrink: 0; min-width: 80px; padding-bottom: 2px; cursor: pointer; }
-        #weather-val { font-size: 3.8rem; font-weight: 700; color: #ffffff; letter-spacing: -2px; line-height: 0.85; }
-        .degree-symbol { position: absolute; top: -5px; right: -5px; font-size: 1.6rem; font-weight: 700; color: #ffffff; }
-        #quote-row { flex: 1; font-size: 1.4rem; font-weight: 600; font-style: normal; color: #f5f5f7; line-height: 1.45; word-wrap: break-word; padding-bottom: 2px; }
-        #bottom-right { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; text-align: right; width: 42%; gap: 6px; padding-bottom: 2px; }
-        #festival-corner { font-size: 1.25rem; font-weight: 600; color: #F4B41A; line-height: 1.3; word-wrap: break-word; text-align: right; }
-        #env-corner { font-size: 1.15rem; font-weight: 500; color: #ffffff; opacity: 0.95; margin-top: 2px; }
+        #bottom-container { position: absolute; bottom: 35px; left: 35px; right: 35px; z-index: 4; display: flex; flex-direction: row; align-items: flex-end; justify-content: flex-start; text-shadow: 0px 3px 12px rgba(0, 0, 0, 0.95); transition: transform 2s ease-in-out; }
+        #bottom-left { display: flex; flex-direction: row; align-items: flex-end; gap: 25px; width: 100%; }
+        
+        #temp-wrapper { display: flex; flex-direction: row; align-items: flex-start; justify-content: flex-start; flex-shrink: 0; cursor: pointer; margin-left: -5px; } 
+        #weather-val { font-weight: 700; color: #ffffff; letter-spacing: -2px; line-height: 0.82; transition: font-size 0.3s ease; }
+        .degree-symbol { position: relative; font-weight: 700; color: #ffffff; margin-left: 2px; transition: font-size 0.3s ease, margin-top 0.3s ease; }
+        
+        #quote-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; }
+        #quote-row { font-size: 1.45rem; font-weight: 600; font-style: normal; color: #f5f5f7; line-height: 1.45; word-wrap: break-word; text-align: left; }
 
         /* BẢNG ĐIỀU KHIỂN & ĐỘ SÁNG MÀN HÌNH */
-        #control-panel { position: absolute; top: 50%; right: 20px; transform: translateY(-50%); z-index: 999; background: rgba(0, 0, 0, 0.85); padding: 18px; border-radius: 12px; color: #fff; font-size: 0.85rem; backdrop-filter: blur(5px); opacity: 0; pointer-events: none; transition: opacity 0.3s ease; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; justify-items: center; width: 280px; }
+        #control-panel { position: absolute; top: 50%; right: 20px; transform: translateY(-50%); z-index: 9999; background: rgba(0, 0, 0, 0.85); padding: 18px; border-radius: 12px; color: #fff; font-size: 0.85rem; backdrop-filter: blur(5px); opacity: 0; pointer-events: none; transition: opacity 0.3s ease; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; justify-items: center; width: 280px; }
         #control-panel.active-panel { opacity: 1; pointer-events: auto; }
         .panel-label { grid-column: span 4; font-weight: 600; font-size: 0.95rem; color: #bbb; margin-bottom: 4px; margin-top: 6px; text-align: center; width: 100%; }
         .panel-label:first-child { margin-top: 0; }
@@ -85,48 +92,40 @@
         .action-btn { background: rgba(244, 180, 26, 0.2); border-color: #F4B41A; color: #F4B41A; padding: 12px 0; width: 100%; font-size: 0.95rem; font-weight: 600; text-align: center; grid-column: span 4; }
         .action-btn:active { background: #F4B41A; color: #000; }
         
-        /* 🌟 THÔNG BÁO CÀI ĐẶT (TOAST NOTIFICATION) */
-        #toast-msg { 
-            position: absolute; top: 15%; left: 50%; transform: translateX(-50%); 
-            background: rgba(0, 0, 0, 0.85); color: #F4B41A; border: 1px solid #F4B41A; 
-            padding: 12px 24px; border-radius: 8px; font-size: 1.2rem; font-weight: 700; 
-            z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; 
-            text-align: center; box-shadow: 0px 4px 15px rgba(0,0,0,0.5); 
-        }
+        #toast-msg { position: absolute; top: 15%; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.85); color: #F4B41A; border: 1px solid #F4B41A; padding: 12px 24px; border-radius: 8px; font-size: 1.2rem; font-weight: 700; z-index: 10000; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; text-align: center; box-shadow: 0px 4px 15px rgba(0,0,0,0.5); }
         #toast-msg.show { opacity: 1; }
 
-        /* ĐỒNG HỒ BAN ĐÊM & HIỆU ỨNG TRÔI NỔI (ANTI-BURN-IN) */
+        /* ĐỒNG HỒ BAN ĐÊM & HIỆU ỨNG TRÔI NỔI */
         #night-clock-box { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: none; z-index: 4; text-shadow: none; transition: transform 2s ease-in-out; }
-        .night-active { background-color: #000000 !important; } 
-        .night-active #photo-container, .night-active #bottom-container, .night-active #right-event-container, .night-active #info-container { display: none !important; }
-        .night-active #frame-wrapper { background-color: #000000 !important; box-shadow: none !important; border-color: transparent !important; }
+        
+        /* KHI VÀO CHẾ ĐỘ ĐÊM, VIỀN TRẮNG CŨNG CHUYỂN ĐEN */
+        .night-active #white-border-bg { background-color: #000000 !important; opacity: 1 !important; } 
+        .night-active #photo-container, .night-active #bottom-container, .night-active #top-right-wrapper, .night-active #info-container { display: none !important; }
+        .night-active #frame-wrapper { background-color: transparent !important; box-shadow: none !important; border-color: transparent !important; }
         .night-active #night-clock-box { display: flex; align-items: center; justify-content: center; flex-direction: row; }
         .night-hours, .night-minutes { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #ff9500; font-size: 46vmin; line-height: 0.9; margin: 0 1vmin; letter-spacing: -2vmin; }
         .night-minutes { font-family: 'Tourney', sans-serif; font-weight: 600; }
 
         @media (orientation: portrait) {
             #frame-wrapper { top: 45px; bottom: 45px; left: 45px; right: 45px; } 
+            #info-container { align-items: flex-start; }
             .hours-style { font-size: 7.5rem; } .minutes-style { font-size: 7.5rem; } 
             #date-solar-top { font-size: 1.7rem; } #date-lunar-top { font-size: 1.7rem; }
             .event-header { font-size: 1.1rem; } .event-item { font-size: 1.25rem; }
             .death-event-item { font-size: 1.25rem; }
-            #weather-val { font-size: 3.2rem; } .degree-symbol { font-size: 1.4rem; } 
-            #quote-row { font-size: 1.25rem; }
-            #festival-corner { font-size: 1.15rem; } #env-corner { font-size: 1.05rem; }
+            
+            #bottom-container { flex-direction: row; } 
+            #quote-row { font-size: 1.3rem; }
+
             .night-active #night-clock-box { flex-direction: column; }
             .night-hours, .night-minutes { font-size: 42vmin; margin: 0; line-height: 0.85; letter-spacing: -2vmin; }
-        }
-        @media (max-width: 480px) {
-            html { font-size: 9.5px; } 
-            #frame-wrapper { top: 15px; left: 15px; right: 15px; bottom: 15px; } 
-            #info-container { top: 20px; left: 15px; } 
-            #bottom-container { flex-direction: column; align-items: flex-start; bottom: 15px; left: 15px; right: 15px; gap: 15px; }
-            #bottom-left, #bottom-right { max-width: 100%; width: 100%; text-align: left; align-items: flex-start; }
-            #right-event-container { display: none !important; }
         }
     </style>
 </head>
 <body ontouchstart="activateControlsWrapper(event)" onclick="activateControlsWrapper(event)">
+
+    <img id="outer-blur-bg" src="">
+    <div id="white-border-bg"></div>
 
     <div id="frame-wrapper">
         <div id="photo-container">
@@ -135,7 +134,6 @@
         </div>
         <div class="overlay"></div>
         <div id="brightness-overlay"></div>
-
         <div id="toast-msg">Đã cài đặt giờ thức dậy</div>
 
         <div id="info-container">
@@ -151,16 +149,19 @@
             <span class="night-minutes btn-interactive" id="night-min-node" ontouchstart="handleShortcut(event, 'chime')" onclick="handleShortcut(event, 'chime')">00</span>
         </div>
 
-        <div id="right-event-container"></div>
+        <div id="top-right-wrapper">
+            <div id="right-event-container"></div>
+            <div id="right-env-container"></div>
+        </div>
         
         <div id="bottom-container">
             <div id="bottom-left">
-                <div id="temp-wrapper" class="btn-interactive" ontouchstart="handleShortcut(event, 'next')" onclick="handleShortcut(event, 'next')"><span id="weather-val">--</span><span class="degree-symbol">°</span></div>
-                <div id="quote-row">Đang tải cấu hình điện toán đám mây...</div>
-            </div>
-            <div id="bottom-right">
-                <div id="festival-corner">Đang tính lịch sự kiện...</div>
-                <div id="env-corner">Đang đo thời tiết...</div>
+                <div id="temp-wrapper" class="btn-interactive" ontouchstart="handleShortcut(event, 'next')" onclick="handleShortcut(event, 'next')">
+                    <span id="weather-val">--</span><span class="degree-symbol">°</span>
+                </div>
+                <div id="quote-wrapper">
+                    <span id="quote-row">Đang tải cấu hình điện toán đám mây...</span>
+                </div>
             </div>
         </div>
         
@@ -186,11 +187,14 @@
         var SECRET_ENCODED = 'QUl6YVN5REwyRm1VQzkxMUtBTnFwN3VPbnZKcU5xVHltb1R2SkxF'; var API_KEY = atob(SECRET_ENCODED); var FOLDER_ID = '1r1WUIKwAPAnsyIh-Zot7AevEW0uEZ-Hl'; 
         var images = []; var currentIndex = 0; var slideInterval; var hideTimeout; var toastTimeout;
         var audioCtx = null; var isGroup1Active = true; var audioUnlocked = false; var forceNightMode = null; 
-        var globalAQI = "--", globalHum = "--", globalRain = "--", globalSunrise = "--", globalSunset = "--"; var envDisplayIndex = 0; var burnInX1 = 0, burnInY1 = 0;
+        
+        var globalAQI = "--", globalHum = "--", globalRain = "--", globalSunrise = "--", globalSunset = "--"; 
+        var globalWind = "--", globalUV = "--", globalAlt = "--";
+        
+        var bX1 = 0, bY1 = 0; var bX2 = 0, bY2 = 0; var bX3 = 0, bY3 = 0;
         var stepSeconds = { 1: 180, 2: 300, 3: 600, 4: 900 }; var currentActiveMode = 2; 
         var currentBrightness = 100;
 
-        // 🌟 LẤY GIỜ THỨC DẬY TỪ BỘ NHỚ LOCAL (MẶC ĐỊNH LÀ 6H SÁNG)
         var wakeUpHour = localStorage.getItem('wakeUpHour') ? parseInt(localStorage.getItem('wakeUpHour')) : 6;
 
         var defaultLatitude = 12.6792; var defaultLongitude = 108.0694; var defaultLocalName = "Tân Lập";
@@ -286,7 +290,6 @@
             updateWeatherAndAQI(); updateClock();
         }
 
-        // ĐỘ SÁNG MÀN HÌNH
         function setBrightness(val) {
             currentBrightness = val;
             var overlay = document.getElementById('brightness-overlay');
@@ -325,17 +328,16 @@
             playNote(293.66, t + 2.5, 3.5, 'sine'); playNote(587.33, t + 2.8, 3.0, 'sine'); playNote(739.99, t + 3.1, 3.0, 'sine'); playNote(880.00, t + 3.4, 4.5, 'sine');
         }
 
-        // 🌟 NÚT TÀNG HÌNH (SHORTCUT) BẢN CẢI TIẾN
         function handleShortcut(e, action) {
             e.preventDefault(); e.stopPropagation(); 
             if (!audioUnlocked) { try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); var osc = audioCtx.createOscillator(); osc.connect(audioCtx.destination); osc.start(0); osc.stop(0.001); audioUnlocked = true; } catch (err) {} }
             if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+            
             if (action === 'night') { toggleNightMode(); } 
             else if (action === 'chime') { forcePlayChime(); } 
             else if (action === 'next') { forceNextSlide(); }
         }
 
-        // 🌟 ĐỔI GIỜ TỰ ĐỘNG THỨC DẬY KHI CHẠM VÀO ÂM LỊCH
         function changeWakeUpTime(e) {
             e.preventDefault(); e.stopPropagation();
             if (wakeUpHour === 5) wakeUpHour = 6;
@@ -344,13 +346,11 @@
             else wakeUpHour = 5;
 
             localStorage.setItem('wakeUpHour', wakeUpHour);
-
             var toast = document.getElementById('toast-msg');
             toast.innerText = "Đã cài đặt giờ thức dậy: " + wakeUpHour + ":00 Sáng";
             toast.classList.add('show');
             if(toastTimeout) clearTimeout(toastTimeout);
             toastTimeout = setTimeout(function() { toast.classList.remove('show'); }, 5000);
-
             updateClock();
         }
 
@@ -360,30 +360,19 @@
             else if (action === 'bright') { setBrightness(val); }
             else if (action === 'location') {
                 if (confirm("Bạn muốn TỰ ĐỘNG định vị vị trí máy này theo mạng Internet không?\n\n- Bấm [OK] để lấy Tự động\n- Bấm [Hủy] để Nhập tay / Xóa mặc định")) {
-                    document.getElementById('quote-row').innerText = 'Đang quét vệ tinh định vị...';
-                    var xhr = new XMLHttpRequest();
-                    xhr.open('GET', 'https://ipapi.co/json/', true);
+                    var xhr = new XMLHttpRequest(); xhr.open('GET', 'https://ipapi.co/json/', true);
                     xhr.onreadystatechange = function() {
-                        if (xhr.readyState === 4) {
-                            if (xhr.status === 200) {
-                                var data = JSON.parse(xhr.responseText);
-                                saveAndApplyLocation(data.latitude, data.longitude, data.city || data.region || "Khu vực");
-                            } else {
-                                var xhr2 = new XMLHttpRequest();
-                                xhr2.open('GET', 'https://freeipapi.com/api/json', true);
-                                xhr2.onreadystatechange = function() {
-                                    if (xhr2.readyState === 4 && xhr2.status === 200) {
-                                        var data2 = JSON.parse(xhr2.responseText);
-                                        saveAndApplyLocation(data2.latitude, data2.longitude, data2.cityName || data2.regionName || "Khu vực");
-                                    } else if (xhr2.readyState === 4) {
-                                        alert("Lỗi mạng. Vui lòng cài đặt thủ công.");
-                                    }
-                                };
-                                xhr2.send();
-                            }
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            var data = JSON.parse(xhr.responseText); saveAndApplyLocation(data.latitude, data.longitude, data.city || data.region || "Khu vực");
+                        } else if (xhr.readyState === 4) {
+                            var xhr2 = new XMLHttpRequest(); xhr2.open('GET', 'https://freeipapi.com/api/json', true);
+                            xhr2.onreadystatechange = function() {
+                                if (xhr2.readyState === 4 && xhr2.status === 200) {
+                                    var data2 = JSON.parse(xhr2.responseText); saveAndApplyLocation(data2.latitude, data2.longitude, data2.cityName || data2.regionName || "Khu vực");
+                                } else if (xhr2.readyState === 4) { alert("Lỗi mạng. Vui lòng cài đặt thủ công."); }
+                            }; xhr2.send();
                         }
-                    };
-                    xhr.send();
+                    }; xhr.send();
                 } else {
                     var newName = prompt("BƯỚC 1/3: Nhập tên địa phương (Để TRỐNG nếu muốn khôi phục vị trí trên Drive):", localStorage.getItem('myName') || defaultLocalName);
                     if (newName !== null) {
@@ -429,25 +418,52 @@
         function toggleNightMode() {
             var body = document.body;
             if (body.classList.contains('night-active')) { 
-                forceNightMode = false; body.classList.remove('night-active'); 
-                document.getElementById('quote-row').innerText = 'Đang làm mới dữ liệu và ảnh từ Drive...';
-                setBrightness(100); 
-                syncDriveData();
-            } else { 
-                forceNightMode = true; body.classList.add('night-active'); 
-                setBrightness(50); 
-            }
+                forceNightMode = false; body.classList.remove('night-active'); setBrightness(100); syncDriveData();
+            } else { forceNightMode = true; body.classList.add('night-active'); setBrightness(50); }
             applyDynamicPositions();
         }
 
-        function runAntiBurnIn() { burnInX1 = Math.floor(Math.random() * 40) - 20; burnInY1 = Math.floor(Math.random() * 40) - 20; applyDynamicPositions(); }
+        // 🌟 TÍNH NĂNG "HƠI THỞ MÀN HÌNH" (CHỐNG CHÁY VIỀN TRẮNG MỖI 10 PHÚT)
+        function triggerBorderBurnInProtection() {
+            if (document.body.classList.contains('night-active')) return;
+            var activeImg = document.querySelector('.slide-group.active .background-blur');
+            var outerBlur = document.getElementById('outer-blur-bg');
+            var whiteBorder = document.getElementById('white-border-bg');
+
+            if(activeImg && activeImg.src) {
+                outerBlur.src = activeImg.src;
+                whiteBorder.style.opacity = '0';
+                setTimeout(function() {
+                    whiteBorder.style.opacity = '1';
+                }, 1500);
+            }
+        }
+        setInterval(triggerBorderBurnInProtection, 600000); // Kích hoạt hiệu ứng thở viền mỗi 10 phút
+
+        // ANTI-BURN-IN CHO CHỮ TRÊN MÀN HÌNH
+        function runAntiBurnIn() { 
+            bX1 = Math.floor(Math.random() * 30) - 15; bY1 = Math.floor(Math.random() * 30) - 15; 
+            bX2 = Math.floor(Math.random() * 30) - 15; bY2 = Math.floor(Math.random() * 30) - 15; 
+            bX3 = Math.floor(Math.random() * 30) - 15; bY3 = Math.floor(Math.random() * 30) - 15; 
+            applyDynamicPositions(); 
+        }
         setInterval(runAntiBurnIn, 60000); 
 
         function applyDynamicPositions() {
             var isNight = document.body.classList.contains('night-active');
-            var clockBox = document.getElementById('night-clock-box'); var infoNode = document.getElementById('info-container');
-            if (isNight) { clockBox.style.transform = "translate(calc(-50% + " + burnInX1 + "px), calc(-50% + " + burnInY1 + "px))"; } 
-            else { clockBox.style.transform = "none"; infoNode.style.transform = "translate(" + burnInX1 + "px, " + burnInY1 + "px)"; }
+            var clockBox = document.getElementById('night-clock-box'); 
+            var infoNode = document.getElementById('info-container');
+            var rightNode = document.getElementById('top-right-wrapper');
+            var bottomNode = document.getElementById('bottom-container');
+            
+            if (isNight) { 
+                clockBox.style.transform = "translate(calc(-50% + " + bX1 + "px), calc(-50% + " + bY1 + "px))"; 
+            } else { 
+                clockBox.style.transform = "none"; 
+                if(infoNode) infoNode.style.transform = "translate(" + bX1 + "px, " + bY1 + "px)";
+                if(rightNode) rightNode.style.transform = "translate(" + bX2 + "px, " + bY2 + "px)";
+                if(bottomNode) bottomNode.style.transform = "translate(" + bX3 + "px, " + bY3 + "px)";
+            }
         }
 
         function renderEvents(sMonth, lMonth, sDay, lDay) {
@@ -485,12 +501,7 @@
         function updateClock() {
             var now = new Date(); var hours = now.getHours(); var minutes = now.getMinutes(); var seconds = now.getSeconds();
             
-            // 🌟 SỬA ĐỔI LẠI THEO GIỜ CÀI ĐẶT
-            if (hours === wakeUpHour && minutes === 0 && seconds === 0) { 
-                forceNightMode = null; 
-                document.getElementById('quote-row').innerText = 'Đang làm mới dữ liệu và ảnh ngày mới...';
-                syncDriveData();
-            }
+            if (hours === wakeUpHour && minutes === 0 && seconds === 0) { forceNightMode = null; syncDriveData(); }
 
             var hrStr = hours < 10 ? '0' + hours : hours; var minStr = minutes < 10 ? '0' + minutes : minutes;
             document.getElementById('hr-node').innerText = hrStr; document.getElementById('min-node').innerText = minStr;
@@ -501,15 +512,9 @@
 
             var isNightModeToggled = document.body.classList.contains('night-active');
             if (forceNightMode === null) {
-                // 🌟 BẢNG SO SÁNH NẾU ĐẾN GIỜ WAKEUP THÌ THOÁT ĐÊM
                 var shouldBeNight = (hours >= 21 || hours < wakeUpHour);
-                if (shouldBeNight && !isNightModeToggled) {
-                    document.body.classList.add('night-active');
-                    setBrightness(50);
-                } else if (!shouldBeNight && isNightModeToggled) {
-                    document.body.classList.remove('night-active');
-                    setBrightness(100);
-                }
+                if (shouldBeNight && !isNightModeToggled) { document.body.classList.add('night-active'); setBrightness(50); } 
+                else if (!shouldBeNight && isNightModeToggled) { document.body.classList.remove('night-active'); setBrightness(100); }
             }
 
             var checkTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0); var activePhase = phases[0];
@@ -535,12 +540,17 @@
         function updateWeatherAndAQI() {
             var lat = clientLatitude; var lon = clientLongitude;
             var xhrWeather = new XMLHttpRequest();
-            xhrWeather.open('GET', 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon + '&current=temperature_2m,relative_humidity_2m,precipitation_probability&daily=sunrise,sunset&timezone=Asia%2FHo_Chi_Minh', true);
+            xhrWeather.open('GET', 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon + '&current=temperature_2m,relative_humidity_2m,precipitation_probability,wind_speed_10m,uv_index&daily=sunrise,sunset&timezone=Asia%2FHo_Chi_Minh', true);
             xhrWeather.onerror = function() { document.getElementById('weather-val').innerText = "28"; };
             xhrWeather.onreadystatechange = function() {
                 if (xhrWeather.readyState === 4 && xhrWeather.status === 200) {
-                    var data = JSON.parse(xhrWeather.responseText); document.getElementById('weather-val').innerText = Math.round(data.current.temperature_2m);
-                    globalHum = data.current.relative_humidity_2m + '%'; globalRain = data.current.precipitation_probability + '%';
+                    var data = JSON.parse(xhrWeather.responseText); 
+                    document.getElementById('weather-val').innerText = Math.round(data.current.temperature_2m);
+                    globalHum = data.current.relative_humidity_2m + '%'; 
+                    globalRain = data.current.precipitation_probability + '%';
+                    globalWind = Math.round(data.current.wind_speed_10m) + ' km/h';
+                    globalUV = data.current.uv_index;
+                    globalAlt = data.elevation ? Math.round(data.elevation) + 'm' : '--';
                     if(data.daily && data.daily.sunrise && data.daily.sunrise[0]) { globalSunrise = data.daily.sunrise[0].substring(11, 16); globalSunset = data.daily.sunset[0].substring(11, 16); }
                 }
             };
@@ -548,14 +558,31 @@
 
             var xhrAQI = new XMLHttpRequest();
             xhrAQI.open('GET', 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon + '&current=us_aqi', true);
-            xhrAQI.onerror = function() { globalAQI = "45"; };
+            xhrAQI.onerror = function() { globalAQI = "--"; };
             xhrAQI.onreadystatechange = function() {
-                if (xhrAQI.readyState === 4 && xhrAQI.status === 200) { var data = JSON.parse(xhrAQI.responseText); globalAQI = data.current.us_aqi || "45"; }
+                if (xhrAQI.readyState === 4 && xhrAQI.status === 200) { var data = JSON.parse(xhrAQI.responseText); globalAQI = data.current.us_aqi || "--"; }
             };
             xhrAQI.send();
         }
 
-        function getLunarDateStringRaw(d, m) { return d + "/" + m; }
+        function syncTempSize() {
+            var quoteRow = document.getElementById('quote-row');
+            var weatherVal = document.getElementById('weather-val');
+            var degreeSymbol = document.querySelector('.degree-symbol');
+            
+            if(quoteRow && weatherVal && degreeSymbol) {
+                setTimeout(function() {
+                    var quoteHeight = quoteRow.offsetHeight;
+                    var baseHeight = Math.max(quoteHeight, 50); 
+                    var effectiveHeight = Math.min(baseHeight, 110); 
+                    var newFontSize = effectiveHeight * 0.85; 
+                    
+                    weatherVal.style.fontSize = newFontSize + 'px';
+                    degreeSymbol.style.fontSize = (newFontSize * 0.4) + 'px';
+                    degreeSymbol.style.marginTop = (newFontSize * 0.05) + 'px';
+                }, 50); 
+            }
+        }
 
         function updateDynamicContentBySlide() {
             var now = new Date(); var currentSolarMonth = now.getMonth() + 1; var sDay = now.getDate();
@@ -564,10 +591,16 @@
             var currentLunarMonth = (activePhase[1] === 0 ? 12 : activePhase[1]);
             var lDay = Math.floor((checkTime - new Date(activePhase[0], activePhase[1], activePhase[2], 0, 0, 0)) / (1000 * 60 * 60 * 24)) + 1;
 
-            var envPool = ['AQI ' + clientLocalName + ': <span class="highlight-yellow">' + globalAQI + '</span>', 'Độ ẩm: <span class="highlight-yellow">' + globalHum + '</span>', 'Tỷ lệ mưa: <span class="highlight-yellow">' + globalRain + '</span>', 'Bình minh: <span class="highlight-yellow">' + globalSunrise + '</span>', 'Hoàng hôn: <span class="highlight-yellow">' + globalSunset + '</span>'];
-            var currentEnv = envPool[envDisplayIndex % envPool.length]; envDisplayIndex++; 
+            var envHtml = '<div id="right-env-container">';
+            envHtml += '<div class="env-stat-row"><span>💧 Ẩm: ' + globalHum + '</span><span>🌧️ Mưa: ' + globalRain + '</span></div>';
+            envHtml += '<div class="env-stat-row"><span>🌬️ Gió: ' + globalWind + '</span><span>☀️ UV: ' + globalUV + '</span></div>';
+            envHtml += '<div class="env-stat-row"><span>🌅 ' + globalSunrise + ' - ' + globalSunset + '</span><span>⛰️ ' + globalAlt + '</span></div>';
+            if(globalAQI !== "--") envHtml += '<div class="env-stat-row" style="justify-content:flex-end">AQI ' + clientLocalName + ': &nbsp;<span style="color:#F4B41A; font-weight:700">' + globalAQI + '</span></div>';
+            envHtml += '</div>';
+            
+            document.getElementById('top-right-wrapper').innerHTML = '<div id="right-event-container"></div>' + envHtml;
 
-            var nextActiveFestivalText = "Gia đình bình an";
+            var nextActiveFestivalText = "";
             var minDiff = 365;
 
             for(var f=0; f<festivalsData.length; f++) {
@@ -582,18 +615,21 @@
                 }
             }
 
-            document.getElementById('festival-corner').innerText = nextActiveFestivalText;
-            document.getElementById('env-corner').innerHTML = currentEnv; 
-            
             var activeSpecialties = [];
             for(var s=0; s<specialtiesData.length; s++) { if(specialtiesData[s].m === currentSolarMonth || specialtiesData[s].m === 0) activeSpecialties.push(specialtiesData[s].text); }
 
             var finalQuote = ""; var dice = Math.random(); 
-            if (dice < 0.5 && activeSpecialties.length > 0) { finalQuote = "🌾 Mùa này " + activeSpecialties[Math.floor(Math.random() * activeSpecialties.length)]; } 
+            if (dice < 0.5 && activeSpecialties.length > 0) { finalQuote = "Mùa này " + activeSpecialties[Math.floor(Math.random() * activeSpecialties.length)]; } 
             else if (quotePool.length > 0) { finalQuote = quotePool[Math.floor(Math.random() * quotePool.length)]; }
             else { finalQuote = "Nhà là nơi bão dừng sau cánh cửa, nơi bình yên ấm áp nhất để trở về."; }
 
-            document.getElementById('quote-row').innerText = finalQuote;
+            var fullText = finalQuote;
+            if(nextActiveFestivalText !== "") {
+                fullText += ' <span style="color:#F4B41A; font-weight:700;">&nbsp; | &nbsp;' + nextActiveFestivalText + '</span>';
+            }
+            
+            document.getElementById('quote-row').innerHTML = fullText;
+            syncTempSize();
         }
 
         function syncDriveData() {
@@ -629,6 +665,7 @@
             var activeFg = document.getElementById(isGroup1Active ? 'fg1' : 'fg2');
             var activeGroup = document.getElementById(isGroup1Active ? 'group1' : 'group2');
             if (activeFg && activeFg.naturalWidth) updateImageDisplayMechanism(activeFg, activeGroup);
+            syncTempSize();
         });
 
         function loadAndDisplayImage(imgUrl, groupID, bgID, fgID) {
