@@ -73,7 +73,7 @@
         #date-solar-top { font-size: 1.7rem; font-weight: 700; color: #ffffff; margin-top: 14px; white-space: nowrap; }
         .highlight-yellow { color: #F4B41A; font-weight: 700; }
 
-        /* 🆕 KHU VỰC MỚI: WIDGET DANH SÁCH SỰ KIỆN GÓC PHẢI TRÊN TRỤC DỌC */
+        /* KHU VỰC ĐẶC BIỆT: WIDGET DANH SÁCH SỰ KIỆN GÓC PHẢI TRÊN */
         #right-event-container {
             position: absolute; top: 35px; right: 35px; z-index: 4;
             display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
@@ -87,7 +87,7 @@
         .event-urgent {
             color: #F4B41A !important; font-weight: 700;
             border-right: 3px solid #F4B41A; background: rgba(0, 0, 0, 0.7);
-            animation: pulseGlow 2s infinite;
+            -webkit-animation: pulseGlow 2s infinite; animation: pulseGlow 2s infinite;
         }
         .event-today-birth {
             color: #2ecc71 !important; font-weight: 700;
@@ -97,9 +97,8 @@
             color: #ff9500 !important; font-weight: 700;
             border-right: 3px solid #ff9500; background: rgba(0, 0, 0, 0.75);
         }
-        @keyframes pulseGlow {
-            0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; }
-        }
+        @-webkit-keyframes pulseGlow { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
+        @keyframes pulseGlow { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
 
         /* KHU VỰC ĐÁY MÀN HÌNH */
         #bottom-container {
@@ -152,7 +151,7 @@
         }
         #next-btn:active { opacity: 0.8; }
         
-        /* CHẾ ĐỘ BAN ĐÊM HỦY DIỆT CHỮ CON CHỐNG CHÁY MÀN HÌNH */
+        /* CHẾ ĐỘ BAN ĐÊM (Giữ Mắt Khỏe) */
         .night-active { background-color: #000000 !important; } 
         .night-active #photo-container, .night-active #bottom-container, .night-active #date-solar-top, .night-active #next-btn, .night-active #right-event-container { display: none !important; }
         .night-active #frame-wrapper { background-color: #000000 !important; box-shadow: none !important; border-color: transparent !important; }
@@ -259,14 +258,22 @@
         var stepSeconds = { 1: 60, 2: 180, 3: 300, 4: 600 };
         var currentActiveMode = 2; // Mặc định 3 phút
 
-        // 🆕 CƠ SỞ DỮ LIỆU KHÓA CHUẨN ĐÃ ĐỒNG BỘ CỦA BẠN
+        // DỮ LIỆU SINH NHẬT (DƯƠNG LỊCH) ĐÃ ĐƯỢC CHUẨN HÓA LẠI THEO YÊU CẦU
         var birthdays = [
-            {m: 2, d: 2, name: "Mẹ Kiền"}, {m: 6, d: 12, name: "Bà nội"}, {m: 11, d: 12, name: "Ông nội"},
-            {m: 6, d: 24, name: "Miu"}, {m: 12, d: 1, name: "Suri Hồng"}, {m: 6, d: 2, name: "Tín"},
-            {m: 4, d: 30, name: "Khánh Dương"}, {m: 3, d: 22, name: "Khánh Dung"}, {m: 8, d: 1, name: "Anh Tuấn"},
-            {m: 1, d: 25, name: "Chị Thảo"}, {m: 10, d: 30, name: "Chị Bích"}
+            {m: 2, d: 2, name: "Mẹ Kiền"}, 
+            {m: 6, d: 12, name: "Bà nội"}, 
+            {m: 11, d: 12, name: "Ông nội"},
+            {m: 6, d: 24, name: "Miu"}, 
+            {m: 12, d: 1, name: "Suri Hồng"}, 
+            {m: 6, d: 2, name: "Tín"},
+            {m: 4, d: 30, name: "Khánh Dương"}, 
+            {m: 3, d: 22, name: "Khánh Dung"}, 
+            {m: 8, d: 1, name: "Anh Tuấn"},
+            {m: 1, d: 25, name: "Chị Thảo"}, 
+            {m: 10, d: 30, name: "Chị Bích"}
         ];
 
+        // DỮ LIỆU NGÀY GIỖ (ÂM LỊCH)
         var anniversaries = [
             {m: 12, d: 7, name: "Ông cố nội (DƯƠNG XUÂN LUÂN Tự Phúc Thiện)"},
             {m: 10, d: 17, name: "Bà cố nội (NGÔ THỊ ĐƯỜNG Hiệu Diệu Dục)"},
@@ -278,7 +285,7 @@
             {m: 9, d: 25, name: "Ba (DƯƠNG XUÂN BẢO Tự Minh Hiền)"}
         ];
 
-        // 🆕 THUẬT TOÁN ĐA TẦNG LỊCH KÉP OFFLINE TỪ 2026 ĐẾN NĂM 2040 CHÍNH XÁC 100%
+        // LỊCH ÂM TÍNH TOÁN OFFLINE 2026 - 2040
         var phases = [
             [2025, 11, 20, 11, "Ất Tỵ"], [2026, 0, 19, 12, "Ất Tỵ"], [2026, 1, 17, 1, "Bính Ngọ"], [2026, 2, 19, 2, "Bính Ngọ"], [2026, 3, 17, 3, "Bính Ngọ"], [2026, 4, 16, 4, "Bính Ngọ"], [2026, 5, 15, 5, "Bính Ngọ"], [2026, 6, 14, 6, "Bính Ngọ"], [2026, 7, 13, 7, "Bính Ngọ"], [2026, 8, 11, 8, "Bính Ngọ"], [2026, 9, 11, 9, "Bính Ngọ"], [2026, 10, 10, 10, "Bính Ngọ"], [2026, 11, 9, 11, "Bính Ngọ"],
             [2027, 0, 8, 12, "Bính Ngọ"], [2027, 1, 6, 1, "Đinh Mùi"], [2027, 2, 8, 2, "Đinh Mùi"], [2027, 3, 7, 3, "Đinh Mùi"], [2027, 4, 6, 4, "Đinh Mùi"], [2027, 5, 5, 5, "Đinh Mùi"], [2027, 6, 4, 6, "Đinh Mùi"], [2027, 7, 2, 7, "Đinh Mùi"], [2027, 7, 31, 7, "Đinh Mùi"], [2027, 8, 29, 8, "Đinh Mùi"], [2027, 9, 29, 9, "Đinh Mùi"], [2027, 10, 28, 10, "Đinh Mùi"], [2027, 11, 27, 11, "Đinh Mùi"],
@@ -309,7 +316,7 @@
             osc.start(startTime); osc.stop(startTime + duration);
         }
 
-        // 🎵 NHẠC 1: GIAI ĐIỆU HAPPY BIRTHDAY CHUẨN ĐỒNG BỘ
+        // BẢN GIAI ĐIỆU CHÚC MỪNG SINH NHẬT
         function playHappyBirthday() {
             if (!audioCtx) return;
             if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -329,7 +336,7 @@
             playNote(466.16, t, tempo*0.8); playNote(466.16, t + tempo, tempo*0.8); playNote(440.00, t + tempo*2, tempo*1.5); playNote(349.23, t + tempo*4, tempo*1.5); playNote(392.00, t + tempo*6, tempo*1.5); playNote(349.23, t + tempo*8, tempo*4);
         }
 
-        // 🎵 NHẠC 2: CHUÔNG NGÂN SANG TRỌNG KÍNH NHỚ NGÀY GIỖ TỔ TIÊN
+        // BẢN GIAI ĐIỆU CHUÔNG NGÂN SANG TRỌNG KÍNH NHỚ
         function playSolemnChime() {
             if (!audioCtx) return;
             if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -402,23 +409,11 @@
             if (bottomNode) bottomNode.style.transform = "translate(" + burnInX2 + "px, 0px)";
         }
 
-        function getLunarFormat(now) {
-            var checkTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
-            var activePhase = phases[0];
-            for (var i = 0; i < phases.length; i++) {
-                var d = new Date(phases[i][0], phases[i][1], phases[i][2], 0, 0, 0);
-                if (checkTime >= d) activePhase = phases[i]; else break;
-            }
-            var startDate = new Date(activePhase[0], activePhase[1], activePhase[2], 0, 0, 0);
-            var diffDays = Math.floor((checkTime - startDate) / (1000 * 60 * 60 * 24)) + 1;
-            return diffDays + '/' + activePhase[3] + ' AL';
-        }
-
-        // 🆕 HÀM QUÉT VÀ RENDER DANH SÁCH SỰ KIỆN THEO TRỤC DỌC CỦA THÁNG HIỆN TẠI
+        // HÀM QUÉT VÀ RENDER DANH SÁCH SỰ KIỆN GÓC PHẢI
         function renderRightEvents(sMonth, lMonth, sDay, lDay) {
             var html = "";
             
-            // 1. Quét Sinh Nhật Dương Lịch trong tháng
+            // 1. Quét Sinh Nhật
             for (var b = 0; b < birthdays.length; b++) {
                 var birth = birthdays[b];
                 if (birth.m === sMonth) {
@@ -435,7 +430,7 @@
                 }
             }
             
-            // 2. Quét Ngày Giỗ Âm Lịch trong tháng
+            // 2. Quét Ngày Giỗ
             for (var a = 0; a < anniversaries.length; a++) {
                 var ann = anniversaries[a];
                 if (ann.m === lMonth) {
@@ -451,7 +446,6 @@
                     if (text !== "") html += '<div class="' + itemClass + '">' + text + '</div>';
                 }
             }
-            
             document.getElementById('right-event-container').innerHTML = html;
         }
 
@@ -473,7 +467,6 @@
                 else document.body.classList.remove('night-active');
             }
 
-            // Lấy thông số lịch để cập nhật giao diện
             var checkTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
             var activePhase = phases[0];
             for (var i = 0; i < phases.length; i++) {
@@ -482,33 +475,22 @@
             }
             var startDate = new Date(activePhase[0], activePhase[1], activePhase[2], 0, 0, 0);
             var currentLunarDay = Math.floor((checkTime - startDate) / (1000 * 60 * 60 * 24)) + 1;
-            var currentLunarMonth = activePhase[3];
+            var currentLunarMonth = (activePhase[1] === 0 ? 12 : activePhase[1]);
 
-            // Cập nhật text Dương lịch góc trên
             var shortDays = ['CN', 'Th 2', 'Th 3', 'Th 4', 'Th 5', 'Th 6', 'Th 7'];
             document.getElementById('date-solar-top').innerHTML = '<span class="highlight-yellow">' + shortDays[now.getDay()] + '</span> ' + now.getDate() + '/' + (now.getMonth() + 1);
-            
-            // Cập nhật đáy
-            document.getElementById('date-lunar-corner').innerText = currentLunarDay + '/' + currentLunarMonth + ' AL (' + activePhase[4] + ')';
+            document.getElementById('date-lunar-corner').innerText = currentLunarDay + '/' + currentLunarMonth + ' Âm Lịch';
 
-            // Gọi render danh sách sự kiện hàng dọc góc phải hằng giây
             renderRightEvents(now.getMonth() + 1, currentLunarMonth, now.getDate(), currentLunarDay);
-
             applyDynamicPositions();
 
-            // 🆕 TỰ ĐỘNG KÍCH HOẠT PHÁT NHẠC ĐÚNG 8:00:00 SÁNG
+            // TỰ ĐỘNG PHÁT NHẠC ĐÚNG 8:00 SÁNG THEO SỰ KIỆN
             if (hours === 8 && minutes === 0 && seconds === 0) {
-                // Kiểm tra sinh nhật hôm nay
                 for (var b = 0; b < birthdays.length; b++) {
-                    if (birthdays[b].m === (now.getMonth() + 1) && birthdays[b].d === now.getDate()) {
-                        playHappyBirthday();
-                    }
+                    if (birthdays[b].m === (now.getMonth() + 1) && birthdays[b].d === now.getDate()) { playHappyBirthday(); }
                 }
-                // Kiểm tra ngày giỗ hôm nay
                 for (var a = 0; a < anniversaries.length; a++) {
-                    if (anniversaries[a].m === currentLunarMonth && anniversaries[a].d === currentLunarDay) {
-                        playSolemnChime();
-                    }
+                    if (anniversaries[a].m === currentLunarMonth && anniversaries[a].d === currentLunarDay) { playSolemnChime(); }
                 }
             }
         }
@@ -548,14 +530,6 @@
 
         function updateDynamicContentBySlide() {
             var now = new Date();
-            var checkTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
-            var activePhase = phases[0];
-            for (var i = 0; i < phases.length; i++) {
-                var d = new Date(phases[i][0], phases[i][1], phases[i][2], 0, 0, 0);
-                if (checkTime >= d) activePhase = phases[i]; else break;
-            }
-            var currentLunarMonth = activePhase[3];
-
             var envPool = [
                 'AQI Đắk Lắk: <span class="highlight-yellow">' + globalAQI + '</span>',
                 'Độ ẩm: <span class="highlight-yellow">' + globalHum + '</span>',
