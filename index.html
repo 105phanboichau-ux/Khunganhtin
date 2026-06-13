@@ -8,7 +8,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="referrer" content="no-referrer">
     
-    <title>Khung Ảnh Số Thông Minh - V65</title>
+    <title>Khung Ảnh Số Thông Minh - V66 Final</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,7 +17,9 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body, html { width: 100%; height: 100%; overflow: hidden; background-color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; cursor: pointer; transition: background-color 1s ease; }
-        #frame-wrapper { position: absolute; top: 50px; bottom: 50px; left: 50px; right: 50px; background-color: #000; overflow: hidden; box-shadow: 0px 15px 45px rgba(0, 0, 0, 0.15), inset 0px 0px 30px rgba(0,0,0,0.85); border: 1px solid #eaeaea; transition: all 0.5s ease; }
+        
+        /* 🛡️ CĂN CHỈNH VIỀN 4 CẠNH ĐỀU TĂM TẮP 45px */
+        #frame-wrapper { position: absolute; top: 45px; bottom: 45px; left: 45px; right: 45px; background-color: #000; overflow: hidden; box-shadow: 0px 15px 45px rgba(0, 0, 0, 0.15), inset 0px 0px 30px rgba(0,0,0,0.85); border: 1px solid #eaeaea; transition: all 0.5s ease; }
         #photo-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
         .slide-group { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 3s ease-in-out; display: block; }
         .slide-group.active { opacity: 1; z-index: 2; }
@@ -30,22 +32,23 @@
 
         .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.15); z-index: 3; pointer-events: none; }
 
-        /* 🛡️ KHU VỰC CỘT TRÁI (GIỜ + DƯƠNG LỊCH + ÂM LỊCH + NGÀY GIỖ) */
+        /* 🛡️ CỘT TRÁI (GIỜ + DƯƠNG LỊCH + ÂM LỊCH + NGÀY GIỖ) */
         #info-container { position: absolute; top: 35px; left: 35px; z-index: 4; text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.8); display: flex; flex-direction: column; align-items: center; transition: transform 0.8s ease-in-out; }
         .hours-style { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #F4B41A; font-size: 7.5rem; letter-spacing: -2px; display: block; line-height: 0.82; }
         .minutes-style { font-family: 'Tourney', sans-serif; font-weight: 600; color: #ffffff; font-size: 7.5rem; letter-spacing: -1px; display: block; margin-top: -5px; line-height: 0.82; }
         
         #date-solar-top { font-size: 1.7rem; font-weight: 700; color: #ffffff; margin-top: 14px; white-space: nowrap; }
-        #date-lunar-top { font-size: 1.7rem; font-weight: 700; color: #ffffff; margin-top: 2px; white-space: nowrap; }
+        #date-lunar-top { font-size: 1.7rem; font-weight: 700; color: #ffffff; margin-top: 4px; white-space: nowrap; }
         .highlight-yellow { color: #F4B41A; font-weight: 700; }
 
-        #death-events-container { display: flex; flex-direction: column; align-items: center; gap: 3px; width: 100%; margin-top: 6px; }
+        /* Đã xóa icon bông sen, dời ngày giỗ lên sát âm lịch */
+        #death-events-container { display: flex; flex-direction: column; align-items: center; gap: 3px; width: 100%; margin-top: 8px; }
         .death-event-item { font-size: 1.25rem; color: rgba(255, 255, 255, 0.9); font-weight: 500; text-align: center; padding: 3px 12px; border-radius: 4px; background: rgba(0, 0, 0, 0.35); }
         .death-event-passed { opacity: 0.35; font-size: 1.05rem; }
         .death-event-urgent { color: #ff9500 !important; font-weight: 700; background: rgba(0, 0, 0, 0.6); -webkit-animation: pulseGlow 2s infinite; animation: pulseGlow 2s infinite; }
         .death-event-today { color: #ff9500 !important; font-weight: 700; font-size: 1.35rem; background: rgba(0, 0, 0, 0.7); }
 
-        /* 🛡️ GÓC PHẢI TRÊN (SINH NHẬT - ĐÃ LÀM GỌN) */
+        /* CỘT PHẢI (SINH NHẬT - Đã xóa icon bánh) */
         #right-event-container { position: absolute; top: 35px; right: 35px; z-index: 4; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; max-width: 350px; text-shadow: 0px 2px 10px rgba(0,0,0,0.95); }
         .event-header { font-size: 1.1rem; color: #F4B41A; font-weight: 700; text-align: right; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; display: flex; align-items: center; justify-content: flex-end; }
         .event-item { font-size: 1.25rem; color: rgba(255, 255, 255, 0.9); font-weight: 500; text-align: right; padding: 3px 10px; border-radius: 4px; background: rgba(0, 0, 0, 0.35); margin-bottom: 2px; }
@@ -56,15 +59,22 @@
         @-webkit-keyframes pulseGlow { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
         @keyframes pulseGlow { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
 
-        /* KHU VỰC ĐÁY MÀN HÌNH */
+        /* 🛡️ KHU VỰC ĐÁY: CĂN CHÂN CHỮ (FLEX-END) CHO THẲNG HÀNG */
         #bottom-container { position: absolute; bottom: 35px; left: 35px; right: 35px; z-index: 4; display: flex; flex-direction: row; justify-content: space-between; align-items: flex-end; text-shadow: 0px 3px 12px rgba(0, 0, 0, 0.95); transition: transform 0.5s ease; }
-        #bottom-left { display: flex; flex-direction: row; align-items: center; gap: 25px; width: 55%; }
-        #temp-wrapper { position: relative; display: flex; align-items: center; justify-content: center; flex-shrink: 0; min-width: 90px; padding-right: 15px; }
-        #weather-val { font-size: 4.5rem; font-weight: 700; color: #ffffff; letter-spacing: -2px; line-height: 1; }
-        .degree-symbol { position: absolute; top: 0px; right: -2px; font-size: 2rem; font-weight: 700; color: #ffffff; }
-        #quote-row { flex: 1; font-size: 1.4rem; font-weight: 600; font-style: normal; color: #f5f5f7; line-height: 1.45; word-wrap: break-word; }
         
-        #bottom-right { display: flex; flex-direction: column; align-items: flex-end; text-align: right; width: 42%; gap: 6px; }
+        /* Đã tăng khoảng cách (gap), căn đáy (flex-end) */
+        #bottom-left { display: flex; flex-direction: row; align-items: flex-end; gap: 30px; width: 55%; }
+        #temp-wrapper { position: relative; display: flex; align-items: flex-end; justify-content: center; flex-shrink: 0; min-width: 80px; padding-bottom: 2px; }
+        
+        /* Đã thu nhỏ Nhiệt độ */
+        #weather-val { font-size: 3.8rem; font-weight: 700; color: #ffffff; letter-spacing: -2px; line-height: 0.85; }
+        .degree-symbol { position: absolute; top: -5px; right: -5px; font-size: 1.6rem; font-weight: 700; color: #ffffff; }
+        
+        /* Danh ngôn: Đẩy margin bottom xíu để bằng chân với số nhiệt độ */
+        #quote-row { flex: 1; font-size: 1.4rem; font-weight: 600; font-style: normal; color: #f5f5f7; line-height: 1.45; word-wrap: break-word; padding-bottom: 2px; }
+        
+        /* Khối bên phải */
+        #bottom-right { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; text-align: right; width: 42%; gap: 6px; padding-bottom: 2px; }
         #festival-corner { font-size: 1.25rem; font-weight: 600; color: #F4B41A; line-height: 1.3; word-wrap: break-word; text-align: right; }
         #env-corner { font-size: 1.15rem; font-weight: 500; color: #ffffff; opacity: 0.95; margin-top: 2px; }
 
@@ -82,17 +92,18 @@
         .night-active #photo-container, .night-active #bottom-container, .night-active #right-event-container, .night-active #info-container { display: none !important; }
         .night-active #frame-wrapper { background-color: #000000 !important; box-shadow: none !important; border-color: transparent !important; }
         .night-active #night-clock-box { display: flex; align-items: center; justify-content: center; flex-direction: row; }
-        
         .night-hours, .night-minutes { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #ff9500; font-size: 46vmin; line-height: 0.9; margin: 0 1vmin; letter-spacing: -2vmin; }
         .night-minutes { font-family: 'Tourney', sans-serif; font-weight: 600; }
 
         @media (orientation: portrait) {
-            #frame-wrapper { top: 50px; bottom: 50px; left: 35px; right: 35px; } 
+            /* Viền đều 45px trên máy dọc */
+            #frame-wrapper { top: 45px; bottom: 45px; left: 45px; right: 45px; } 
             .hours-style { font-size: 7.5rem; } .minutes-style { font-size: 7.5rem; } 
             #date-solar-top { font-size: 1.7rem; } #date-lunar-top { font-size: 1.7rem; }
             .event-header { font-size: 1.1rem; } .event-item { font-size: 1.25rem; }
             .death-event-item { font-size: 1.25rem; }
-            #weather-val { font-size: 3.5rem; } .degree-symbol { font-size: 1.5rem; } 
+            
+            #weather-val { font-size: 3.2rem; } .degree-symbol { font-size: 1.4rem; } 
             #quote-row { font-size: 1.25rem; }
             #festival-corner { font-size: 1.15rem; } #env-corner { font-size: 1.05rem; }
 
@@ -310,9 +321,7 @@
             else { clockBox.style.transform = "none"; infoNode.style.transform = "translate(" + burnInX1 + "px, " + burnInY1 + "px)"; }
         }
 
-        // 🛡️ PHÂN TÁCH GIAO DIỆN TRÁI/PHẢI
-        var lotusIcon = '<svg width="26" height="26" viewBox="0 0 24 24" fill="#F4B41A" style="display:inline-block; vertical-align:-5px;"><path d="M12 22C12 22 15 14 15 10C15 6 12 2 12 2C12 2 9 6 9 10C9 14 12 22 12 22Z"/><path d="M12 22C12 22 19 16 19 11C19 7 15 6 15 10C15 14 12 22 12 22Z" opacity="0.85"/><path d="M12 22C12 22 5 16 5 11C5 7 9 6 9 10C9 14 12 22 12 22Z" opacity="0.85"/><path d="M12 22C12 22 24 18 24 13C24 9 19 8 19 12C19 16 12 22 12 22Z" opacity="0.6"/><path d="M12 22C12 22 0 18 0 13C0 9 5 8 5 12C5 16 12 22 12 22Z" opacity="0.6"/></svg>';
-
+        // ĐÃ XÓA ICON BÔNG SEN THEO YÊU CẦU
         function renderEvents(sMonth, lMonth, sDay, lDay) {
             // -- Cột Phải (Sinh Nhật) --
             var rightHtml = "";
@@ -321,6 +330,7 @@
             currentBirths.sort(function(a, b) { return a.d - b.d; });
 
             if (currentBirths.length > 0) {
+                // Đã xóa icon bánh sinh nhật
                 rightHtml += '<div class="event-header">SINH NHẬT</div>';
                 for (var i = 0; i < currentBirths.length; i++) {
                     var birth = currentBirths[i]; var diff = birth.d - sDay; var cls = "event-item"; var txt = birth.d + "/" + birth.m + " " + birth.name;
@@ -330,14 +340,13 @@
             }
             document.getElementById('right-event-container').innerHTML = rightHtml;
 
-            // -- Cột Trái (Dưới đồng hồ: Ngày Giỗ) --
+            // -- Cột Trái (Ngày Giỗ) --
             var leftHtml = "";
             var currentDeaths = [];
             for (var a = 0; a < anniversaries.length; a++) { if (anniversaries[a].m === lMonth) currentDeaths.push(anniversaries[a]); }
             currentDeaths.sort(function(a, b) { return a.d - b.d; });
 
             if (currentDeaths.length > 0) {
-                leftHtml += '<div class="event-header" style="justify-content: center; margin-top: 8px; margin-bottom: 4px; height: 1.5rem;">' + lotusIcon + '</div>';
                 for (var j = 0; j < currentDeaths.length; j++) {
                     var ann = currentDeaths[j]; var diff = ann.d - lDay; var cls = "death-event-item";
                     var shortName = ann.name.split(" (")[0]; var txt = ann.d + "/" + ann.m + " " + shortName;
@@ -377,7 +386,7 @@
             var shortDays = ['CN', 'Th 2', 'Th 3', 'Th 4', 'Th 5', 'Th 6', 'Th 7'];
             document.getElementById('date-solar-top').innerHTML = '<span class="highlight-yellow">' + shortDays[now.getDay()] + '</span> ' + now.getDate() + '/' + (now.getMonth() + 1);
             
-            // CẬP NHẬT ĐỊNH DẠNG ÂM LỊCH SANG TRÁI DƯỚI DƯƠNG LỊCH
+            // CẬP NHẬT ĐỊNH DẠNG ÂM LỊCH SANG TRÁI DƯỚI DƯƠNG LỊCH (ĐỒNG BỘ MÀU SẮC)
             document.getElementById('date-lunar-top').innerHTML = '<span class="highlight-yellow">AL</span> ' + currentLunarDay + '/' + currentLunarMonth;
 
             renderEvents(now.getMonth() + 1, currentLunarMonth, now.getDate(), currentLunarDay);
@@ -447,7 +456,8 @@
             for(var s=0; s<specialtiesData.length; s++) { if(specialtiesData[s].m === currentSolarMonth || specialtiesData[s].m === 0) activeSpecialties.push(specialtiesData[s].text); }
 
             var finalQuote = ""; var dice = Math.random(); 
-            if (dice < 0.5 && activeSpecialties.length > 0) { finalQuote = "🌾 Mùa này " + activeSpecialties[Math.floor(Math.random() * activeSpecialties.length)]; } 
+            // ĐÃ XÓA ICON BÔNG LÚA TRƯỚC CHỮ MÙA NÀY
+            if (dice < 0.5 && activeSpecialties.length > 0) { finalQuote = "Mùa này " + activeSpecialties[Math.floor(Math.random() * activeSpecialties.length)]; } 
             else if (quotePool.length > 0) { finalQuote = quotePool[Math.floor(Math.random() * quotePool.length)]; }
             else { finalQuote = "Nhà là nơi bão dừng sau cánh cửa, nơi bình yên ấm áp nhất để trở về."; }
 
