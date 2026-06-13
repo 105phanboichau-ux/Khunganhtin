@@ -8,7 +8,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="referrer" content="no-referrer">
     
-    <title>Khung Ảnh Số Thông Minh - V58</title>
+    <title>Khung Ảnh Số Thông Minh - V59</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body, html { width: 100%; height: 100%; overflow: hidden; background-color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; cursor: pointer; transition: background-color 1s ease; }
         
-        /* 🛡️ KHUNG VIỀN ĐỐI XỨNG HOÀN HẢO */
+        /* KHUNG VIỀN ĐỐI XỨNG */
         #frame-wrapper { 
             position: absolute; top: 50px; bottom: 50px; left: 50px; right: 50px; 
             background-color: #000; overflow: hidden; 
@@ -27,8 +27,6 @@
         }
         
         #photo-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
-        
-        /* 🛡️ LOẠI BỎ FLEXBOX ĐỂ IOS 10 RENDER ẢNH CHUẨN XÁC TRÀN VIỀN */
         .slide-group { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 3s ease-in-out; display: block; }
         .slide-group.active { opacity: 1; z-index: 2; }
         
@@ -70,21 +68,15 @@
         #date-lunar-corner { font-size: 1.6rem; font-weight: 700; color: #F4B41A; letter-spacing: 0.5px; }
         #event-env-corner { font-size: 1.25rem; font-weight: 500; color: #ffffff; line-height: 1.4; opacity: 0.95; }
 
-        /* BẢNG ĐIỀU KHIỂN & ĐỘ NHẠY SIÊU TỐC */
-        #control-panel { position: absolute; top: 50%; right: 20px; transform: translateY(-50%); z-index: 999; background: rgba(0, 0, 0, 0.85); padding: 18px; border-radius: 12px; color: #fff; font-size: 0.85rem; backdrop-filter: blur(5px); opacity: 0; pointer-events: none; transition: opacity 0.3s ease; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; justify-items: center; width: 220px; }
+        /* BẢNG ĐIỀU KHIỂN RÚT GỌN 2x2 */
+        #control-panel { position: absolute; top: 50%; right: 20px; transform: translateY(-50%); z-index: 999; background: rgba(0, 0, 0, 0.85); padding: 18px; border-radius: 12px; color: #fff; font-size: 0.85rem; backdrop-filter: blur(5px); opacity: 0; pointer-events: none; transition: opacity 0.3s ease; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; justify-items: center; width: 220px; }
         #control-panel.active-panel { opacity: 1; pointer-events: auto; }
-        .panel-label { grid-column: span 2; font-weight: 600; font-size: 0.95rem; color: #bbb; margin-bottom: 2px; text-align: center; }
-        
+        .panel-label { grid-column: span 2; font-weight: 600; font-size: 0.95rem; color: #bbb; margin-bottom: 4px; text-align: center; }
         .btn-interactive { -webkit-tap-highlight-color: transparent; outline: none; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 6px; cursor: pointer; transition: background 0.1s; }
-        .speed-btn { background: rgba(255, 255, 255, 0.15); color: #fff; padding: 14px 0; width: 100%; font-size: 0.95rem; font-weight: 500; }
+        .speed-btn { background: rgba(255, 255, 255, 0.15); color: #fff; padding: 14px 0; width: 100%; font-size: 1rem; font-weight: 600; }
         .speed-btn.active { background: #F4B41A !important; border-color: #F4B41A !important; color: #000 !important; font-weight: bold; }
-        #speed-next { grid-column: span 2; width: 100%; background: rgba(244, 180, 26, 0.2); border-color: #F4B41A; color: #F4B41A; padding: 14px 0; font-size: 1rem; font-weight: 600; }
-        #speed-next:active { background: #F4B41A; color: #000; }
-        .action-divider { grid-column: span 2; width: 100%; height: 1px; background: rgba(255,255,255,0.15); margin: 4px 0; }
-        .action-btn { background: rgba(244, 180, 26, 0.2); border-color: #F4B41A; color: #F4B41A; padding: 14px 0; width: 100%; font-size: 0.9rem; font-weight: 600; text-align: center; }
-        .action-btn:active { background: #F4B41A; color: #000; }
         
-        /* 🛡️ ĐỒNG HỒ BAN ĐÊM: CĂN GIỮA VÀ BẢO VỆ CHỐNG CẮT VIỀN */
+        /* CHẾ ĐỘ BAN ĐÊM */
         #night-clock-box { 
             position: absolute; left: 50%; top: 50%; 
             transform: translate(-50%, -50%); 
@@ -98,11 +90,9 @@
         .night-hours, .night-minutes { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #ff9500; font-size: 38vmin; line-height: 0.9; margin: 0 1vmin; letter-spacing: -1vmin; }
         .night-minutes { font-family: 'Tourney', sans-serif; font-weight: 600; }
 
-        /* 🛡️ RESPONSIVE CỤ THỂ CHO MÀN HÌNH DỌC (PORTRAIT) */
+        /* RESPONSIVE CHO MÀN HÌNH DỌC */
         @media (orientation: portrait) {
-            /* Viền đối xứng hoàn hảo trên máy dọc */
             #frame-wrapper { top: 35px; bottom: 35px; left: 35px; right: 35px; } 
-            
             .hours-style { font-size: 7.5rem; }
             .minutes-style { font-size: 7.5rem; }
             #date-solar-top { font-size: 1.7rem; }
@@ -114,7 +104,6 @@
             #date-lunar-corner { font-size: 1.4rem; }
             #event-env-corner { font-size: 1.1rem; }
 
-            /* Chế độ đêm DỌC: Xếp 2 dòng gọn gàng, siêu to */
             .night-active #night-clock-box { flex-direction: column; }
             .night-hours, .night-minutes { font-size: 42vmin; margin: 0; line-height: 0.85; letter-spacing: -2vmin; }
         }
@@ -138,14 +127,23 @@
         </div>
         <div class="overlay"></div>
 
-        <div id="info-container"><span class="hours-style" id="hr-node">00</span><span class="minutes-style" id="min-node">00</span><div id="date-solar-top">Th 0 00/00</div></div>
+        <div id="info-container">
+            <span class="hours-style" id="hr-node" ontouchstart="handleShortcut(event, 'night')" onclick="handleShortcut(event, 'night')">00</span>
+            <span class="minutes-style" id="min-node" ontouchstart="handleShortcut(event, 'chime')" onclick="handleShortcut(event, 'chime')">00</span>
+            <div id="date-solar-top">Th 0 00/00</div>
+        </div>
         
-        <div id="night-clock-box"><span class="night-hours" id="night-hr-node">00:</span><span class="night-minutes" id="night-min-node">00</span></div>
+        <div id="night-clock-box">
+            <span class="night-hours" id="night-hr-node" ontouchstart="handleShortcut(event, 'night')" onclick="handleShortcut(event, 'night')">00:</span>
+            <span class="night-minutes" id="night-min-node" ontouchstart="handleShortcut(event, 'chime')" onclick="handleShortcut(event, 'chime')">00</span>
+        </div>
 
         <div id="right-event-container"></div>
         <div id="bottom-container">
             <div id="bottom-left">
-                <div id="temp-wrapper"><span id="weather-val">--</span><span class="degree-symbol">°</span></div>
+                <div id="temp-wrapper" ontouchstart="handleShortcut(event, 'next')" onclick="handleShortcut(event, 'next')">
+                    <span id="weather-val">--</span><span class="degree-symbol">°</span>
+                </div>
                 <div id="quote-row">Xin chào, đang kết nối dữ liệu...</div>
             </div>
             <div id="bottom-right">
@@ -156,14 +154,10 @@
         
         <div id="control-panel">
             <div class="panel-label">Thời gian đổi ảnh:</div>
-            <button class="btn-interactive speed-btn" ontouchstart="handleBtn(event, 'speed', 1)" onclick="handleBtn(event, 'speed', 1)" id="speed-1">1 P</button>
-            <button class="btn-interactive speed-btn" ontouchstart="handleBtn(event, 'speed', 2)" onclick="handleBtn(event, 'speed', 2)" id="speed-2">3 P</button>
-            <button class="btn-interactive speed-btn" ontouchstart="handleBtn(event, 'speed', 3)" onclick="handleBtn(event, 'speed', 3)" id="speed-3">5 P</button>
-            <button class="btn-interactive speed-btn" ontouchstart="handleBtn(event, 'speed', 4)" onclick="handleBtn(event, 'speed', 4)" id="speed-4">10 P</button>
-            <button class="btn-interactive" id="speed-next" ontouchstart="handleBtn(event, 'next')" onclick="handleBtn(event, 'next')">⏭️ NEXT</button>
-            <div class="action-divider"></div>
-            <button class="btn-interactive action-btn" id="night-btn" ontouchstart="handleBtn(event, 'night')" onclick="handleBtn(event, 'night')">Bật Đêm 🌙</button>
-            <button class="btn-interactive action-btn" id="chime-btn" ontouchstart="handleBtn(event, 'chime')" onclick="handleBtn(event, 'chime')">Chuông 🔔</button>
+            <button class="btn-interactive speed-btn" ontouchstart="handleBtn(event, 'speed', 1)" onclick="handleBtn(event, 'speed', 1)" id="speed-1">3 P</button>
+            <button class="btn-interactive speed-btn" ontouchstart="handleBtn(event, 'speed', 2)" onclick="handleBtn(event, 'speed', 2)" id="speed-2">5 P</button>
+            <button class="btn-interactive speed-btn" ontouchstart="handleBtn(event, 'speed', 3)" onclick="handleBtn(event, 'speed', 3)" id="speed-3">10 P</button>
+            <button class="btn-interactive speed-btn" ontouchstart="handleBtn(event, 'speed', 4)" onclick="handleBtn(event, 'speed', 4)" id="speed-4">15 P</button>
         </div>
     </div>
 
@@ -176,7 +170,10 @@
         var audioCtx = null; var isGroup1Active = true; var audioUnlocked = false; var forceNightMode = null; 
         var globalAQI = "--", globalHum = "--", globalRain = "--", globalSunrise = "--", globalSunset = "--";
         var envDisplayIndex = 0; var burnInX1 = 0, burnInY1 = 0;
-        var stepSeconds = { 1: 60, 2: 180, 3: 300, 4: 600 }; var currentActiveMode = 2; 
+        
+        // 🛡️ CẬP NHẬT MỐC THỜI GIAN THEO YÊU CẦU: 3P, 5P, 10P, 15P
+        var stepSeconds = { 1: 180, 2: 300, 3: 600, 4: 900 }; 
+        var currentActiveMode = 2; // Mặc định là 5 Phút (mốc số 2)
 
         var birthdays = [
             {m: 2, d: 2, name: "Mẹ Kiền"}, {m: 6, d: 12, name: "Bà nội"}, {m: 11, d: 12, name: "Ông nội"},
@@ -203,7 +200,7 @@
             { type: 's', m: 4, d: 30, text: "Ngày Giải phóng miền Nam thống nhất đất nước 🇻🇳" },
             { type: 's', m: 5, d: 1, text: "Ngày Quốc tế Lao động" },
             { type: 'l', m: 4, d: 15, text: "Đại lễ Phật Đản rợp cờ hoa chốn thiền môn" },
-            { type: 'l', m: 4, d: 23, text: "Lễ hội Vía Bà Chúa Xứ núi Sam (An Giang)" },
+            { type: 'l', m: 4, d: 23, text: "Lễ hội Vía Bà Chúa Xứ núi Sam" },
             { type: 's', m: 6, d: 1, text: "Ngày Quốc tế Thiếu nhi" },
             { type: 's', m: 6, d: 28, text: "Ngày Gia đình Việt Nam" },
             { type: 'l', m: 5, d: 5, text: "Tết Đoan Ngọ (Diệt sâu bọ)" },
@@ -323,40 +320,50 @@
             playNote(293.66, t + 2.5, 3.5, 'sine'); playNote(587.33, t + 2.8, 3.0, 'sine'); playNote(739.99, t + 3.1, 3.0, 'sine'); playNote(880.00, t + 3.4, 4.5, 'sine');
         }
 
-        // 🛡️ BỘ BẮT SỰ KIỆN FAST-TAP ĐỂ NÚT HOẠT ĐỘNG TRƠN TRU TỨC THÌ TRÊN IOS 10
-        function handleBtn(e, action, val) {
-            e.preventDefault();  // Chặn sự kiện click kép (loại bỏ độ trễ 300ms của iOS cũ)
-            e.stopPropagation(); // Không cho sự kiện lan ra ngoài làm tắt menu
+        // 🛡️ BỘ BẮT SỰ KIỆN SHORTCUT TÀNG HÌNH TRÊN MÀN HÌNH
+        function handleShortcut(e, action) {
+            e.preventDefault(); 
+            e.stopPropagation(); 
             
-            if (action === 'speed') { changeIntervalMode(val); }
-            else if (action === 'next') { forceNextSlide(); }
-            else if (action === 'night') { toggleNightMode(); }
+            if (!audioUnlocked) {
+                try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); var osc = audioCtx.createOscillator(); osc.connect(audioCtx.destination); osc.start(0); osc.stop(0.001); audioUnlocked = true; } catch (err) {}
+            }
+            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+
+            if (action === 'night') { toggleNightMode(); }
             else if (action === 'chime') { forcePlayChime(); }
+            else if (action === 'next') { forceNextSlide(); }
+        }
+
+        function handleBtn(e, action, val) {
+            e.preventDefault(); 
+            e.stopPropagation(); 
+            if (action === 'speed') { changeIntervalMode(val); }
         }
 
         function forcePlayChime() { if (!audioUnlocked) { activateControlsWrapper(); } setTimeout(function() { playSolemnChime(); }, 100); }
 
         function activateControlsWrapper(e) {
-            if (e) {
-                // Tránh việc chạm vào bảng điều khiển làm load lại / tắt menu nếu chạm lệch
-                if (e.target.closest('#control-panel')) return;
-            }
+            if (e && e.target.closest('#control-panel')) return;
+            
             if (!audioUnlocked) {
                 try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); var osc = audioCtx.createOscillator(); osc.connect(audioCtx.destination); osc.start(0); osc.stop(0.001); audioUnlocked = true; } catch (err) {}
             }
             if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-            var panel = document.getElementById('control-panel'); panel.classList.add('active-panel');
-            if (hideTimeout) clearTimeout(hideTimeout); hideTimeout = setTimeout(function() { panel.classList.remove('active-panel'); }, 4000); 
+            
+            var panel = document.getElementById('control-panel'); 
+            panel.classList.add('active-panel');
+            if (hideTimeout) clearTimeout(hideTimeout); 
+            hideTimeout = setTimeout(function() { panel.classList.remove('active-panel'); }, 4000); 
         }
 
         function toggleNightMode() {
-            var body = document.body; var btn = document.getElementById('night-btn');
-            if (body.classList.contains('night-active')) { forceNightMode = false; body.classList.remove('night-active'); btn.innerText = "Bật Đêm 🌙"; } 
-            else { forceNightMode = true; body.classList.add('night-active'); btn.innerText = "Tắt Đêm ☀️"; }
+            var body = document.body; 
+            if (body.classList.contains('night-active')) { forceNightMode = false; body.classList.remove('night-active'); } 
+            else { forceNightMode = true; body.classList.add('night-active'); }
             applyDynamicPositions();
         }
 
-        // 🛡️ CHỐNG CHÁY MÀN HÌNH MỀM MẠI HƠN
         function runAntiBurnIn() { burnInX1 = Math.floor(Math.random() * 16) - 8; burnInY1 = Math.floor(Math.random() * 16) - 8; applyDynamicPositions(); }
         setInterval(runAntiBurnIn, 60000); 
 
@@ -366,7 +373,6 @@
             var infoNode = document.getElementById('info-container');
             
             if (isNight) { 
-                // Căn giữa 100% bằng CSS top/left 50%, kết hợp translate Calc để bù đắp burnIn
                 clockBox.style.transform = "translate(calc(-50% + " + burnInX1 + "px), calc(-50% + " + burnInY1 + "px))"; 
             } else { 
                 clockBox.style.transform = "none";
@@ -452,16 +458,14 @@
 
         function updateClock() {
             var now = new Date(); var hours = now.getHours(); var minutes = now.getMinutes(); var seconds = now.getSeconds();
-            if (hours === 5 && minutes === 0) { forceNightMode = null; document.getElementById('night-btn').innerText = "Bật Đêm 🌙"; }
+            if (hours === 5 && minutes === 0) { forceNightMode = null; }
             if (hours === 5 && minutes === 0 && seconds === 0) { syncDriveData(); }
 
             var hrStr = hours < 10 ? '0' + hours : hours; var minStr = minutes < 10 ? '0' + minutes : minutes;
             
-            // Cập nhật đồng hồ ngày
             document.getElementById('hr-node').innerText = hrStr;
             document.getElementById('min-node').innerText = minStr;
             
-            // Cập nhật đồng hồ đêm (xoay ngang hiển thị 1 dòng, xoay dọc tự động 2 dòng bằng flex column trong CSS)
             if (window.innerWidth > window.innerHeight) {
                 document.getElementById('night-hr-node').innerText = hrStr + ":";
             } else {
@@ -590,7 +594,6 @@
             xhrDrive.send();
         }
 
-        // 🛡️ CHÍNH SÁCH ẢNH HOÀN MỸ CHO IOS 10
         function updateImageDisplayMechanism(imgElement, groupElement) {
             var isScreenLandscape = (window.innerWidth > window.innerHeight);
             var isImageLandscape = (imgElement.naturalWidth > imgElement.naturalHeight);
@@ -599,14 +602,13 @@
             groupElement.classList.add('show-blur');
 
             if (isScreenLandscape) {
-                if (isImageLandscape) { imgElement.classList.add('fit-cover'); } // Ngang trên Ngang -> Cover (Tràn viền cắt dư)
-                else { imgElement.classList.add('fit-contain'); } // Dọc trên Ngang -> Contain (Lọt giữa bù mờ)
+                if (isImageLandscape) { imgElement.classList.add('fit-cover'); } 
+                else { imgElement.classList.add('fit-contain'); } 
             } else {
-                if (!isImageLandscape) { imgElement.classList.add('fit-cover'); } // Dọc trên Dọc -> Cover (Tràn viền cắt dư)
-                else { imgElement.classList.add('fit-contain'); } // Ngang trên Dọc -> Contain (Lọt giữa bù mờ)
+                if (!isImageLandscape) { imgElement.classList.add('fit-cover'); } 
+                else { imgElement.classList.add('fit-contain'); } 
             }
             
-            // Fix text cho đồng hồ đêm khi xoay
             var hrStr = document.getElementById('hr-node').innerText;
             if (isScreenLandscape) { document.getElementById('night-hr-node').innerText = hrStr + ":"; } 
             else { document.getElementById('night-hr-node').innerText = hrStr; }
@@ -647,7 +649,7 @@
 
         function changeIntervalMode(modeVal) {
             currentActiveMode = modeVal; var seconds = stepSeconds[modeVal]; var btns = document.querySelectorAll('.speed-btn');
-            for (var i = 0; i < btns.length; i++) { if (parseInt(btns[i].dataset.speed) === modeVal) btns[i].classList.add('active'); else btns[i].classList.remove('active'); }
+            for (var i = 0; i < btns.length; i++) { if (parseInt(btns[i].id.split('-')[1]) === modeVal) btns[i].classList.add('active'); else btns[i].classList.remove('active'); }
             if (slideInterval) clearInterval(slideInterval); slideInterval = setInterval(goToNextSlide, seconds * 1000);
         }
 
