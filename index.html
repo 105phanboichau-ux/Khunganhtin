@@ -8,7 +8,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="referrer" content="no-referrer">
     
-    <title>Khung Ảnh Số Thông Minh - Phiên Bản Hoàn Hảo</title>
+    <title>Khung Ảnh Số Thông Minh - V56</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,12 +22,10 @@
         .slide-group { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 3s ease-in-out; display: flex; align-items: center; justify-content: center; }
         .slide-group.active { opacity: 1; z-index: 2; }
         
-        /* 🛡️ CƠ CHẾ HIỂN THỊ ẢNH KHÓA CHẶT TRÊN iOS 10 */
+        /* CƠ CHẾ HIỂN THỊ ẢNH KHÓA CHẶT TRÊN iOS 10 */
         .background-blur { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover !important; -webkit-filter: blur(40px) brightness(0.85); filter: blur(40px) brightness(0.85); transform: scale(1.3); z-index: 1; display: none; }
         .foreground-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; flex-shrink: 0; -webkit-filter: drop-shadow(0px 15px 35px rgba(0,0,0,0.6)); filter: drop-shadow(0px 15px 35px rgba(0,0,0,0.6)); transition: all 0.5s ease; }
         .slide-group.show-blur .background-blur { display: block; }
-        
-        /* 2 Lệnh ma thuật để ép Safari cắt/giữ ảnh chính xác */
         .fit-cover { object-fit: cover !important; width: 100% !important; height: 100% !important; }
         .fit-contain { object-fit: contain !important; width: 100% !important; height: 100% !important; }
 
@@ -62,51 +60,53 @@
         #date-lunar-corner { font-size: 1.6rem; font-weight: 700; color: #F4B41A; letter-spacing: 0.5px; }
         #event-env-corner { font-size: 1.25rem; font-weight: 500; color: #ffffff; line-height: 1.4; opacity: 0.95; }
 
-        /* BẢNG ĐIỀU KHIỂN - TĂNG ĐỘ NHẠY */
-        #control-panel { position: absolute; top: 20px; right: 20px; z-index: 10; background: rgba(0, 0, 0, 0.75); padding: 16px; border-radius: 8px; color: #fff; font-size: 0.85rem; backdrop-filter: blur(5px); opacity: 0; pointer-events: none; transition: opacity 0.3s ease; display: flex; flex-direction: column; gap: 12px; }
+        /* 🛡️ BẢNG ĐIỀU KHIỂN - CHUYỂN RA GIỮA LỀ PHẢI, DẠNG LƯỚI 2 CỘT GỌN GÀNG */
+        #control-panel { 
+            position: absolute; top: 50%; right: 20px; transform: translateY(-50%); 
+            z-index: 10; background: rgba(0, 0, 0, 0.75); padding: 18px; border-radius: 12px; 
+            color: #fff; font-size: 0.85rem; backdrop-filter: blur(5px); opacity: 0; 
+            pointer-events: none; transition: opacity 0.3s ease; 
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; justify-items: center; width: 220px;
+        }
         #control-panel.active-panel { opacity: 1; pointer-events: auto; }
-        .panel-label { font-weight: 600; font-size: 0.9rem; color: #bbb; margin-bottom: 2px; }
-        .speed-btn-group { display: flex; gap: 8px; }
-        .speed-btn, #speed-next { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); color: #fff; padding: 10px 16px; font-size: 0.9rem; border-radius: 6px; cursor: pointer; font-weight: 500; transition: all 0.2s ease; outline: none; }
-        .speed-btn.active { background: #F4B41A !important; border-color: #F4B41A !important; color: #000 !important; font-weight: bold; }
-        #speed-next { background: rgba(244, 180, 26, 0.2); border-color: #F4B41A; color: #F4B41A; }
-        #speed-next:active { background: #F4B41A; color: #000; }
-        .action-btn-group { display: flex; gap: 10px; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 10px; }
-        .action-btn { flex: 1; background: rgba(244, 180, 26, 0.2); border: 1px solid #F4B41A; color: #F4B41A; padding: 10px 16px; font-size: 0.9rem; border-radius: 6px; cursor: pointer; font-weight: 600; text-align: center; outline: none; }
-        .action-btn:active { background: #F4B41A; color: #000; }
-
-        #next-btn { position: absolute; bottom: 85px; right: 35px; z-index: 10; padding: 8px; display: flex; align-items: center; justify-content: center; opacity: 0.15; transition: opacity 0.3s; cursor: pointer; }
-        #next-btn:active { opacity: 0.8; }
+        .panel-label { grid-column: span 2; font-weight: 600; font-size: 0.95rem; color: #bbb; margin-bottom: 2px; text-align: center; }
         
-        /* 🛡️ CHẾ ĐỘ BAN ĐÊM (CÂN BẰNG NGANG, 100% KHÔNG BỊ CẮT) */
+        .speed-btn { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); color: #fff; padding: 12px 0; width: 100%; font-size: 0.95rem; border-radius: 6px; cursor: pointer; font-weight: 500; transition: all 0.2s ease; outline: none; }
+        .speed-btn.active { background: #F4B41A !important; border-color: #F4B41A !important; color: #000 !important; font-weight: bold; }
+        
+        #speed-next { grid-column: span 2; width: 100%; background: rgba(244, 180, 26, 0.2); border: 1px solid #F4B41A; color: #F4B41A; padding: 12px 0; font-size: 1rem; border-radius: 6px; cursor: pointer; font-weight: 600; outline: none; }
+        #speed-next:active { background: #F4B41A; color: #000; }
+        
+        .action-divider { grid-column: span 2; width: 100%; height: 1px; background: rgba(255,255,255,0.15); margin: 4px 0; }
+        
+        .action-btn { background: rgba(244, 180, 26, 0.2); border: 1px solid #F4B41A; color: #F4B41A; padding: 12px 0; width: 100%; font-size: 0.9rem; border-radius: 6px; cursor: pointer; font-weight: 600; text-align: center; outline: none; }
+        .action-btn:active { background: #F4B41A; color: #000; }
+        
+        /* CHẾ ĐỘ BAN ĐÊM - ĐỒNG HỒ KHỔNG LỒ TĂNG 70% KÍCH THƯỚC */
         .night-active { background-color: #000000 !important; } 
-        .night-active #photo-container, .night-active #bottom-container, .night-active #date-solar-top, .night-active #next-btn, .night-active #right-event-container { display: none !important; }
+        .night-active #photo-container, .night-active #bottom-container, .night-active #date-solar-top, .night-active #right-event-container { display: none !important; }
         .night-active #frame-wrapper { background-color: #000000 !important; box-shadow: none !important; border-color: transparent !important; }
         .night-active #info-container { 
             width: 100vw !important; height: 100vh !important; 
-            display: flex !important; flex-direction: row !important; /* HIỂN THỊ DẠNG NGANG */
+            display: flex !important; flex-direction: row !important; /* DẠNG NGANG */
             justify-content: center !important; align-items: center !important; 
             top: 0 !important; left: 0 !important; transform: none !important; text-shadow: none !important; 
         }
-        /* Dùng vmin: 28% của cạnh nhỏ nhất màn hình -> luôn lọt thỏm an toàn */
+        /* PHÓNG TO 46vmin ĐỂ SIÊU TO MÀ VẪN LỌT KHUNG AN TOÀN */
         .night-active .hours-style, .night-active .minutes-style { 
-            font-size: 28vmin !important; color: #ff9500 !important; 
+            font-size: 46vmin !important; color: #ff9500 !important; 
             margin: 0 !important; padding: 0 !important;
-            letter-spacing: -1vmin !important; line-height: 1 !important; 
+            letter-spacing: -2vmin !important; line-height: 1 !important; 
         }
 
         /* 🛡️ TỐI ƯU CỤ THỂ CHỈ DÀNH CHO MÀN HÌNH DỌC (PORTRAIT) */
         @media (orientation: portrait) {
             #frame-wrapper { top: 35px; left: 30px; right: 30px; bottom: 35px; } 
-            
-            /* Giữ nguyên độ to của top */
             .hours-style { font-size: 7.5rem; }
             .minutes-style { font-size: 7.5rem; }
             #date-solar-top { font-size: 1.7rem; }
             .event-header { font-size: 1.1rem; }
             .event-item { font-size: 1.25rem; }
-
-            /* Chỉ thu nhỏ phần đáy để không chèn lên nhau */
             #weather-val { font-size: 3.2rem; }
             .degree-symbol { font-size: 1.5rem; }
             #quote-row { font-size: 1.1rem; }
@@ -148,14 +148,14 @@
         
         <div id="control-panel" onclick="event.stopPropagation();" ontouchstart="event.stopPropagation();">
             <div class="panel-label">Thời gian đổi ảnh:</div>
-            <div class="speed-btn-group">
-                <button class="speed-btn" id="speed-1" onclick="changeIntervalMode(1)">1 P</button>
-                <button class="speed-btn" id="speed-2" onclick="changeIntervalMode(2)">3 P</button>
-                <button class="speed-btn" id="speed-3" onclick="changeIntervalMode(3)">5 P</button>
-                <button class="speed-btn" id="speed-4" onclick="changeIntervalMode(4)">10 P</button>
-                <button id="speed-next" onclick="forceNextSlide(event)">NEXT</button>
-            </div>
-            <div class="action-btn-group"><button class="action-btn" id="night-btn" onclick="toggleNightMode()">Bật Đêm 🌙</button><button class="action-btn" onclick="forcePlayChime()">Thử chuông 🔔</button></div>
+            <button class="speed-btn" id="speed-1" onclick="changeIntervalMode(1)">1 P</button>
+            <button class="speed-btn" id="speed-2" onclick="changeIntervalMode(2)">3 P</button>
+            <button class="speed-btn" id="speed-3" onclick="changeIntervalMode(3)">5 P</button>
+            <button class="speed-btn" id="speed-4" onclick="changeIntervalMode(4)">10 P</button>
+            <button id="speed-next" onclick="forceNextSlide(event)">⏭️ NEXT</button>
+            <div class="action-divider"></div>
+            <button class="action-btn" id="night-btn" onclick="toggleNightMode()">Bật Đêm 🌙</button>
+            <button class="action-btn" onclick="forcePlayChime()">Chuông 🔔</button>
         </div>
     </div>
 
@@ -332,18 +332,16 @@
             applyDynamicPositions();
         }
 
-        function runAntiBurnIn() { burnInX1 = Math.floor(Math.random() * 24) - 12; burnInY1 = Math.floor(Math.random() * 24) - 12; burnInX2 = Math.floor(Math.random() * 24) - 12; applyDynamicPositions(); }
-        setInterval(runAntiBurnIn, 60000); 
-
         function applyDynamicPositions() {
             var isNight = document.body.classList.contains('night-active');
             var infoNode = document.getElementById('info-container'); var bottomNode = document.getElementById('bottom-container');
+            // GIỮ CHUẨN CĂN GIỮA ĐỒNG HỒ CHO BAN ĐÊM
             if (isNight) { infoNode.style.top = "50%"; infoNode.style.left = "50%"; infoNode.style.transform = "translate(-50%, -50%)"; } 
-            else { infoNode.style.top = "35px"; infoNode.style.left = "35px"; infoNode.style.transform = "translate(" + burnInX1 + "px, " + burnInY1 + "px)"; }
-            if (bottomNode) bottomNode.style.transform = "translate(" + burnInX2 + "px, 0px)";
+            else { infoNode.style.top = "35px"; infoNode.style.left = "35px"; infoNode.style.transform = "translate(0px, 0px)"; }
+            if (bottomNode) bottomNode.style.transform = "translate(0px, 0px)";
         }
 
-        // 🛡️ HOA SEN 5 CÁNH XÒE RA NGHỆ THUẬT HƠN
+        // 🛡️ HOA SEN VECTOR 5 CÁNH
         var lotusIcon = '<svg width="26" height="26" viewBox="0 0 24 24" fill="#F4B41A" style="display:inline-block; vertical-align:-5px; margin-left:8px;"><path d="M12 22C12 22 15 14 15 10C15 6 12 2 12 2C12 2 9 6 9 10C9 14 12 22 12 22Z"/><path d="M12 22C12 22 19 16 19 11C19 7 15 6 15 10C15 14 12 22 12 22Z" opacity="0.85"/><path d="M12 22C12 22 5 16 5 11C5 7 9 6 9 10C9 14 12 22 12 22Z" opacity="0.85"/><path d="M12 22C12 22 24 18 24 13C24 9 19 8 19 12C19 16 12 22 12 22Z" opacity="0.6"/><path d="M12 22C12 22 0 18 0 13C0 9 5 8 5 12C5 16 12 22 12 22Z" opacity="0.6"/></svg>';
 
         function renderRightEvents(sMonth, lMonth, sDay, lDay) {
@@ -353,7 +351,6 @@
             currentBirths.sort(function(a, b) { return a.d - b.d; });
 
             if (currentBirths.length > 0) {
-                // 🛡️ ĐẨY BÁNH SINH NHẬT VÀ HOA SEN THÀNH 1 CỘT BÊN PHẢI CÙNG NHAU
                 html += '<div class="event-header">SINH NHẬT <span style="font-size:1.3rem; margin-left:8px;">🎂</span></div>';
                 for (var i = 0; i < currentBirths.length; i++) {
                     var birth = currentBirths[i]; var diff = birth.d - sDay; var cls = "event-item"; var txt = birth.d + "/" + birth.m + " " + birth.name;
@@ -511,7 +508,6 @@
             var activeSpecialties = [];
             for(var s=0; s<specialtiesData.length; s++) { if(specialtiesData[s].m === currentSolarMonth || specialtiesData[s].m === 0) activeSpecialties.push(specialtiesData[s].text); }
             
-            // 🛡️ XÚC XẮC THÔNG MINH HIỂN THỊ LỄ HỘI 7 NGÀY TỚI
             var activeFestivalsSoon = [];
             for(var f=0; f<festivalsData.length; f++) {
                 var fest = festivalsData[f];
