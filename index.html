@@ -7,13 +7,10 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="referrer" content="no-referrer">
-    
-    <title>Khung Ảnh Số Thông Minh - V61</title>
-    
+    <title>Khung Ảnh Số Thông Minh - V62 Pro</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Tourney:wght@600&display=swap" rel="stylesheet">
-
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body, html { width: 100%; height: 100%; overflow: hidden; background-color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; cursor: pointer; transition: background-color 1s ease; }
@@ -21,21 +18,17 @@
         #photo-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
         .slide-group { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 3s ease-in-out; display: block; }
         .slide-group.active { opacity: 1; z-index: 2; }
-        
         .background-blur { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover !important; -webkit-filter: blur(40px) brightness(0.85); filter: blur(40px) brightness(0.85); transform: scale(1.3); z-index: 1; display: none; }
         .foreground-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; flex-shrink: 0; -webkit-filter: drop-shadow(0px 15px 35px rgba(0,0,0,0.6)); filter: drop-shadow(0px 15px 35px rgba(0,0,0,0.6)); transition: all 0.5s ease; }
         .slide-group.show-blur .background-blur { display: block; }
         .fit-cover { object-fit: cover !important; width: 100% !important; height: 100% !important; }
         .fit-contain { object-fit: contain !important; width: 100% !important; height: 100% !important; }
-
         .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.15); z-index: 3; pointer-events: none; }
-
         #info-container { position: absolute; top: 35px; left: 35px; z-index: 4; text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.8); display: flex; flex-direction: column; align-items: center; transition: transform 0.8s ease-in-out; }
         .hours-style { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #F4B41A; font-size: 7.5rem; letter-spacing: -2px; display: block; line-height: 0.82; }
         .minutes-style { font-family: 'Tourney', sans-serif; font-weight: 600; color: #ffffff; font-size: 7.5rem; letter-spacing: -1px; display: block; margin-top: -5px; line-height: 0.82; }
         #date-solar-top { font-size: 1.7rem; font-weight: 700; color: #ffffff; margin-top: 14px; white-space: nowrap; }
         .highlight-yellow { color: #F4B41A; font-weight: 700; }
-
         #right-event-container { position: absolute; top: 35px; right: 35px; z-index: 4; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; max-width: 350px; text-shadow: 0px 2px 10px rgba(0,0,0,0.95); }
         .event-header { font-size: 1.1rem; color: #F4B41A; font-weight: 700; text-align: right; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; display: flex; align-items: center; justify-content: flex-end; }
         .event-item { font-size: 1.25rem; color: rgba(255, 255, 255, 0.9); font-weight: 500; text-align: right; padding: 3px 10px; border-radius: 4px; background: rgba(0, 0, 0, 0.35); margin-bottom: 2px; }
@@ -45,7 +38,6 @@
         .event-today-death { color: #ff9500 !important; font-weight: 700; font-size: 1.35rem; background: rgba(0, 0, 0, 0.7); }
         @-webkit-keyframes pulseGlow { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
         @keyframes pulseGlow { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
-
         #bottom-container { position: absolute; bottom: 30px; left: 35px; right: 35px; z-index: 4; display: flex; flex-direction: row; justify-content: space-between; align-items: flex-end; text-shadow: 0px 3px 12px rgba(0, 0, 0, 0.95); transition: transform 0.5s ease; }
         #bottom-left { display: flex; flex-direction: row; align-items: center; gap: 20px; width: 60%; }
         #temp-wrapper { position: relative; display: flex; align-items: center; justify-content: center; flex-shrink: 0; min-width: 90px; padding-right: 20px; }
@@ -55,23 +47,19 @@
         #bottom-right { display: flex; flex-direction: column; align-items: flex-end; text-align: right; max-width: 40%; gap: 6px; }
         #date-lunar-corner { font-size: 1.6rem; font-weight: 700; color: #F4B41A; letter-spacing: 0.5px; }
         #event-env-corner { font-size: 1.25rem; font-weight: 500; color: #ffffff; line-height: 1.4; opacity: 0.95; }
-
         #control-panel { position: absolute; top: 50%; right: 20px; transform: translateY(-50%); z-index: 999; background: rgba(0, 0, 0, 0.85); padding: 18px; border-radius: 12px; color: #fff; font-size: 0.85rem; backdrop-filter: blur(5px); opacity: 0; pointer-events: none; transition: opacity 0.3s ease; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; justify-items: center; width: 220px; }
         #control-panel.active-panel { opacity: 1; pointer-events: auto; }
         .panel-label { grid-column: span 2; font-weight: 600; font-size: 0.95rem; color: #bbb; margin-bottom: 4px; text-align: center; }
         .btn-interactive { -webkit-tap-highlight-color: transparent; outline: none; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 6px; cursor: pointer; transition: background 0.1s; }
         .speed-btn { background: rgba(255, 255, 255, 0.15); color: #fff; padding: 14px 0; width: 100%; font-size: 1rem; font-weight: 600; }
         .speed-btn.active { background: #F4B41A !important; border-color: #F4B41A !important; color: #000 !important; font-weight: bold; }
-        
         #night-clock-box { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: none; z-index: 4; text-shadow: none; }
         .night-active { background-color: #000000 !important; } 
         .night-active #photo-container, .night-active #bottom-container, .night-active #date-solar-top, .night-active #right-event-container, .night-active #info-container { display: none !important; }
         .night-active #frame-wrapper { background-color: #000000 !important; box-shadow: none !important; border-color: transparent !important; }
         .night-active #night-clock-box { display: flex; align-items: center; justify-content: center; flex-direction: row; }
-        
         .night-hours, .night-minutes { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #ff9500; font-size: 46vmin; line-height: 0.9; margin: 0 1vmin; letter-spacing: -2vmin; }
         .night-minutes { font-family: 'Tourney', sans-serif; font-weight: 600; }
-
         @media (orientation: portrait) {
             #frame-wrapper { top: 50px; bottom: 50px; left: 35px; right: 35px; } 
             .hours-style { font-size: 7.5rem; } .minutes-style { font-size: 7.5rem; } #date-solar-top { font-size: 1.7rem; }
@@ -81,51 +69,33 @@
             .night-active #night-clock-box { flex-direction: column; }
             .night-hours, .night-minutes { font-size: 42vmin; margin: 0; line-height: 0.85; letter-spacing: -2vmin; }
         }
-
-        @media (max-width: 480px) {
-            html { font-size: 9.5px; } 
-            #frame-wrapper { top: 15px; left: 15px; right: 15px; bottom: 15px; } 
-            #info-container { top: 20px; left: 15px; } 
-            #bottom-container { flex-direction: column; align-items: flex-start; bottom: 15px; left: 15px; right: 15px; gap: 15px; }
-            #bottom-left, #bottom-right { max-width: 100%; width: 100%; text-align: left; align-items: flex-start; }
-            #right-event-container { display: none !important; }
-        }
     </style>
 </head>
 <body ontouchstart="activateControlsWrapper(event)" onclick="activateControlsWrapper(event)">
 
     <div id="frame-wrapper">
         <div id="photo-container">
-            <div id="group1" class="slide-group active"><img id="bg1" class="background-blur" alt="" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" referrerpolicy="no-referrer"><img id="fg1" class="foreground-image" alt="" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" referrerpolicy="no-referrer"></div>
-            <div id="group2" class="slide-group"><img id="bg2" class="background-blur" alt="" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" referrerpolicy="no-referrer"><img id="fg2" class="foreground-image" alt="" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" referrerpolicy="no-referrer"></div>
+            <div id="group1" class="slide-group active"><img id="bg1" class="background-blur"><img id="fg1" class="foreground-image"></div>
+            <div id="group2" class="slide-group"><img id="bg2" class="background-blur"><img id="fg2" class="foreground-image"></div>
         </div>
         <div class="overlay"></div>
-
         <div id="info-container">
             <span class="hours-style" id="hr-node" ontouchstart="handleShortcut(event, 'night')" onclick="handleShortcut(event, 'night')">00</span>
             <span class="minutes-style" id="min-node" ontouchstart="handleShortcut(event, 'chime')" onclick="handleShortcut(event, 'chime')">00</span>
             <div id="date-solar-top">Th 0 00/00</div>
         </div>
-        
         <div id="night-clock-box">
             <span class="night-hours" id="night-hr-node" ontouchstart="handleShortcut(event, 'night')" onclick="handleShortcut(event, 'night')">00:</span>
             <span class="night-minutes" id="night-min-node" ontouchstart="handleShortcut(event, 'chime')" onclick="handleShortcut(event, 'chime')">00</span>
         </div>
-
         <div id="right-event-container"></div>
         <div id="bottom-container">
             <div id="bottom-left">
-                <div id="temp-wrapper" ontouchstart="handleShortcut(event, 'next')" onclick="handleShortcut(event, 'next')">
-                    <span id="weather-val">--</span><span class="degree-symbol">°</span>
-                </div>
+                <div id="temp-wrapper" ontouchstart="handleShortcut(event, 'next')" onclick="handleShortcut(event, 'next')"><span id="weather-val">--</span><span class="degree-symbol">°</span></div>
                 <div id="quote-row">Đang tải cấu hình điện toán đám mây...</div>
             </div>
-            <div id="bottom-right">
-                <div id="date-lunar-corner">--/-- Âm Lịch</div>
-                <div id="event-env-corner">Đang tính lịch sự kiện...</div>
-            </div>
+            <div id="bottom-right"><div id="date-lunar-corner">--/-- Âm Lịch</div><div id="event-env-corner">Đang tính lịch sự kiện...</div></div>
         </div>
-        
         <div id="control-panel">
             <div class="panel-label">Thời gian đổi ảnh:</div>
             <button class="btn-interactive speed-btn" ontouchstart="handleBtn(event, 'speed', 1)" onclick="handleBtn(event, 'speed', 1)" id="speed-1">3 P</button>
@@ -136,17 +106,13 @@
     </div>
 
     <script>
-        var SECRET_ENCODED = 'QUl6YVN5REwyRm1VQzkxMUtBTnFwN3VPbnZKcU5xVHltb1R2SkxF';
-        var API_KEY = atob(SECRET_ENCODED);
-        var FOLDER_ID = '1r1WUIKwAPAnsyIh-Zot7AevEW0uEZ-Hl'; 
-
-        var images = []; var currentIndex = 0; var slideInterval; var hideTimeout;
-        var audioCtx = null; var isGroup1Active = true; var audioUnlocked = false; var forceNightMode = null; 
-        var globalAQI = "--", globalHum = "--", globalRain = "--", globalSunrise = "--", globalSunset = "--";
-        var envDisplayIndex = 0; var burnInX1 = 0, burnInY1 = 0;
+        var SECRET_ENCODED = 'QUl6YVN5REwyRm1VQzkxMUtBTnFwN3VPbnZKcU5xVHltb1R2SkxF'; var API_KEY = atob(SECRET_ENCODED); var FOLDER_ID = '1r1WUIKwAPAnsyIh-Zot7AevEW0uEZ-Hl'; 
+        var images = []; var currentIndex = 0; var slideInterval; var hideTimeout; var audioCtx = null; var isGroup1Active = true; var audioUnlocked = false; var forceNightMode = null; 
+        var globalAQI = "--", globalHum = "--", globalRain = "--", globalSunrise = "--", globalSunset = "--"; var envDisplayIndex = 0; var burnInX1 = 0, burnInY1 = 0;
         var stepSeconds = { 1: 180, 2: 300, 3: 600, 4: 900 }; var currentActiveMode = 2; 
 
-        var clientLatitude = 12.6283; var clientLongitude = 108.1464; var clientLocalName = "Ea Ktur";
+        // BIẾN CẤU HÌNH ĐỘNG KHỞI TẠO MẶC ĐỊNH
+        var clientLatitude = 12.6792; var clientLongitude = 108.0694; var clientLocalName = "Tân Lập";
         var birthdays = []; var anniversaries = []; var festivalsData = []; var specialtiesData = []; var quotePool = [];
 
         var phases = [
@@ -167,6 +133,7 @@
             [2040, 0, 14, 11, "Kỷ Mùi"], [2040, 1, 12, 12, "Kỷ Mùi"], [2040, 2, 12, 1, "Canh Thân"], [2040, 3, 13, 2, "Canh Thân"], [2040, 4, 11, 3, "Canh Thân"], [2040, 5, 11, 4, "Canh Thân"], [2040, 6, 9, 5, "Canh Thân"], [2040, 7, 9, 6, "Canh Thân"], [2040, 8, 7, 7, "Canh Thân"], [2040, 9, 6, 8, "Canh Thân"], [2040, 10, 5, 9, "Canh Thân"], [2040, 11, 4, 10, "Canh Thân"], [2040, 12, 3, 11, "Canh Thân"]
         ];
 
+        // 🛡️ TRÌNH THÔNG DỊCH ĐỌC FILE CAUHINH.TXT (NHẬN DIỆN CỤM MỚI)
         function fetchConfigFromDrive() {
             var query = encodeURIComponent("'" + FOLDER_ID + "' in parents and name = 'cauhinh.txt' and trashed = false");
             var url = 'https://www.googleapis.com/drive/v3/files?q=' + query + '&key=' + API_KEY + '&fields=files(id)';
@@ -176,8 +143,7 @@
                     var data = JSON.parse(xhr.responseText);
                     if (data.files && data.files.length > 0) { downloadConfigFile(data.files[0].id); }
                 }
-            };
-            xhr.send();
+            }; xhr.send();
         }
 
         function downloadConfigFile(fileId) {
@@ -191,6 +157,7 @@
         function parseConfigText(text) {
             var lines = text.split('\n'); var section = "";
             var tempB = [], tempA = [], tempF = [], tempS = [], tempQ = [];
+            
             for (var i = 0; i < lines.length; i++) {
                 var line = lines[i].replace('\r', '').trim();
                 if (!line || line.indexOf('#') === 0) continue;
@@ -213,7 +180,7 @@
                     var mA = line.match(/^(\d{1,2})\s*[\/]\s*(\d{1,2})\s+(.+)$/);
                     if (mA) tempA.push({d: parseInt(mA[1],10), m: parseInt(mA[2],10), name: mA[3].trim()});
                 }
-                else if (section === "[LE HOI VA NGAY LE TON GIAO]") {
+                else if (section === "[LE HOI VIET NAM]" || section === "[NGAY LE TON GIAO]" || section === "[LE HOI VA NGAY LE TON GIAO]") {
                     var mF = line.match(/^(s|l)\s*[\/]\s*(\d{1,2})\s*[\/]\s*(\d{1,2})\s+(.+)$/i);
                     if (mF) tempF.push({type: mF[1].toLowerCase(), m: parseInt(mF[2],10), d: parseInt(mF[3],10), text: mF[4].trim()});
                 }
@@ -221,32 +188,56 @@
                     var mS = line.match(/^(\d{1,2})\s+(.+)$/);
                     if (mS) tempS.push({m: parseInt(mS[1],10), text: mS[2].trim()});
                 }
-                else if (section === "[KHO DANH NGON CUOC SONG]") {
+                else if (section === "[KHO DANH NGON CUOC LIFE]" || section === "[KHO DANH NGON CUOC SONG]") {
                     tempQ.push(line);
                 }
             }
             if(tempB.length>0) birthdays = tempB; if(tempA.length>0) anniversaries = tempA;
             if(tempF.length>0) festivalsData = tempF; if(tempS.length>0) specialtiesData = tempS;
             if(tempQ.length>0) quotePool = tempQ;
+            
             updateWeatherAndAQI(); updateClock();
+        }
+
+        function playNote(freq, startTime, duration, type) {
+            if (!audioCtx) return;
+            var osc = audioCtx.createOscillator(); var gainNode = audioCtx.createGain();
+            osc.type = type || 'sine'; osc.frequency.setValueAtTime(freq, startTime);
+            gainNode.gain.setValueAtTime(0.25, startTime); gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+            osc.connect(gainNode); gainNode.connect(audioCtx.destination); osc.start(startTime); osc.stop(startTime + duration);
+        }
+
+        function playHappyBirthday() {
+            if (!audioCtx) return; if (audioCtx.state === 'suspended') audioCtx.resume();
+            var t = audioCtx.currentTime; var tempo = 0.42; 
+            playNote(261.63, t, tempo*0.8); playNote(261.63, t + tempo, tempo*0.8); playNote(293.66, t + tempo*2, tempo*1.5); playNote(261.63, t + tempo*4, tempo*1.5); playNote(349.23, t + tempo*6, tempo*1.5); playNote(329.63, t + tempo*8, tempo*3);
+            t += tempo * 11; playNote(261.63, t, tempo*0.8); playNote(261.63, t + tempo, tempo*0.8); playNote(293.66, t + tempo*2, tempo*1.5); playNote(261.63, t + tempo*4, tempo*1.5); playNote(392.00, t + tempo*6, tempo*1.5); playNote(349.23, t + tempo*8, tempo*3);
+            t += tempo * 11; playNote(261.63, t, tempo*0.8); playNote(261.63, t + tempo, tempo*0.8); playNote(523.25, t + tempo*2, tempo*1.5); playNote(440.00, t + tempo*4, tempo*1.5); playNote(349.23, t + tempo*6, tempo*1.5); playNote(329.63, t + tempo*8, tempo*1.5); playNote(293.66, t + tempo*10, tempo*3);
+            t += tempo * 13; playNote(466.16, t, tempo*0.8); playNote(466.16, t + tempo, tempo*0.8); playNote(440.00, t + tempo*2, tempo*1.5); playNote(349.23, t + tempo*4, tempo*1.5); playNote(392.00, t + tempo*6, tempo*1.5); playNote(349.23, t + tempo*8, tempo*4);
+        }
+
+        function playSolemnChime() {
+            if (!audioCtx) return; if (audioCtx.state === 'suspended') audioCtx.resume();
+            var t = audioCtx.currentTime;
+            playNote(220.00, t, 3.5, 'sine'); playNote(440.00, t + 0.2, 3.0, 'sine'); playNote(554.37, t + 0.5, 3.0, 'sine'); playNote(659.25, t + 0.8, 3.0, 'sine'); playNote(880.00, t + 1.2, 4.0, 'sine'); 
+            playNote(293.66, t + 2.5, 3.5, 'sine'); playNote(587.33, t + 2.8, 3.0, 'sine'); playNote(739.99, t + 3.1, 3.0, 'sine'); playNote(880.00, t + 3.4, 4.5, 'sine');
         }
 
         function handleShortcut(e, action) {
             e.preventDefault(); e.stopPropagation(); 
-            if (!audioUnlocked) {
-                try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); var osc = audioCtx.createOscillator(); osc.connect(audioCtx.destination); osc.start(0); osc.stop(0.001); audioUnlocked = true; } catch (err) {}
-            }
+            if (!audioUnlocked) { try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); var osc = audioCtx.createOscillator(); osc.connect(audioCtx.destination); osc.start(0); osc.stop(0.001); audioUnlocked = true; } catch (err) {} }
             if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-            if (action === 'night') { toggleNightMode(); }
-            else if (action === 'chime') { forcePlayChime(); }
-            else if (action === 'next') { forceNextSlide(); }
+            if (action === 'night') { toggleNightMode(); } else if (action === 'chime') { forcePlayChime(); } else if (action === 'next') { forceNextSlide(); }
         }
 
         function handleBtn(e, action, val) { e.preventDefault(); e.stopPropagation(); if (action === 'speed') { changeIntervalMode(val); } }
         function forceNextSlide() { goToNextSlide(); changeIntervalMode(currentActiveMode); }
+        function forcePlayChime() { if (!audioUnlocked) { activateControlsWrapper(); } setTimeout(function() { playSolemnChime(); }, 100); }
 
         function activateControlsWrapper(e) {
             if (e && e.target.closest('#control-panel')) return;
+            if (!audioUnlocked) { try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); var osc = audioCtx.createOscillator(); osc.connect(audioCtx.destination); osc.start(0); osc.stop(0.001); audioUnlocked = true; } catch (err) {} }
+            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
             var panel = document.getElementById('control-panel'); panel.classList.add('active-panel');
             if (hideTimeout) clearTimeout(hideTimeout); hideTimeout = setTimeout(function() { panel.classList.remove('active-panel'); }, 4000); 
         }
@@ -307,9 +298,7 @@
             if (hours === 5 && minutes === 0 && seconds === 0) { syncDriveData(); }
 
             var hrStr = hours < 10 ? '0' + hours : hours; var minStr = minutes < 10 ? '0' + minutes : minutes;
-            document.getElementById('hr-node').innerText = hrStr;
-            document.getElementById('min-node').innerText = minStr;
-            
+            document.getElementById('hr-node').innerText = hrStr; document.getElementById('min-node').innerText = minStr;
             if (window.innerWidth > window.innerHeight) { document.getElementById('night-hr-node').innerText = hrStr + ":"; } 
             else { document.getElementById('night-hr-node').innerText = hrStr; }
             document.getElementById('night-min-node').innerText = minStr;
@@ -353,17 +342,17 @@
             xhrWeather.send();
 
             var xhrAQI = new XMLHttpRequest();
-            xhrAQI.open('GET', 'https://air-quality-api.open-meteo.com/v1/air-quality?latitude=' + lat + '&longitude=' + lon + '&current=us_aqi', true);
+            xhrAQI.open('GET', 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon + '&current=us_aqi', true);
             xhrAQI.onerror = function() { globalAQI = "45"; };
             xhrAQI.onreadystatechange = function() {
-                if (xhrAQI.readyState === 4 && xhrAQI.status === 200) {
-                    var data = JSON.parse(xhrAQI.responseText); globalAQI = data.current.us_aqi || "45";
-                }
+                if (xhrAQI.readyState === 4 && xhrAQI.status === 200) { var data = JSON.parse(xhrAQI.responseText); globalAQI = data.current.us_aqi || "45"; }
             };
             xhrAQI.send();
         }
 
-        // 🛡️ THUẬT TOÁN XÚC XẮC THÔNG MINH HIỂN THỊ DỮ LIỆU ĐẾM NGƯỢC CHUẨN XÁC
+        // 🛡️ FORMAT HIỂN THỊ ĐẾM NGƯỢC CHUẨN MỚI
+        function getLunarDateStringRaw(d, m) { return d + "/" + m; }
+
         function updateDynamicContentBySlide() {
             var now = new Date(); var currentSolarMonth = now.getMonth() + 1; var sDay = now.getDate();
             var checkTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0); var activePhase = phases[0];
@@ -375,18 +364,18 @@
             var currentEnv = envPool[envDisplayIndex % envPool.length]; envDisplayIndex++; 
 
             // TÌM KIẾM NGÀY LỄ CẬP NHẬT GẦN NHẤT ĐỂ ĐẾM NGƯỢC ĐỘNG
-            var nextActiveFestivalText = "Sắp đến Mùng 1 Âm Lịch";
+            var nextActiveFestivalText = "Cuộc sống bình an";
             var minDiff = 365;
 
             for(var f=0; f<festivalsData.length; f++) {
                 var fest = festivalsData[f];
                 if(fest.type === 's' && fest.m === currentSolarMonth && fest.d >= sDay) {
                     var diff = fest.d - sDay;
-                    if(diff < minDiff) { minDiff = diff; nextActiveFestivalText = (diff === 0 ? "Hôm nay diễn ra: " : "Còn " + diff + " ngày đến ") + fest.text + " (" + fest.d + "/" + fest.m + ")"; }
+                    if(diff < minDiff) { minDiff = diff; nextActiveFestivalText = (diff === 0 ? "Hôm nay: " : "Còn " + diff + " ngày đến ") + fest.text + " (" + fest.d + "/" + fest.m + ")"; }
                 }
                 if(fest.type === 'l' && fest.m === currentLunarMonth && fest.d >= lDay) {
                     var diffL = fest.d - lDay;
-                    if(diffL < minDiff) { minDiff = diffL; nextActiveFestivalText = (diffL === 0 ? "Hôm nay diễn ra: " : "Còn " + diffL + " ngày đến ") + fest.text + " (" + fest.d + "/" + fest.m + " ÂL)"; }
+                    if(diffL < minDiff) { minDiff = diffL; nextActiveFestivalText = (diffL === 0 ? "Hôm nay: " : "Còn " + diffL + " ngày đến ") + fest.text + " (" + fest.d + "/" + fest.m + " Âm Lịch)"; }
                 }
             }
 
@@ -450,7 +439,7 @@
 
         function changeIntervalMode(modeVal) {
             currentActiveMode = modeVal; var seconds = stepSeconds[modeVal]; var btns = document.querySelectorAll('.speed-btn');
-            for (var i = 0; i < btns.length; i++) { if ((i + 1) === modeVal) btns[i].classList.add('active'); else btns[i].classList.remove('active'); }
+            for (var i = 0; i < btns.length; i++) { if (parseInt(btns[i].id.split('-')[1]) === modeVal) btns[i].classList.add('active'); else btns[i].classList.remove('active'); }
             if (slideInterval) clearInterval(slideInterval); slideInterval = setInterval(goToNextSlide, seconds * 1000);
         }
 
