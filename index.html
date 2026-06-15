@@ -8,7 +8,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="referrer" content="no-referrer">
     
-    <title>Khung Ảnh Số Thông Minh - V88 AI Smart Layout</title>
+    <title>Khung Ảnh Số Thông Minh - V91 Ultimate</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,14 +20,15 @@
         
         #outer-blur-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; filter: blur(45px) brightness(0.6); z-index: 0; transform: scale(1.2); }
         #white-border-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #ffffff; z-index: 1; transition: opacity 1.5s ease-in-out; }
-        
         #frame-wrapper { position: absolute; top: 45px; bottom: 45px; left: 45px; right: 45px; background-color: #000; overflow: hidden; box-shadow: 0px 15px 45px rgba(0, 0, 0, 0.15), inset 0px 0px 30px rgba(0,0,0,0.85); border: 1px solid #eaeaea; transition: all 0.5s ease; z-index: 5; }
-        #photo-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
-        .slide-group { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 3s ease-in-out; display: block; }
+        
+        #photo-container, .slide-group { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        #photo-container { z-index: 1; }
+        .slide-group { opacity: 0; transition: opacity 3s ease-in-out; display: block; }
         .slide-group.active { opacity: 1; z-index: 2; }
         
-        .background-blur { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover !important; -webkit-filter: blur(40px) brightness(0.85); filter: blur(40px) brightness(0.85); transform: scale(1.3); z-index: 1; display: none; }
-        .foreground-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; flex-shrink: 0; -webkit-filter: drop-shadow(0px 15px 35px rgba(0,0,0,0.6)); filter: drop-shadow(0px 15px 35px rgba(0,0,0,0.6)); transition: all 0.5s ease; }
+        .background-blur { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover !important; filter: blur(40px) brightness(0.85); -webkit-filter: blur(40px) brightness(0.85); transform: scale(1.3); z-index: 1; display: none; }
+        .foreground-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; flex-shrink: 0; filter: drop-shadow(0px 15px 35px rgba(0,0,0,0.6)); -webkit-filter: drop-shadow(0px 15px 35px rgba(0,0,0,0.6)); transition: all 0.5s ease; }
         .slide-group.show-blur .background-blur { display: block; }
         .fit-cover { object-fit: cover !important; width: 100% !important; height: 100% !important; }
         .fit-contain { object-fit: contain !important; width: 100% !important; height: 100% !important; }
@@ -38,7 +39,7 @@
         .tap-target { -webkit-tap-highlight-color: transparent; outline: none; border: none; background: transparent; cursor: pointer; transition: opacity 0.2s; }
         .tap-target:active { opacity: 0.6; }
 
-        /* CỘT TRÁI TRÊN (GIỜ + LỊCH) */
+        /* CỘT TRÁI TRÊN (GIỜ + LỊCH - CĂN GIỮA) */
         #info-container { position: absolute; top: 35px; left: 35px; z-index: 4; text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.6); display: flex; flex-direction: column; align-items: center; transition: transform 2s ease-in-out; width: auto; }
         #clock-flex-wrapper { display: flex; flex-direction: column; align-items: center; width: 100%; margin-left: 0; }
         .hours-style, .minutes-style { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 8rem; letter-spacing: -2px; display: block; line-height: 0.85; transition: color 0.5s, font-family 0.5s; width: 100%; text-align: center; margin-left: 0; } 
@@ -48,11 +49,10 @@
         #date-lunar-top { font-size: 1.6rem; font-weight: 700; color: #ffffff; margin-top: 4px; white-space: nowrap; text-align: center; }
         .highlight-yellow { color: #F4B41A; font-weight: 700; }
 
-        /* CỘT PHẢI TRÊN (THỜI TIẾT + NHIỆT ĐỘ) */
+        /* CỘT PHẢI TRÊN (THỜI TIẾT + NHIỆT ĐỘ - TRONG SUỐT BÁM CẠNH TRÊN) */
         #top-right-wrapper { position: absolute; top: 35px; right: 35px; z-index: 4; display: flex; flex-direction: row; align-items: flex-start; justify-content: flex-end; gap: 15px; text-shadow: 0px 2px 5px rgba(0,0,0,0.6); transition: transform 2s ease-in-out; }
         #right-env-container { display: flex; flex-direction: column; align-items: flex-end; margin-top: 12px; }
         .env-rotating-item { font-size: 1.25rem; color: rgba(255, 255, 255, 0.95); font-weight: 600; text-align: right; padding: 4px; background: transparent; white-space: nowrap; }
-
         #temp-wrapper { position: relative; display: flex; align-items: flex-start; justify-content: flex-end; flex-shrink: 0; margin-left: 0; text-align: right; margin-right: 15px; } 
         #weather-val { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #ffffff; letter-spacing: -2px; line-height: 0.82; font-size: 4.5rem; display: inline-block; }
         .degree-symbol { position: absolute; font-weight: 700; color: #ffffff; font-size: 1.8rem; top: 0; right: -20px; }
@@ -75,12 +75,19 @@
         
         .countdown-highlight { color: #F4B41A; font-weight: 700; }
         .death-highlight { color: #ff9500; font-weight: 700; }
-        .death-event-passed { color: #c4c4c4; font-weight: 500; opacity: 0.6; }
+        .death-event-passed { color: #a1a1a1; font-weight: 500; opacity: 0.6; }
 
-        /* BẢNG CÀI ĐẶT VỊ TRÍ MỚI (MODAL) */
-        #location-modal { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); padding: 25px; border-radius: 16px; border: 1px solid #F4B41A; z-index: 10001; display: none; flex-direction: column; gap: 15px; width: 320px; box-shadow: 0px 10px 40px rgba(0,0,0,0.8); }
-        #location-modal.show-modal { display: flex; }
-        .loc-title { color: #F4B41A; font-weight: 700; font-size: 1.3rem; text-align: center; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        /* BẢNG CHUNG (CÀI ĐẶT & DANH SÁCH) */
+        .modal-base { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(15px); padding: 25px; border-radius: 16px; border: 1px solid #F4B41A; z-index: 10001; display: none; flex-direction: column; gap: 15px; width: 340px; box-shadow: 0px 10px 40px rgba(0,0,0,0.8); }
+        .show-modal { display: flex; }
+        .modal-title { color: #F4B41A; font-weight: 700; font-size: 1.3rem; text-align: center; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        
+        /* Chỉnh List */
+        .list-item { color: #fff; padding: 10px 5px; border-bottom: 1px solid rgba(255,255,255,0.15); font-size: 1.1rem; font-weight: 500; }
+        .list-item:last-child { border-bottom: none; }
+        #list-content { overflow-y: auto; max-height: 350px; padding-right: 10px; }
+        
+        /* Chỉnh Input */
         .loc-input { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 12px 15px; border-radius: 8px; font-size: 1.05rem; width: 100%; outline: none; font-family: inherit; font-weight: 500;}
         .loc-input::placeholder { color: #aaa; font-weight: 400; }
         .loc-input:focus { border-color: #F4B41A; background: rgba(255,255,255,0.15); }
@@ -89,11 +96,12 @@
         .loc-btn:active { transform: scale(0.95); }
         .btn-save { background: #F4B41A; color: #000; }
         .btn-default { background: transparent; color: #fff; border: 1px solid #fff; }
+        .btn-close-modal { background: transparent; color: #aaa; font-weight: 400; border: none; font-size: 0.95rem; text-align: center; margin-top: -5px; padding: 5px; cursor: pointer; }
         
         #toast-msg { position: absolute; top: 15%; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.85); color: #F4B41A; border: 1px solid #F4B41A; padding: 12px 24px; border-radius: 8px; font-size: 1.2rem; font-weight: 700; z-index: 10000; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; text-align: center; box-shadow: 0px 4px 15px rgba(0,0,0,0.5); }
         #toast-msg.show { opacity: 1; }
 
-        /* ĐỒNG HỒ BAN ĐÊM */
+        /* ĐỒNG HỒ BAN ĐÊM - APPLE NIGHTSTAND */
         #night-clock-box { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: none; z-index: 4; text-shadow: none; transition: transform 2s ease-in-out; }
         .night-active #white-border-bg { background-color: #000000 !important; opacity: 1 !important; } 
         .night-active #photo-container, .night-active #bottom-container, .night-active #top-right-wrapper, .night-active #info-container { display: none !important; }
@@ -101,7 +109,7 @@
         .night-active #night-clock-box { display: flex; align-items: center; justify-content: center; flex-direction: row; }
         .night-hours, .night-minutes { font-family: 'Tourney', cursive !important; font-weight: 600 !important; color: #FF9500 !important; font-size: 46vmin; line-height: 0.9; margin: 0 1vmin; letter-spacing: -2vmin; }
 
-        /* ĐỨNG DỌC IPAD */
+        /* MÀN HÌNH DỌC */
         @media (orientation: portrait) {
             .hours-style, .minutes-style { font-size: 8.5rem; text-align: center; } 
             #date-solar-top { font-size: 1.6rem; text-align: center; } 
@@ -153,21 +161,28 @@
         </div>
         
         <div id="bottom-container">
-            <div id="bottom-left-events"></div>
-            <div id="bottom-right-text">
-                <span id="quote-row">Đang tải và phân tích dữ liệu điện toán đám mây...</span>
+            <div id="bottom-left-events" class="tap-target" ontouchstart="handleAction(event, 'show_birth')" onclick="handleAction(event, 'show_birth')"></div>
+            <div id="bottom-right-text" class="tap-target" ontouchstart="handleAction(event, 'show_death')" onclick="handleAction(event, 'show_death')">
+                <span id="quote-row">Đang tải và đồng bộ hệ thống dữ liệu điện toán đám mây...</span>
             </div>
         </div>
         
-        <div id="location-modal">
-            <div class="loc-title">CÀI ĐẶT VỊ TRÍ</div>
+        <div id="location-modal" class="modal-base">
+            <div class="modal-title">CÀI ĐẶT VỊ TRÍ</div>
             <input type="text" id="loc-name" class="loc-input" placeholder="Tên địa phương (VD: Tân Lập)">
-            <input type="text" inputmode="decimal" id="loc-lat" class="loc-input" placeholder="Vĩ độ (VD: 12.6792)">
+            <input type="text" inputmode="decimal" id="loc-lat" class="loc-input" placeholder="Vĩ độ (Dùng dấu phẩy hoặc chấm đều được)">
             <input type="text" inputmode="decimal" id="loc-lon" class="loc-input" placeholder="Kinh độ (VD: 108.0694)">
             <div class="loc-btns">
-                <button class="loc-btn btn-save" onclick="saveLocation()">LƯU</button>
-                <button class="loc-btn btn-default" onclick="defaultLocation()">MẶC ĐỊNH</button>
+                <button class="loc-btn btn-save" ontouchstart="saveLocation(); event.preventDefault();" onclick="saveLocation()">LƯU</button>
+                <button class="loc-btn btn-default" ontouchstart="defaultLocation(); event.preventDefault();" onclick="defaultLocation()">MẶC ĐỊNH</button>
             </div>
+            <button class="btn-close-modal" ontouchstart="closeLocationModal(); event.preventDefault();" onclick="closeLocationModal()">Đóng (Hủy)</button>
+        </div>
+
+        <div id="list-modal" class="modal-base">
+            <div id="list-title" class="modal-title">DANH SÁCH</div>
+            <div id="list-content"></div>
+            <button class="btn-close-modal" style="margin-top:10px;" ontouchstart="closeListModal(); event.preventDefault();" onclick="closeListModal()">Đóng bảng</button>
         </div>
 
     </div>
@@ -175,7 +190,7 @@
     <script>
         var SECRET_ENCODED = 'QUl6YVN5REwyRm1VQzkxMUtBTnFwN3VPbnZKcU5xVHltb1R2SkxF'; var API_KEY = atob(SECRET_ENCODED); var FOLDER_ID = '1r1WUIKwAPAnsyIh-Zot7AevEW0uEZ-Hl'; 
         var images = ['https://images.unsplash.com/photo-1506744626753-14002fa88301?q=80&w=2048&auto=format&fit=crop']; 
-        var currentIndex = 0; var slideInterval; var toastTimeout; var locationModalTimeout;
+        var currentIndex = 0; var slideInterval; var toastTimeout; var locationModalTimeout; var listModalTimeout;
         var audioCtx = null; var isGroup1Active = true; var audioUnlocked = false; var forceNightMode = null; 
         
         var globalAQI = "--", globalHum = "--", globalRain = "--", globalSunrise = "--", globalSunset = "--"; 
@@ -225,15 +240,15 @@
             [2030, 0, 6, 11, "Kỷ Dậu"], [2030, 1, 5, 12, "Kỷ Dậu"], [2030, 2, 3, 1, "Canh Tuất"], [2030, 3, 5, 2, "Canh Tuất"], [2030, 4, 3, 3, "Canh Tuất"], [2030, 5, 2, 4, "Canh Tuất"], [2030, 6, 1, 5, "Canh Tuất"], [2030, 6, 30, 6, "Canh Tuất"], [2030, 7, 30, 7, "Canh Tuất"], [2030, 8, 29, 8, "Canh Tuất"], [2030, 9, 27, 9, "Canh Tuất"], [2030, 10, 27, 10, "Canh Tuất"], [2030, 11, 26, 11, "Canh Tuất"]
         ];
 
-        /* 🌟 THUẬT TOÁN ĐỔI MÀU CẢNH BÁO THÔNG MINH */
+        /* 🌟 THUẬT TOÁN ĐỔI MÀU CẢNH BÁO AI */
         function getEnvColor(type, val) {
             if (val === "--" || val.indexOf('--') !== -1) return "#ffffff";
             var v = parseFloat(val);
             if (type === 'aqi') {
                 if (v <= 50) return "#ffffff";
-                if (v <= 100) return "#F4B41A";
-                if (v <= 150) return "#FF9500";
-                return "#FF3366";
+                if (v <= 100) return "#F4B41A"; // Vàng
+                if (v <= 150) return "#FF9500"; // Cam
+                return "#FF3366"; // Đỏ
             }
             if (type === 'uv') {
                 if (v <= 2) return "#ffffff";
@@ -243,10 +258,27 @@
             }
             if (type === 'rain') {
                 if (v < 51) return "#ffffff";
-                if (v <= 75) return "#F4B41A";
-                return "#FF3366";
+                if (v <= 75) return "#F4B41A"; // Vàng
+                return "#FF3366"; // Đỏ
             }
             return "#ffffff";
+        }
+
+        /* 🌟 HÀM ÉP CẬP NHẬT GIAO DIỆN TỨC THÌ CHO KHỐI THỜI TIẾT */
+        function refreshCurrentEnv() {
+            var envPool = [
+                '🍃 AQI <span style="color:' + getEnvColor('aqi', globalAQI) + ';">' + globalAQI + '</span>',
+                '💧 ' + globalHum,
+                '🌧️ <span style="color:' + getEnvColor('rain', globalRain) + ';">' + globalRain + '</span>',
+                '🌬️ ' + globalWind,
+                '☀️ <span style="color:' + getEnvColor('uv', globalUV) + ';">UV ' + globalUV + '</span>',
+                '🌅 ' + globalSunrise + ' - ' + globalSunset,
+                '⛰️ ' + globalAlt
+            ];
+            var displayIdx = envDisplayIndex > 0 ? envDisplayIndex - 1 : 0;
+            var currentEnv = envPool[displayIdx % envPool.length];
+            var rightEnvContainer = document.getElementById('right-env-container');
+            if(rightEnvContainer) rightEnvContainer.innerHTML = '<div class="env-rotating-item">' + currentEnv + '</div>';
         }
 
         function fetchConfigFromDrive() {
@@ -326,11 +358,17 @@
             var s = clockStyles[currentStyleIdx];
             var hrNode = document.getElementById('hr-node');
             var minNode = document.getElementById('min-node');
-            
             hrNode.style.fontFamily = s.f; hrNode.style.color = s.hc; hrNode.style.fontWeight = s.fw;
             minNode.style.fontFamily = s.f; minNode.style.color = s.mc; minNode.style.fontWeight = s.fw;
-            
             localStorage.setItem('clockStyle', currentStyleIdx);
+        }
+
+        function setBrightness(val) {
+            var overlay = document.getElementById('brightness-overlay');
+            if (overlay) {
+                var opacity = 1 - (val / 100);
+                overlay.style.background = 'rgba(0, 0, 0, ' + opacity + ')';
+            }
         }
 
         function playNote(freq, startTime, duration, type) {
@@ -352,26 +390,23 @@
         function playHappyBirthday() {
             if (!audioCtx) { try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){} }
             if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-            
             var t = audioCtx.currentTime; var tempo = 0.45; 
             function p(f, d) { playNote(f, t, d * tempo, 'triangle'); t += d * tempo; }
-            
             p(261.63, 0.75); p(261.63, 0.25); p(293.66, 1); p(261.63, 1); p(349.23, 1); p(329.63, 2);
             p(261.63, 0.75); p(261.63, 0.25); p(293.66, 1); p(261.63, 1); p(392.00, 1); p(349.23, 2);
             p(261.63, 0.75); p(261.63, 0.25); p(523.25, 1); p(440.00, 1); p(349.23, 1); p(329.63, 1); p(293.66, 2);
             p(466.16, 0.75); p(466.16, 0.25); p(440.00, 1); p(349.23, 1); p(392.00, 1); p(349.23, 2);
         }
 
-        // 🌟 BỘ XỬ LÝ LỆNH CLICK & BẢNG CÀI ĐẶT LOCATION MỚI
+        /* 🌟 GIAO DIỆN MODAL CHO CÀI ĐẶT LOCATION VÀ DANH SÁCH */
         function openLocationModal() {
             var modal = document.getElementById('location-modal');
             document.getElementById('loc-name').value = clientLocalName;
             document.getElementById('loc-lat').value = clientLatitude;
             document.getElementById('loc-lon').value = clientLongitude;
             modal.classList.add('show-modal');
-
             if (locationModalTimeout) clearTimeout(locationModalTimeout);
-            locationModalTimeout = setTimeout(closeLocationModal, 60000); // Tự ẩn sau 1 phút
+            locationModalTimeout = setTimeout(closeLocationModal, 60000); 
         }
 
         function closeLocationModal() {
@@ -381,28 +416,48 @@
 
         function saveLocation() {
             var n = document.getElementById('loc-name').value.trim();
-            // Khắc phục triệt để lỗi gõ dấu phẩy trên bàn phím iPad
             var latStr = document.getElementById('loc-lat').value.replace(',', '.');
             var lonStr = document.getElementById('loc-lon').value.replace(',', '.');
             var lat = parseFloat(latStr);
             var lon = parseFloat(lonStr);
-            
             if (n && !isNaN(lat) && !isNaN(lon)) {
+                closeLocationModal();
                 clientLocalName = n; clientLatitude = lat; clientLongitude = lon;
                 localStorage.setItem('myName', n); localStorage.setItem('myLat', lat); localStorage.setItem('myLon', lon);
                 showToast("📍 Đã lưu vị trí: " + n);
                 updateWeatherAndAQI(); updateDynamicContentBySlide();
-                closeLocationModal(); 
             } else { alert("Vui lòng nhập thông tin hợp lệ!"); }
         }
 
         function defaultLocation() {
+            closeLocationModal();
             localStorage.removeItem('myName'); localStorage.removeItem('myLat'); localStorage.removeItem('myLon');
             clientLocalName = defaultLocalName; clientLatitude = defaultLatitude; clientLongitude = defaultLongitude;
             showToast("📍 Đã khôi phục vị trí mặc định");
             updateWeatherAndAQI(); updateDynamicContentBySlide();
-            closeLocationModal(); 
         }
+
+        function showAllLists(type) {
+            var modal = document.getElementById('list-modal');
+            var title = document.getElementById('list-title');
+            var content = document.getElementById('list-content');
+            content.innerHTML = "";
+            if(type === 'birth') {
+                title.innerText = "DANH SÁCH SINH NHẬT";
+                birthdays.sort(function(a,b){return a.m-b.m || a.d-b.d;}).forEach(function(b) {
+                    content.innerHTML += '<div class="list-item">' + b.d + '/' + b.m + ' - ' + b.name + '</div>';
+                });
+            } else {
+                title.innerText = "DANH SÁCH NGÀY GIỖ";
+                anniversaries.sort(function(a,b){return a.m-b.m || a.d-b.d;}).forEach(function(a) {
+                    content.innerHTML += '<div class="list-item">' + a.d + '/' + a.m + ' ÂL - ' + a.name + '</div>';
+                });
+            }
+            modal.classList.add('show-modal');
+            if(listModalTimeout) clearTimeout(listModalTimeout);
+            listModalTimeout = setTimeout(closeListModal, 10000); // Tự tắt sau 10s
+        }
+        function closeListModal() { document.getElementById('list-modal').classList.remove('show-modal'); }
 
         function handleAction(e, action) {
             e.preventDefault(); e.stopPropagation(); 
@@ -420,7 +475,7 @@
                 else if (wakeUpHour === 7) wakeUpHour = 8;
                 else wakeUpHour = 5;
                 localStorage.setItem('wakeUpHour', wakeUpHour);
-                showToast("🌅 Chuyển Đêm sang Ngày: " + wakeUpHour + ":00 Sáng");
+                showToast("🌅 Đã cài chuyển chế độ Đêm sang Ngày: " + wakeUpHour + ":00 Sáng");
                 updateClock();
             }
             else if (action === 'interval') {
@@ -432,6 +487,8 @@
             else if (action === 'next') { forceNextSlide(); }
             else if (action === 'chime') { playSolemnChime(); }
             else if (action === 'open_location') { openLocationModal(); }
+            else if (action === 'show_birth') { showAllLists('birth'); }
+            else if (action === 'show_death') { showAllLists('death'); }
         }
 
         function forceNextSlide() { goToNextSlide(); changeIntervalMode(currentIntervalIdx + 1); showToast("Đang đổi ảnh..."); }
@@ -516,7 +573,6 @@
                     var ann = currentDeaths[j]; var diff = ann.d - lDay;
                     var shortName = ann.name.split(" (")[0]; 
                     var txt = "Giỗ " + shortName + " (" + ann.d + "/" + ann.m + " ÂL)";
-
                     if (diff < 0) { 
                         windowDeathList.push('<span class="death-event-passed">' + txt + '</span>');
                     } else {
@@ -553,7 +609,6 @@
                     showToast("🎂 Chúc mừng Sinh Nhật " + birthdayPerson.name + "!");
                     playHappyBirthday(); clock18PMMusicFlag = true; 
                 }
-
                 if (lastBirthdayCheckDate && lastBirthdayCheckDate !== now.getDate()) {
                     loadMorningMusicFlag = false; clock8AMMusicFlag = false; 
                     clock14PMMusicFlag = false; clock18PMMusicFlag = false;
@@ -608,12 +663,12 @@
         }
         setInterval(updateClock, 1000); updateClock();
 
+        /* 🌟 GỌI API THỜI TIẾT VÀ AQI ĐÚNG CHUẨN ĐỂ KHÔNG BỊ TREO */
         function updateWeatherAndAQI() {
             var lat = clientLatitude; var lon = clientLongitude;
-            
             var xhrWeather = new XMLHttpRequest();
             xhrWeather.open('GET', 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon + '&current=temperature_2m,relative_humidity_2m,precipitation_probability,wind_speed_10m,uv_index&daily=sunrise,sunset&timezone=Asia%2FHo_Chi_Minh', true);
-            xhrWeather.onerror = function() { document.getElementById('weather-val').innerText = "28"; };
+            xhrWeather.onerror = function() { document.getElementById('weather-val').innerText = "28"; refreshCurrentEnv(); };
             xhrWeather.onreadystatechange = function() {
                 if (xhrWeather.readyState === 4 && xhrWeather.status === 200) {
                     var data = JSON.parse(xhrWeather.responseText); 
@@ -624,20 +679,27 @@
                     globalUV = data.current.uv_index;
                     globalAlt = data.elevation ? Math.round(data.elevation) + 'm' : '--';
                     if(data.daily && data.daily.sunrise && data.daily.sunrise[0]) { globalSunrise = data.daily.sunrise[0].substring(11, 16); globalSunset = data.daily.sunset[0].substring(11, 16); }
+                    refreshCurrentEnv(); 
                 }
             };
             xhrWeather.send();
 
-            /* 🌟 ĐÃ SỬA API LẤY AQI CHO CHÍNH XÁC */
             var xhrAQI = new XMLHttpRequest();
             xhrAQI.open('GET', 'https://air-quality-api.open-meteo.com/v1/air-quality?latitude=' + lat + '&longitude=' + lon + '&current=us_aqi', true);
-            xhrAQI.onerror = function() { globalAQI = "--"; };
+            xhrAQI.onerror = function() { globalAQI = "--"; refreshCurrentEnv(); };
             xhrAQI.onreadystatechange = function() {
-                if (xhrAQI.readyState === 4 && xhrAQI.status === 200) { var data = JSON.parse(xhrAQI.responseText); globalAQI = data.current.us_aqi || "--"; }
+                if (xhrAQI.readyState === 4 && xhrAQI.status === 200) { 
+                    var data = JSON.parse(xhrAQI.responseText); 
+                    if(data && data.current && data.current.us_aqi != null) {
+                        globalAQI = Math.round(data.current.us_aqi); 
+                    } else { globalAQI = "--"; }
+                    refreshCurrentEnv(); 
+                }
             };
             xhrAQI.send();
         }
 
+        /* 🌟 THUẬT TOÁN ĐO LƯỜNG DÒNG (SMART QUOTE LAYOUT) */
         function updateDynamicContentBySlide() {
             var now = new Date(); var currentSolarMonth = now.getMonth() + 1; var sDay = now.getDate();
             var checkTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0); var activePhase = phases[0];
@@ -645,21 +707,18 @@
             var currentLunarMonth = (activePhase[1] === 0 ? 12 : activePhase[1]);
             var lDay = Math.floor((checkTime - new Date(activePhase[0], activePhase[1], activePhase[2], 0, 0, 0)) / (1000 * 60 * 60 * 24)) + 1;
 
-            /* 🌟 ÁP DỤNG TRÍ TUỆ NHÂN TẠO AI VÀO MÀU SẮC MÔI TRƯỜNG */
             var envPool = [
-                '🍃 AQI <span style="color:' + getEnvColor('aqi', globalAQI) + '; font-weight:700">' + globalAQI + '</span>',
+                '🍃 AQI <span style="color:' + getEnvColor('aqi', globalAQI) + ';">' + globalAQI + '</span>',
                 '💧 ' + globalHum,
-                '🌧️ <span style="color:' + getEnvColor('rain', globalRain) + '; font-weight:700">' + globalRain + '</span>',
+                '🌧️ <span style="color:' + getEnvColor('rain', globalRain) + ';">' + globalRain + '</span>',
                 '🌬️ ' + globalWind,
-                '☀️ <span style="color:' + getEnvColor('uv', globalUV) + '; font-weight:700">UV ' + globalUV + '</span>',
+                '☀️ <span style="color:' + getEnvColor('uv', globalUV) + ';">UV ' + globalUV + '</span>',
                 '🌅 ' + globalSunrise + ' - ' + globalSunset,
                 '⛰️ ' + globalAlt
             ];
             var currentEnv = envPool[envDisplayIndex % envPool.length]; envDisplayIndex++; 
-
-            var envHtml = '<div class="env-rotating-item">' + currentEnv + '</div>';
             var rightEnvContainer = document.getElementById('right-env-container');
-            if(rightEnvContainer) rightEnvContainer.innerHTML = envHtml;
+            if(rightEnvContainer) rightEnvContainer.innerHTML = '<div class="env-rotating-item">' + currentEnv + '</div>';
 
             renderEvents(currentSolarMonth, currentLunarMonth, sDay, lDay);
 
@@ -688,7 +747,7 @@
             var quoteElement = document.getElementById('quote-row');
             quoteElement.innerHTML = finalQuote; 
 
-            /* 🌟 TRÍ TUỆ NHÂN TẠO ĐO LƯỜNG SỐ DÒNG ĐỂ NỐI HAY CẮT DÒNG */
+            // CƠ CHẾ ĐO DÒNG & NỐI DỮ LIỆU
             setTimeout(function() {
                 var style = window.getComputedStyle(quoteElement);
                 var lineHeight = parseFloat(style.lineHeight) || (parseFloat(style.fontSize) * 1.5);
@@ -702,9 +761,9 @@
                 if (extrasArray.length > 0) {
                     var extrasStr = extrasArray.join(' <span style="color:#ffffff; font-weight:400;">|</span> ');
                     if (linesCount <= 1) {
-                        quoteElement.innerHTML = finalQuote + '<br>' + extrasStr;
+                        quoteElement.innerHTML = finalQuote + '<br>' + extrasStr; // 1 dòng => Rớt dòng mới ko dấu |
                     } else {
-                        quoteElement.innerHTML = finalQuote + ' <span style="color:#ffffff; font-weight:400;">|</span> ' + extrasStr;
+                        quoteElement.innerHTML = finalQuote + ' <span style="color:#ffffff; font-weight:400;">|</span> ' + extrasStr; // Nhiều dòng => Nối liền
                     }
                 }
             }, 50);
@@ -723,7 +782,6 @@
             };
             xhr.send();
 
-            // YÊU CẦU LẤY DANH SÁCH ẢNH ƯU TIÊN MỚI NHẤT
             var imgQuery = encodeURIComponent("'" + FOLDER_ID + "' in parents and mimeType contains 'image/'");
             var imgUrl = 'https://www.googleapis.com/drive/v3/files?q=' + imgQuery + '&orderBy=createdTime desc&key=' + API_KEY + '&fields=files(id,createdTime)';
             var xhrDrive = new XMLHttpRequest(); xhrDrive.open('GET', imgUrl, true);
@@ -737,7 +795,7 @@
                                 allImgs.push('https://drive.google.com/thumbnail?id=' + data.files[i].id + '&sz=w2048'); 
                             }
                             
-                            var newestImgs = allImgs.slice(0, 15); // Lọc 15 ảnh mới nhất
+                            var newestImgs = allImgs.slice(0, 15);
 
                             function shuffleArray(arr) {
                                 var a = arr.slice();
@@ -751,7 +809,7 @@
                             initSlideshow();
                         } else { fallbackInit("Thư mục trống! Vui lòng tải ảnh lên Drive."); }
                     } else {
-                        fallbackInit("Lỗi API Google Cloud! Đang dùng ảnh dự phòng...");
+                        fallbackInit("Lỗi API/CORS! Đang dùng ảnh dự phòng...");
                     }
                 }
             }; xhrDrive.send();
@@ -780,7 +838,7 @@
             if (activeFg && activeFg.naturalWidth) updateImageDisplayMechanism(activeFg, activeGroup);
         });
 
-        // 🌟 BẢO VỆ MÀN HÌNH CHỐNG KẸT LỖI TẢI ẢNH TỪ DRIVE
+        // 🌟 TÍCH HỢP ONERROR CHỐNG ĐEN MÀN HÌNH
         function loadAndDisplayImage(imgUrl, groupID, bgID, fgID) {
             var currentGroup = document.getElementById(isGroup1Active ? 'group1' : 'group2'); var nextGroup = document.getElementById(groupID);
             var nextBg = document.getElementById(bgID); var nextFg = document.getElementById(fgID);
@@ -795,9 +853,7 @@
             };
             
             nextFg.onerror = function() {
-                if (imgUrl.indexOf('unsplash.com') === -1) {
-                    fallbackInit("Lỗi lấy ảnh từ Google Drive. Đang chạy ảnh dự phòng...");
-                }
+                if (imgUrl.indexOf('unsplash.com') === -1) { fallbackInit("Lỗi lấy ảnh Drive. Đang dùng ảnh dự phòng..."); }
             };
             
             nextBg.src = imgUrl; nextFg.src = imgUrl;
