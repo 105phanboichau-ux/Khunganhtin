@@ -8,7 +8,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="referrer" content="no-referrer">
     
-    <title>Khung Ảnh Số Thông Minh - V87 Perfect Layout</title>
+    <title>Khung Ảnh Số Thông Minh - V88 AI Smart Layout</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,19 +38,17 @@
         .tap-target { -webkit-tap-highlight-color: transparent; outline: none; border: none; background: transparent; cursor: pointer; transition: opacity 0.2s; }
         .tap-target:active { opacity: 0.6; }
 
-        /* 🛡️ CỘT TRÁI TRÊN (ĐỒNG HỒ & LỊCH) */
+        /* CỘT TRÁI TRÊN */
         #info-container { position: absolute; top: 35px; left: 35px; z-index: 4; text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.6); display: flex; flex-direction: column; align-items: center; transition: transform 2s ease-in-out; width: auto; }
         #clock-flex-wrapper { display: flex; flex-direction: column; align-items: center; width: 100%; margin-left: 0; }
-        
         .hours-style, .minutes-style { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 8rem; letter-spacing: -2px; display: block; line-height: 0.85; transition: color 0.5s, font-family 0.5s; width: 100%; text-align: center; margin-left: 0; } 
         .hours-style { color: #F4B41A; } 
         .minutes-style { color: #ffffff; margin-top: 4px; }
-        
         #date-solar-top { font-size: 1.6rem; font-weight: 700; color: #ffffff; margin-top: 14px; white-space: nowrap; text-align: center; }
         #date-lunar-top { font-size: 1.6rem; font-weight: 700; color: #ffffff; margin-top: 4px; white-space: nowrap; text-align: center; }
         .highlight-yellow { color: #F4B41A; font-weight: 700; }
 
-        /* 🛡️ CỘT PHẢI TRÊN (THỜI TIẾT + NHIỆT ĐỘ) */
+        /* CỘT PHẢI TRÊN */
         #top-right-wrapper { position: absolute; top: 35px; right: 35px; z-index: 4; display: flex; flex-direction: row; align-items: flex-start; justify-content: flex-end; gap: 15px; text-shadow: 0px 2px 5px rgba(0,0,0,0.6); transition: transform 2s ease-in-out; }
         #right-env-container { display: flex; flex-direction: column; align-items: flex-end; margin-top: 12px; }
         .env-rotating-item { font-size: 1.25rem; color: rgba(255, 255, 255, 0.95); font-weight: 600; text-align: right; padding: 4px; background: transparent; white-space: nowrap; }
@@ -62,10 +60,9 @@
         @-webkit-keyframes pulseGlow { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
         @keyframes pulseGlow { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
 
-        /* 🛡️ KHU VỰC ĐÁY (SINH NHẬT TRÁI - VĂN BẢN TRẢI DÀI PHẢI) */
-        #bottom-container { position: absolute; bottom: 35px; left: 35px; right: 35px; z-index: 4; display: flex; flex-direction: row; align-items: flex-end; justify-content: flex-start; gap: 30px; text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.7); transition: transform 2s ease-in-out; }
+        /* KHU VỰC ĐÁY */
+        #bottom-container { position: absolute; bottom: 35px; left: 35px; right: 35px; z-index: 4; display: flex; flex-direction: row; align-items: flex-end; justify-content: space-between; text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.7); transition: transform 2s ease-in-out; }
         
-        /* Cụm Sinh nhật sẽ chỉ lấy đúng bề ngang nội dung của nó */
         #bottom-left-events { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; flex-shrink: 0; }
         .event-header { font-size: 1.1rem; color: #F4B41A; font-weight: 700; text-align: left; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
         .event-item { font-size: 1.15rem; color: rgba(255, 255, 255, 0.95); font-weight: 600; text-align: left; padding: 4px 12px; border-radius: 4px; background: rgba(0, 0, 0, 0.4); margin-bottom: 2px; display: inline-block;}
@@ -73,13 +70,12 @@
         .event-urgent { color: #F4B41A !important; font-weight: 700; background: rgba(0, 0, 0, 0.7); -webkit-animation: pulseGlow 2s infinite; animation: pulseGlow 2s infinite; }
         .event-today-birth { color: #2ecc71 !important; font-weight: 700; font-size: 1.25rem; background: rgba(0, 0, 0, 0.8); }
 
-        /* Cụm Văn Bản lấp đầy toàn bộ khoảng trống còn lại (Flex: 1) */
-        #bottom-right-text { flex: 1; display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; text-align: right; }
+        #bottom-right-text { flex: 1; display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; text-align: right; margin-left: 30px; }
         #quote-row { font-size: 1.15rem; font-weight: 500; font-style: normal; color: #f5f5f7; line-height: 1.5; word-wrap: break-word; text-align: right; width: 100%; }
         
         .countdown-highlight { color: #F4B41A; font-weight: 700; }
         .death-highlight { color: #ff9500; font-weight: 700; }
-        .death-event-passed { color: #c4c4c4; font-weight: 500; opacity: 0.6; }
+        .death-event-passed { color: #a1a1a1; font-weight: 500; opacity: 0.6; }
 
         /* BẢNG ĐIỀU KHIỂN & TOAST */
         #control-panel { position: absolute; top: 50%; right: 20px; transform: translateY(-50%); z-index: 9999; background: rgba(0, 0, 0, 0.85); padding: 18px; border-radius: 12px; color: #fff; font-size: 0.85rem; backdrop-filter: blur(5px); opacity: 0; pointer-events: none; transition: opacity 0.3s ease; display: flex; flex-direction: column; gap: 8px; align-items: center; width: 220px; }
@@ -91,29 +87,24 @@
         #toast-msg { position: absolute; top: 15%; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.85); color: #F4B41A; border: 1px solid #F4B41A; padding: 12px 24px; border-radius: 8px; font-size: 1.2rem; font-weight: 700; z-index: 10000; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; text-align: center; box-shadow: 0px 4px 15px rgba(0,0,0,0.5); }
         #toast-msg.show { opacity: 1; }
 
-        /* ĐỒNG HỒ BAN ĐÊM - APPLE NIGHTSTAND */
+        /* ĐỒNG HỒ BAN ĐÊM */
         #night-clock-box { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: none; z-index: 4; text-shadow: none; transition: transform 2s ease-in-out; }
         .night-active #white-border-bg { background-color: #000000 !important; opacity: 1 !important; } 
         .night-active #photo-container, .night-active #bottom-container, .night-active #top-right-wrapper, .night-active #info-container { display: none !important; }
         .night-active #frame-wrapper { background-color: transparent !important; box-shadow: none !important; border-color: transparent !important; }
         .night-active #night-clock-box { display: flex; align-items: center; justify-content: center; flex-direction: row; }
-        
         .night-hours, .night-minutes { font-family: 'Tourney', cursive !important; font-weight: 600 !important; color: #FF9500 !important; font-size: 46vmin; line-height: 0.9; margin: 0 1vmin; letter-spacing: -2vmin; }
 
-        /* 🛡️ CẤU TRÚC XOAY DỌC (SỬA LỖI ĐÈ CHỮ VÀO ĐỒNG HỒ) */
         @media (orientation: portrait) {
             .hours-style, .minutes-style { font-size: 8.5rem; text-align: center; } 
             #date-solar-top { font-size: 1.6rem; text-align: center; } 
             #date-lunar-top { font-size: 1.6rem; text-align: center; }
             .event-header { font-size: 1.1rem; } .event-item { font-size: 1.15rem; }
             .env-rotating-item { font-size: 1.15rem; }
-            
-            /* Dựng dọc khu vực đáy, neo chặt xuống dưới cùng để không bị nhảy lên */
             #bottom-container { flex-direction: column; align-items: stretch; gap: 15px; }
             #bottom-left-events { align-items: flex-start; max-width: 100%; width: 100%; }
             #bottom-right-text { text-align: right; align-items: flex-end; margin-left: 0; width: 100%; }
             #quote-row { font-size: 1.15rem; line-height: 1.45; text-align: right; }
-            
             .night-active #night-clock-box { flex-direction: column; }
             .night-hours, .night-minutes { font-size: 42vmin; margin: 0; line-height: 0.85; letter-spacing: -2vmin; }
         }
@@ -133,7 +124,6 @@
         <div id="brightness-overlay"></div>
         <div id="toast-msg">Thông báo</div>
 
-        <!-- CỘT TRÁI TRÊN -->
         <div id="info-container">
             <div id="clock-flex-wrapper">
                 <span class="hours-style tap-target" id="hr-node" ontouchstart="handleAction(event, 'night')" onclick="handleAction(event, 'night')">00</span>
@@ -148,7 +138,6 @@
             <span class="night-minutes tap-target" id="night-min-node" ontouchstart="handleAction(event, 'night')" onclick="handleAction(event, 'night')">00</span>
         </div>
 
-        <!-- CỘT PHẢI TRÊN -->
         <div id="top-right-wrapper">
             <div id="right-env-container" class="tap-target" ontouchstart="handleAction(event, 'open_menu')" onclick="handleAction(event, 'open_menu')"></div>
             <div id="temp-wrapper" class="tap-target" ontouchstart="handleAction(event, 'next')" onclick="handleAction(event, 'next')">
@@ -156,7 +145,6 @@
             </div>
         </div>
         
-        <!-- KHU VỰC ĐÁY -->
         <div id="bottom-container">
             <div id="bottom-left-events"></div>
             <div id="bottom-right-text">
@@ -179,20 +167,15 @@
         var globalAQI = "--", globalHum = "--", globalRain = "--", globalSunrise = "--", globalSunset = "--"; 
         var globalWind = "--", globalUV = "--", globalAlt = "--";
         var envDisplayIndex = 0;
-        var windowDeathText = ""; 
+        var windowDeathList = []; 
         
         var bX1 = 0, bY1 = 0; var bX2 = 0, bY2 = 0; var bX3 = 0, bY3 = 0;
         var stepSeconds = [180, 300, 600, 900]; 
         var currentIntervalIdx = 1; 
-
         var wakeUpHour = localStorage.getItem('wakeUpHour') ? parseInt(localStorage.getItem('wakeUpHour')) : 6;
         
         /* CỜ ĐỂ ĐẢM BẢO NHẠC CHỈ PHÁT 1 LẦN CHO MỖI MỐC */
-        var loadMorningMusicFlag = false; 
-        var clock8AMMusicFlag = false;
-        var clock14PMMusicFlag = false;
-        var clock18PMMusicFlag = false;
-        var lastBirthdayCheckDate = null; 
+        var loadMorningMusicFlag = false; var clock8AMMusicFlag = false; var clock14PMMusicFlag = false; var clock18PMMusicFlag = false; var lastBirthdayCheckDate = null; 
         
         var clockStyles = [
             { f: "'Montserrat', sans-serif", hc: "#F4B41A", mc: "#ffffff", fw: 700 }, { f: "'Montserrat', sans-serif", hc: "#ffffff", mc: "#F4B41A", fw: 700 },
@@ -225,18 +208,32 @@
             [2027, 0, 8, 12, "Bính Ngọ"], [2027, 1, 6, 1, "Đinh Mùi"], [2027, 2, 8, 2, "Đinh Mùi"], [2027, 3, 7, 3, "Đinh Mùi"], [2027, 4, 6, 4, "Đinh Mùi"], [2027, 5, 5, 5, "Đinh Mùi"], [2027, 6, 4, 6, "Đinh Mùi"], [2027, 7, 2, 7, "Đinh Mùi"], [2027, 7, 31, 7, "Đinh Mùi"], [2027, 8, 29, 8, "Đinh Mùi"], [2027, 9, 29, 9, "Đinh Mùi"], [2027, 10, 28, 10, "Đinh Mùi"], [2027, 11, 27, 11, "Đinh Mùi"],
             [2028, 0, 26, 12, "Đinh Mùi"], [2028, 1, 26, 1, "Mậu Thân"], [2028, 2, 25, 2, "Mậu Thân"], [2028, 3, 26, 3, "Mậu Thân"], [2028, 4, 25, 4, "Mậu Thân"], [2028, 5, 24, 5, "Mậu Thân"], [2028, 6, 23, 5, "Mậu Thân"], [2028, 7, 22, 6, "Mậu Thân"], [2028, 8, 20, 7, "Mậu Thân"], [2028, 9, 19, 8, "Mậu Thân"], [2028, 10, 18, 9, "Mậu Thân"], [2028, 11, 17, 10, "Mậu Thân"],
             [2029, 0, 16, 11, "Mậu Thân"], [2029, 1, 15, 12, "Mậu Thân"], [2029, 2, 13, 1, "Kỷ Dậu"], [2029, 3, 15, 2, "Kỷ Dậu"], [2029, 4, 13, 3, "Kỷ Dậu"], [2029, 5, 13, 4, "Kỷ Dậu"], [2029, 6, 11, 5, "Kỷ Dậu"], [2029, 7, 11, 6, "Kỷ Dậu"], [2029, 8, 10, 7, "Kỷ Dậu"], [2029, 9, 8, 8, "Kỷ Dậu"], [2029, 10, 8, 9, "Kỷ Dậu"], [2029, 11, 7, 10, "Kỷ Dậu"],
-            [2030, 0, 6, 11, "Kỷ Dậu"], [2030, 1, 5, 12, "Kỷ Dậu"], [2030, 2, 3, 1, "Canh Tuất"], [2030, 3, 5, 2, "Canh Tuất"], [2030, 4, 3, 3, "Canh Tuất"], [2030, 5, 2, 4, "Canh Tuất"], [2030, 6, 1, 5, "Canh Tuất"], [2030, 6, 30, 6, "Canh Tuất"], [2030, 7, 30, 7, "Canh Tuất"], [2030, 8, 29, 8, "Canh Tuất"], [2030, 9, 27, 9, "Canh Tuất"], [2030, 10, 27, 10, "Canh Tuất"], [2030, 11, 26, 11, "Canh Tuất"],
-            [2031, 0, 25, 12, "Canh Tuất"], [2031, 1, 23, 1, "Tân Hợi"], [2031, 2, 21, 2, "Tân Hợi"], [2031, 3, 23, 3, "Tân Hợi"], [2031, 4, 22, 3, "Tân Hợi"], [2031, 5, 21, 4, "Tân Hợi"], [2031, 6, 20, 5, "Tân Hợi"], [2031, 7, 20, 6, "Tân Hợi"], [2031, 8, 18, 7, "Tân Hợi"], [2031, 9, 17, 8, "Tân Hợi"], [2031, 10, 16, 9, "Tân Hợi"], [2031, 11, 15, 10, "Tân Hợi"],
-            [2032, 0, 14, 11, "Tân Hợi"], [2032, 1, 12, 12, "Tân Hợi"], [2032, 2, 11, 1, "Nhâm Tý"], [2032, 3, 12, 2, "Nhâm Tý"], [2032, 4, 10, 3, "Nhâm Tý"], [2032, 5, 9, 4, "Nhâm Tý"], [2032, 6, 8, 5, "Nhâm Tý"], [2032, 7, 7, 6, "Nhâm Tý"], [2032, 8, 6, 7, "Nhâm Tý"], [2032, 9, 4, 8, "Nhâm Tý"], [2032, 10, 4, 9, "Nhâm Tý"], [2032, 11, 3, 10, "Nhâm Tý"],
-            [2033, 0, 2, 11, "Nhâm Tý"], [2033, 1, 1, 12, "Nhâm Tý"], [2033, 1, 31, 1, "Quý Sửu"], [2033, 2, 2, 2, "Quý Sửu"], [2033, 3, 1, 3, "Quý Sửu"], [2033, 4, 30, 4, "Quý Sửu"], [2033, 5, 29, 5, "Quý Sửu"], [2033, 6, 27, 6, "Quý Sửu"], [2033, 7, 26, 7, "Quý Sửu"], [2033, 8, 25, 8, "Quý Sửu"], [2033, 9, 24, 9, "Quý Sửu"], [2033, 10, 23, 10, "Quý Sửu"], [2033, 11, 22, 11, "Quý Sửu"],
-            [2034, 0, 22, 11, "Quý Sửu"], [2034, 1, 19, 12, "Quý Sửu"], [2034, 2, 19, 1, "Giáp Dần"], [2034, 3, 20, 2, "Giáp Dần"], [2034, 4, 18, 3, "Giáp Dần"], [2034, 5, 18, 4, "Giáp Dần"], [2034, 6, 16, 5, "Giáp Dần"], [2034, 7, 16, 6, "Giáp Dần"], [2034, 8, 14, 7, "Giáp Dần"], [2034, 9, 13, 8, "Giáp Dần"], [2034, 10, 12, 9, "Giáp Dần"], [2034, 11, 11, 10, "Giáp Dần"],
-            [2035, 0, 10, 11, "Giáp Dần"], [2035, 1, 9, 12, "Giáp Dần"], [2035, 2, 8, 1, "Ất Mão"], [2035, 3, 10, 2, "Ất Mão"], [2035, 4, 8, 3, "Ất Mão"], [2035, 7, 5, 6, "Ất Mão"], [2035, 8, 4, 7, "Ất Mão"], [2035, 9, 2, 8, "Ất Mão"], [2035, 10, 2, 9, "Ất Mão"], [2035, 11, 1, 10, "Ất Mão"],
-            [2036, 0, 1, 11, "Ất Mão"], [2036, 0, 30, 12, "Ất Mão"], [2036, 1, 28, 1, "Bính Thìn"], [2036, 2, 27, 2, "Bính Thìn"], [2036, 3, 27, 3, "Bính Thìn"], [2036, 4, 26, 4, "Bính Thìn"], [2036, 5, 25, 5, "Bính Thìn"], [2036, 6, 24, 6, "Bính Thìn"], [2036, 7, 23, 6, "Bính Thìn"], [2036, 8, 22, 7, "Bính Thìn"], [2036, 9, 21, 8, "Bính Thìn"], [2036, 10, 20, 9, "Bính Thìn"], [2036, 11, 19, 10, "Bính Thìn"],
-            [2037, 0, 17, 11, "Bính Thìn"], [2037, 1, 15, 12, "Bính Thìn"], [2037, 2, 15, 1, "Đinh Tỵ"], [2037, 3, 17, 2, "Đinh Tỵ"], [2037, 4, 15, 3, "Đinh Tỵ"], [2037, 5, 15, 4, "Đinh Tỵ"], [2037, 6, 13, 5, "Đinh Tỵ"], [2037, 7, 13, 6, "Đinh Tỵ"], [2037, 8, 11, 7, "Đinh Tỵ"], [2037, 9, 10, 8, "Đinh Tỵ"], [2037, 10, 10, 9, "Đinh Tỵ"], [2037, 11, 8, 10, "Đinh Tỵ"],
-            [2038, 0, 7, 11, "Đinh Tỵ"], [2038, 1, 5, 12, "Đinh Tỵ"], [2038, 2, 4, 1, "Mậu Ngọ"], [2038, 3, 6, 2, "Mậu Ngọ"], [2038, 4, 4, 3, "Mậu Ngọ"], [2038, 5, 4, 4, "Mậu Ngọ"], [2038, 6, 2, 4, "Mậu Ngọ"], [2038, 7, 2, 5, "Mậu Ngọ"], [2038, 7, 31, 6, "Mậu Ngọ"], [2038, 8, 30, 7, "Mậu Ngọ"], [2038, 9, 29, 8, "Mậu Ngọ"], [2038, 10, 28, 9, "Mậu Ngọ"], [2038, 11, 26, 10, "Mậu Ngọ"],
-            [2039, 0, 25, 11, "Mậu Ngọ"], [2039, 1, 24, 12, "Mậu Ngọ"], [2039, 2, 22, 1, "Kỷ Mùi"], [2039, 3, 24, 2, "Kỷ Mùi"], [2039, 4, 22, 3, "Kỷ Mùi"], [2039, 5, 22, 4, "Kỷ Mùi"], [2039, 6, 21, 5, "Kỷ Mùi"], [2039, 7, 20, 6, "Kỷ Mùi"], [2039, 8, 19, 7, "Kỷ Mùi"], [2039, 9, 17, 8, "Kỷ Mùi"], [2039, 10, 17, 9, "Kỷ Mùi"], [2039, 11, 15, 10, "Kỷ Mùi"],
-            [2040, 0, 14, 11, "Kỷ Mùi"], [2040, 1, 12, 12, "Kỷ Mùi"], [2040, 2, 12, 1, "Canh Thân"], [2040, 3, 13, 2, "Canh Thân"], [2040, 4, 11, 3, "Canh Thân"], [2040, 5, 11, 4, "Canh Thân"], [2040, 6, 9, 5, "Canh Thân"], [2040, 7, 9, 6, "Canh Thân"], [2040, 8, 7, 7, "Canh Thân"], [2040, 9, 6, 8, "Canh Thân"], [2040, 10, 5, 9, "Canh Thân"], [2040, 11, 4, 10, "Canh Thân"], [2040, 12, 3, 11, "Canh Thân"]
+            [2030, 0, 6, 11, "Kỷ Dậu"], [2030, 1, 5, 12, "Kỷ Dậu"], [2030, 2, 3, 1, "Canh Tuất"], [2030, 3, 5, 2, "Canh Tuất"], [2030, 4, 3, 3, "Canh Tuất"], [2030, 5, 2, 4, "Canh Tuất"], [2030, 6, 1, 5, "Canh Tuất"], [2030, 6, 30, 6, "Canh Tuất"], [2030, 7, 30, 7, "Canh Tuất"], [2030, 8, 29, 8, "Canh Tuất"], [2030, 9, 27, 9, "Canh Tuất"], [2030, 10, 27, 10, "Canh Tuất"], [2030, 11, 26, 11, "Canh Tuất"]
         ];
+
+        // MÀU CẢNH BÁO AI THÔNG MINH
+        function getEnvColor(type, val) {
+            if (val === "--" || val.indexOf('--') !== -1) return "#ffffff";
+            var v = parseFloat(val);
+            if (type === 'aqi') {
+                if (v <= 50) return "#ffffff";
+                if (v <= 100) return "#F4B41A";
+                if (v <= 150) return "#FF9500";
+                return "#FF3366";
+            }
+            if (type === 'uv') {
+                if (v <= 2) return "#ffffff";
+                if (v <= 5) return "#F4B41A";
+                if (v <= 7) return "#FF9500";
+                return "#FF3366";
+            }
+            if (type === 'rain') {
+                if (v < 51) return "#ffffff";
+                if (v <= 75) return "#F4B41A";
+                return "#FF3366";
+            }
+            return "#ffffff";
+        }
 
         function fetchConfigFromDrive() {
             var query = encodeURIComponent("'" + FOLDER_ID + "' in parents and name = 'cauhinh.txt' and trashed = false");
@@ -304,7 +301,6 @@
 
             updateWeatherAndAQI(); updateClock();
             updateDynamicContentBySlide(); 
-            
             checkForBirthdayMusic('load');
         }
 
@@ -446,14 +442,16 @@
             } else { alert("Không xác định được tọa độ. Vui lòng cài thủ công."); }
         }
 
-        function forceNextSlide() { goToNextSlide(); changeIntervalMode(currentIntervalIdx + 1); showToast("Đang tải ảnh tiếp theo..."); }
+        function forceNextSlide() { goToNextSlide(); changeIntervalMode(currentIntervalIdx + 1); showToast("Đang đổi ảnh..."); }
 
         function toggleNightMode() {
             var body = document.body;
             if (body.classList.contains('night-active')) { 
-                forceNightMode = false; body.classList.remove('night-active'); showToast("☀️ Chào ngày mới!"); setBrightness(100); syncDriveData();
+                forceNightMode = false; body.classList.remove('night-active'); showToast("☀️ Chào ngày mới!"); setBrightness(100); 
+                syncDriveData(); // 🌟 KÍCH HOẠT TẢI ẢNH MỚI KHI VÀO NGÀY
             } else { 
                 forceNightMode = true; body.classList.add('night-active'); showToast("🌙 Chúc ngủ ngon!"); setBrightness(50); 
+                syncDriveData(); // 🌟 KÍCH HOẠT TẢI ẢNH MỚI KHI VÀO ĐÊM
             }
             applyDynamicPositions();
         }
@@ -514,7 +512,7 @@
             var leftContainer = document.getElementById('bottom-left-events');
             if (leftContainer && leftContainer.innerHTML !== leftHtml) { leftContainer.innerHTML = leftHtml; }
 
-            windowDeathText = "";
+            windowDeathList = [];
             var currentDeaths = [];
             for (var a = 0; a < anniversaries.length; a++) { if (anniversaries[a].m === lMonth) currentDeaths.push(anniversaries[a]); }
             currentDeaths.sort(function(a, b) { return a.d - b.d; });
@@ -524,22 +522,18 @@
                     var ann = currentDeaths[j]; var diff = ann.d - lDay;
                     var shortName = ann.name.split(" (")[0]; 
                     var txt = "Giỗ " + shortName + " (" + ann.d + "/" + ann.m + " ÂL)";
-                    var passClass = "";
 
                     if (diff < 0) { 
-                        passClass = " death-event-passed"; 
-                    } else if (diff === 0) { 
-                        txt = "Hôm nay " + txt; 
-                    } else if (diff <= 3) { 
-                        txt = "Còn " + diff + " ngày đến " + txt; 
+                        windowDeathList.push('<span class="death-event-passed">' + txt + '</span>');
+                    } else {
+                        if (diff === 0) { txt = "Hôm nay " + txt; } 
+                        else if (diff <= 3) { txt = "Còn " + diff + " ngày đến " + txt; }
+                        windowDeathList.push('<span class="death-highlight">' + txt + '</span>');
                     }
-                    
-                    windowDeathText += ' <span class="death-highlight' + passClass + '">&nbsp; | &nbsp;' + txt + '</span>';
                 }
             }
         }
 
-        /* 🌟 THUẬT TOÁN KỂM TRA NHẠC SINH NHẬT VỚI 4 MỐC THỜI GIAN */
         function checkForBirthdayMusic(triggerType) {
             if (birthdays.length === 0) return;
             var now = new Date(); var hours = now.getHours(); var minutes = now.getMinutes();
@@ -553,17 +547,14 @@
                     showToast("🎂 Chúc mừng Sinh Nhật " + birthdayPerson.name + "!");
                     playHappyBirthday(); loadMorningMusicFlag = true; 
                 }
-
                 if (clock8AMMusicFlag === false && hours === 8 && minutes === 0) {
                     showToast("🎂 Chúc mừng Sinh Nhật " + birthdayPerson.name + "!");
                     playHappyBirthday(); clock8AMMusicFlag = true; 
                 }
-
                 if (clock14PMMusicFlag === false && hours === 14 && minutes === 0) {
                     showToast("🎂 Chúc mừng Sinh Nhật " + birthdayPerson.name + "!");
                     playHappyBirthday(); clock14PMMusicFlag = true; 
                 }
-
                 if (clock18PMMusicFlag === false && hours === 18 && minutes === 0) {
                     showToast("🎂 Chúc mừng Sinh Nhật " + birthdayPerson.name + "!");
                     playHappyBirthday(); clock18PMMusicFlag = true; 
@@ -619,7 +610,6 @@
 
             renderEvents(now.getMonth() + 1, currentLunarMonth, now.getDate(), currentLunarDay);
             applyDynamicPositions();
-            
             checkForBirthdayMusic('clock');
         }
         setInterval(updateClock, 1000); updateClock();
@@ -643,8 +633,9 @@
             };
             xhrWeather.send();
 
+            // 🌟 ĐÃ SỬA LỖI AQI SANG MÁY CHỦ CHUYÊN DỤNG CỦA OPEN-METEO AIR QUALITY
             var xhrAQI = new XMLHttpRequest();
-            xhrAQI.open('GET', 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon + '&current=us_aqi', true);
+            xhrAQI.open('GET', 'https://air-quality-api.open-meteo.com/v1/air-quality?latitude=' + lat + '&longitude=' + lon + '&current=us_aqi&timezone=Asia%2FHo_Chi_Minh', true);
             xhrAQI.onerror = function() { globalAQI = "--"; };
             xhrAQI.onreadystatechange = function() {
                 if (xhrAQI.readyState === 4 && xhrAQI.status === 200) { var data = JSON.parse(xhrAQI.responseText); globalAQI = data.current.us_aqi || "--"; }
@@ -659,12 +650,13 @@
             var currentLunarMonth = (activePhase[1] === 0 ? 12 : activePhase[1]);
             var lDay = Math.floor((checkTime - new Date(activePhase[0], activePhase[1], activePhase[2], 0, 0, 0)) / (1000 * 60 * 60 * 24)) + 1;
 
+            // 🌟 ÁP DỤNG TRÍ TUỆ NHÂN TẠO AI VÀO MÀU SẮC MÔI TRƯỜNG
             var envPool = [
-                '🍃 AQI ' + globalAQI,
+                '🍃 AQI <span style="color:' + getEnvColor('aqi', globalAQI) + '; font-weight:700">' + globalAQI + '</span>',
                 '💧 ' + globalHum,
-                '🌧️ ' + globalRain,
+                '🌧️ <span style="color:' + getEnvColor('rain', globalRain) + '; font-weight:700">' + globalRain + '</span>',
                 '🌬️ ' + globalWind,
-                '☀️ UV ' + globalUV,
+                '☀️ <span style="color:' + getEnvColor('uv', globalUV) + '; font-weight:700">UV ' + globalUV + '</span>',
                 '🌅 ' + globalSunrise + ' - ' + globalSunset,
                 '⛰️ ' + globalAlt
             ];
@@ -698,13 +690,32 @@
                 }
             }
 
-            var fullText = finalQuote;
-            if(nextActiveFestivalText !== "") { fullText += ' <span class="countdown-highlight">&nbsp; | &nbsp;' + nextActiveFestivalText + '</span>'; }
-            if(windowDeathText !== "") { fullText += windowDeathText; }
-            
-            document.getElementById('quote-row').innerHTML = fullText;
+            // 🌟 TRÍ TUỆ NHÂN TẠO ĐO LƯỜNG SỐ DÒNG ĐỂ QUYẾT ĐỊNH XUỐNG DÒNG HAY NỐI DÒNG
+            var quoteElement = document.getElementById('quote-row');
+            quoteElement.innerHTML = finalQuote; 
+
+            setTimeout(function() {
+                var style = window.getComputedStyle(quoteElement);
+                var lineHeight = parseFloat(style.lineHeight) || (parseFloat(style.fontSize) * 1.5);
+                var height = quoteElement.offsetHeight;
+                var linesCount = Math.round(height / lineHeight);
+
+                var extrasArray = [];
+                if(nextActiveFestivalText !== "") extrasArray.push('<span class="countdown-highlight">' + nextActiveFestivalText + '</span>');
+                if(windowDeathList.length > 0) extrasArray = extrasArray.concat(windowDeathList);
+                
+                if (extrasArray.length > 0) {
+                    var extrasStr = extrasArray.join(' <span style="color:#ffffff; font-weight:400;">|</span> ');
+                    if (linesCount <= 1) {
+                        quoteElement.innerHTML = finalQuote + '<br>' + extrasStr;
+                    } else {
+                        quoteElement.innerHTML = finalQuote + ' <span style="color:#ffffff; font-weight:400;">|</span> ' + extrasStr;
+                    }
+                }
+            }, 50);
         }
 
+        // 🌟 THUẬT TOÁN ƯU TIÊN ẢNH MỚI (NEWEST FIRST) VÀ QUÉT LẠI MỖI KHI ĐỔI NGÀY/ĐÊM
         function syncDriveData() {
             var query = encodeURIComponent("'" + FOLDER_ID + "' in parents and name = 'cauhinh.txt' and trashed = false");
             var url = 'https://www.googleapis.com/drive/v3/files?q=' + query + '&key=' + API_KEY + '&fields=files(id)';
@@ -717,17 +728,34 @@
             };
             xhr.send();
 
+            // YÊU CẦU GOOGLE DRIVE SẮP XẾP THEO THỜI GIAN TẠO (CREATEDTIME DESC)
             var imgQuery = encodeURIComponent("'" + FOLDER_ID + "' in parents and mimeType contains 'image/'");
-            var imgUrl = 'https://www.googleapis.com/drive/v3/files?q=' + imgQuery + '&key=' + API_KEY + '&fields=files(id)';
+            var imgUrl = 'https://www.googleapis.com/drive/v3/files?q=' + imgQuery + '&orderBy=createdTime desc&key=' + API_KEY + '&fields=files(id,createdTime)';
             var xhrDrive = new XMLHttpRequest(); xhrDrive.open('GET', imgUrl, true);
             xhrDrive.onreadystatechange = function() {
                 if (xhrDrive.readyState === 4) {
                     if (xhrDrive.status === 200) {
                         var data = JSON.parse(xhrDrive.responseText);
                         if (data.files && data.files.length > 0) {
-                            images = [];
-                            for (var i = 0; i < data.files.length; i++) { images.push('https://drive.google.com/thumbnail?id=' + data.files[i].id + '&sz=w2048'); }
-                            for (var k = images.length - 1; k > 0; k--) { var j = Math.floor(Math.random() * (k + 1)); var temp = images[k]; images[k] = images[j]; images[j] = temp; }
+                            
+                            var allImgs = [];
+                            for (var i = 0; i < data.files.length; i++) { 
+                                allImgs.push('https://drive.google.com/thumbnail?id=' + data.files[i].id + '&sz=w2048'); 
+                            }
+                            
+                            // 🌟 Trích xuất 15 ảnh mới nhất tải lên
+                            var newestImgs = allImgs.slice(0, 15);
+
+                            function shuffleArray(arr) {
+                                var a = arr.slice();
+                                for (var k = a.length - 1; k > 0; k--) { var j = Math.floor(Math.random() * (k + 1)); var temp = a[k]; a[k] = a[j]; a[j] = temp; }
+                                return a;
+                            }
+
+                            // 🌟 Cấu trúc Queue: [15 ảnh mới trộn] + [15 ảnh mới trộn lần 2] + [Toàn bộ ảnh trộn]
+                            images = [].concat(shuffleArray(newestImgs), shuffleArray(newestImgs), shuffleArray(allImgs));
+                            currentIndex = 0;
+
                             initSlideshow();
                         } else { fallbackInit("Thư mục trống! Vui lòng tải ảnh lên Drive."); }
                     } else {
