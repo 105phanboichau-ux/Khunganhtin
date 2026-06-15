@@ -8,7 +8,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="referrer" content="no-referrer">
     
-    <title>Khung Ảnh Số Thông Minh - V100 Century Masterpiece</title>
+    <title>Khung Ảnh Số Thông Minh - V99 Perfect Alignment</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,7 +39,7 @@
         .tap-target { -webkit-tap-highlight-color: transparent; outline: none; border: none; background: transparent; cursor: pointer; transition: opacity 0.2s; }
         .tap-target:active { opacity: 0.6; }
 
-        /* 🛡️ CỘT TRÁI TRÊN (GIỜ + LỊCH - CĂN GIỮA TUYỆT ĐỐI) */
+        /* 🛡️ CỘT TRÁI TRÊN (GIỜ + LỊCH - THU NHỎ KÍCH THƯỚC) */
         #info-container { position: absolute; top: 35px; left: 35px; z-index: 4; text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.6); display: flex; flex-direction: column; align-items: center; transition: transform 2s ease-in-out; width: auto; }
         #clock-flex-wrapper { display: flex; flex-direction: column; align-items: center; width: 100%; margin-left: 0; }
         .hours-style, .minutes-style { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 6.5rem; letter-spacing: -2px; display: block; line-height: 0.85; transition: color 0.5s, font-family 0.5s; width: 100%; text-align: center; margin-left: 0; } 
@@ -49,19 +49,21 @@
         #date-lunar-top { font-size: 1.4rem; font-weight: 700; color: #ffffff; margin-top: 4px; white-space: nowrap; text-align: center; }
         .highlight-yellow { color: #F4B41A; font-weight: 700; }
 
-        /* 🛡️ CỘT PHẢI TRÊN (THỜI TIẾT + NHIỆT ĐỘ) - ĐÃ CẬP NHẬT THUẬT TOÁN AI CĂN TÂM ĐỐI XỨNG */
-        #top-right-wrapper { position: absolute; top: 35px; right: 35px; z-index: 4; display: flex; flex-direction: column; align-items: center; gap: 2px; text-shadow: 0px 2px 5px rgba(0,0,0,0.6); transition: transform 2s ease-in-out; }
+        /* 🛡️ CỘT PHẢI TRÊN (THỜI TIẾT Ở TRÊN, NHIỆT ĐỘ Ở DƯỚI) */
+        #top-right-wrapper { position: absolute; top: 35px; right: 35px; z-index: 4; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; text-shadow: 0px 2px 5px rgba(0,0,0,0.6); transition: transform 2s ease-in-out; }
         
-        #right-env-container { display: flex; flex-direction: column; align-items: center; margin-right: 0; width: auto; }
-        .env-rotating-item { padding: 0; background: transparent; white-space: nowrap; transition: opacity 0.5s ease; color: rgba(255, 255, 255, 0.95); font-weight: 600; text-align: center; display: flex; justify-content: center; align-items: center; }
+        #right-env-container { display: flex; flex-direction: column; align-items: flex-end; margin-right: 18px; /* Căn chỉnh đúng với mép phải của con số nhiệt độ */ }
+        .env-rotating-item { padding: 0; background: transparent; white-space: nowrap; transition: opacity 0.5s ease; color: rgba(255, 255, 255, 0.95); font-weight: 600; text-align: right; }
 
-        #temp-wrapper { position: relative; display: flex; align-items: flex-start; justify-content: center; flex-shrink: 0; margin-left: 0; text-align: center; margin-right: 0; width: auto; } 
+        #temp-wrapper { position: relative; display: flex; align-items: flex-start; justify-content: flex-end; flex-shrink: 0; margin-left: 0; text-align: right; margin-right: 18px; } 
         #weather-val { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #ffffff; letter-spacing: -2px; line-height: 0.8; font-size: 3.8rem; display: inline-block; }
-        /* Khóa cứng biểu tượng độ ra ngoài vùng đo của khối Flexbox */
         .degree-symbol { position: absolute; font-weight: 700; color: #ffffff; font-size: 1.5rem; top: 0; right: -18px; }
 
+        @-webkit-keyframes pulseGlow { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
+        @keyframes pulseGlow { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
+
         /* 🛡️ KHU VỰC ĐÁY */
-        #bottom-container { position: absolute; bottom: 35px; left: 35px; right: 35px; z-index: 4; display: flex; flex-direction: row; align-items: flex-end; justify-content: space-between; text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.7); transition: transform 2s ease-in-out; gap: 30px;}
+        #bottom-container { position: absolute; bottom: 35px; left: 35px; right: 35px; z-index: 4; display: flex; flex-direction: row; align-items: flex-end; justify-content: space-between; text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.7); transition: transform 2s ease-in-out; }
         
         #bottom-left-events { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; flex-shrink: 0; }
         .event-header { font-size: 1.1rem; color: #F4B41A; font-weight: 700; text-align: left; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; cursor: pointer; }
@@ -70,14 +72,14 @@
         .event-urgent { color: #F4B41A !important; font-weight: 700; background: rgba(0, 0, 0, 0.7); -webkit-animation: pulseGlow 2s infinite; animation: pulseGlow 2s infinite; }
         .event-today-birth { color: #2ecc71 !important; font-weight: 700; font-size: 1.25rem; background: rgba(0, 0, 0, 0.8); }
 
-        #bottom-right-text { flex: 1; display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; text-align: right; }
+        #bottom-right-text { flex: 1; display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; text-align: right; margin-left: 30px; cursor: pointer;}
         #quote-row { font-size: 1.15rem; font-weight: 500; font-style: normal; color: #f5f5f7; line-height: 1.5; word-wrap: break-word; text-align: right; width: 100%; }
         
         .countdown-highlight { color: #F4B41A; font-weight: 700; }
         .death-highlight { color: #ff9500; font-weight: 700; }
-        .death-event-passed { color: #c4c4c4; font-weight: 500; opacity: 0.6; }
+        .death-event-passed { color: #a1a1a1; font-weight: 500; opacity: 0.6; }
 
-        /* BẢNG CÀI ĐẶT & TRA CỨU POPUP */
+        /* BẢNG MODAL CHUNG */
         .modal-base { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(15px); padding: 25px; border-radius: 16px; border: 1px solid #F4B41A; z-index: 10001; display: none; flex-direction: column; gap: 15px; width: 340px; box-shadow: 0px 10px 40px rgba(0,0,0,0.8); }
         .show-modal { display: flex !important; }
         .modal-title { color: #F4B41A; font-weight: 700; font-size: 1.3rem; text-align: center; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
@@ -107,13 +109,12 @@
         .night-active #night-clock-box { display: flex; align-items: center; justify-content: center; flex-direction: row; }
         .night-hours, .night-minutes { font-family: 'Tourney', cursive !important; font-weight: 600 !important; color: #FF9500 !important; font-size: 46vmin; line-height: 0.9; margin: 0 1vmin; letter-spacing: -2vmin; }
 
-        /* MÀN HÌNH DỌC (PORTRAIT) */
+        /* MÀN HÌNH DỌC */
         @media (orientation: portrait) {
             .hours-style, .minutes-style { font-size: 7.5rem; text-align: center; } 
             #date-solar-top { font-size: 1.6rem; text-align: center; } 
             #date-lunar-top { font-size: 1.6rem; text-align: center; }
             .event-header { font-size: 1.1rem; } .event-item { font-size: 1.15rem; }
-            .env-rotating-item { font-size: 1.15rem; }
             #bottom-container { flex-direction: column; align-items: stretch; gap: 15px; }
             #bottom-left-events { align-items: flex-start; max-width: 100%; width: 100%; }
             #bottom-right-text { text-align: right; align-items: flex-end; margin-left: 0; width: 100%; }
@@ -139,8 +140,8 @@
 
         <div id="info-container">
             <div id="clock-flex-wrapper">
-                <span class="hours-style tap-target" id="hr-node" ontouchstart="handleAction(event, 'night')", onclick="handleAction(event, 'night')">00</span>
-                <span class="minutes-style tap-target" id="min-node" ontouchstart="handleAction(event, 'style')", onclick="handleAction(event, 'style')">00</span>
+                <span class="hours-style tap-target" id="hr-node" ontouchstart="handleAction(event, 'night')" onclick="handleAction(event, 'night')">00</span>
+                <span class="minutes-style tap-target" id="min-node" ontouchstart="handleAction(event, 'style')" onclick="handleAction(event, 'style')">00</span>
             </div>
             <div id="date-solar-top" class="tap-target" ontouchstart="handleAction(event, 'wakeup')" onclick="handleAction(event, 'wakeup')">Th 0 00/00</div>
             <div id="date-lunar-top" class="tap-target" ontouchstart="handleAction(event, 'interval')" onclick="handleAction(event, 'interval')"><span class="highlight-yellow">AL</span> 00/00</div>
@@ -161,7 +162,7 @@
         <div id="bottom-container">
             <div id="bottom-left-events" class="tap-target" ontouchstart="handleAction(event, 'show_birth')" onclick="handleAction(event, 'show_birth')"></div>
             <div id="bottom-right-text" class="tap-target" ontouchstart="handleAction(event, 'show_death')" onclick="handleAction(event, 'show_death')">
-                <span id="quote-row">Đang tải và đồng bộ dữ liệu đám mây...</span>
+                <span id="quote-row">Đang tải và đồng bộ hệ thống dữ liệu điện toán đám mây...</span>
             </div>
         </div>
         
@@ -192,7 +193,7 @@
         var audioCtx = null; var isGroup1Active = true; var audioUnlocked = false; var forceNightMode = null; 
         
         var globalAQI = "--", globalHum = "--", globalRain = "--", globalSunrise = "--", globalSunset = "--"; 
-        var globalWind = "--", globalUV = "--", globalAlt = "--";
+        var globalUV = "--", globalAlt = "--";
         var envDisplayIndex = 0; 
         var windowDeathList = []; 
         
@@ -263,7 +264,7 @@
             return "#ffffff";
         }
 
-        /* 🌟 ĐỒNG BỘ CHIỀU NGANG THỜI TIẾT KHỚP VÀ CĂN GIỮA VỚI SỐ NHIỆT ĐỘ */
+        /* 🌟 ĐỒNG BỘ CHIỀU NGANG THỜI TIẾT KHỚP VỚI SỐ NHIỆT ĐỘ */
         function syncEnvWidth() {
             setTimeout(function() {
                 var tempVal = document.getElementById('weather-val');
@@ -273,13 +274,13 @@
                     if (targetW > 0) {
                         envItem.style.width = targetW + 'px';
                         envItem.style.display = 'flex';
-                        envItem.style.justifyContent = 'center'; // 🌟 ĐÃ SỬA: Ép nội dung chữ căn giữa trục tâm
+                        envItem.style.justifyContent = 'flex-end'; // Căn lề phải thẳng tắp
                         envItem.style.alignItems = 'center';
                         
                         var fontSize = 1.1; 
                         envItem.style.fontSize = fontSize + 'rem';
                         
-                        // Vòng lặp thu nhỏ font chữ thông minh nếu text quá dài (như chuỗi Mặt trời)
+                        // Thuật toán thu nhỏ font AI để chữ lọt thỏm vào kích thước số 24
                         while (envItem.scrollWidth > envItem.clientWidth && fontSize > 0.4) {
                             fontSize -= 0.05;
                             envItem.style.fontSize = fontSize + 'rem';
@@ -289,7 +290,7 @@
             }, 50); 
         }
 
-        /* 🌟 XOAY VÒNG CHỈ SỐ THỜI TIẾT 2 PHÚT / LẦN */
+        /* 🌟 XOAY VÒNG CHỈ SỐ THỜI TIẾT 1 MÓN / 2 PHÚT */
         function rotateWeatherDisplay() {
             var envPool = [
                 'AQI <span style="color:' + getEnvColor('aqi', globalAQI) + '; font-weight:700;">' + globalAQI + '</span>',
@@ -306,8 +307,118 @@
                 syncEnvWidth();
             }
         }
-        setInterval(rotateWeatherDisplay, 120000); // 🌟 Thay đổi món mỗi 2 phút
+        setInterval(rotateWeatherDisplay, 120000); // Quay vòng mỗi 2 phút
 
+        function fetchConfigFromDrive() {
+            var query = encodeURIComponent("'" + FOLDER_ID + "' in parents and name = 'cauhinh.txt' and trashed = false");
+            var url = 'https://www.googleapis.com/drive/v3/files?q=' + query + '&key=' + API_KEY + '&fields=files(id)';
+            var xhr = new XMLHttpRequest(); xhr.open('GET', url, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var data = JSON.parse(xhr.responseText);
+                    if (data.files && data.files.length > 0) { downloadConfigFile(data.files[0].id); }
+                }
+            }; xhr.send();
+        }
+
+        function downloadConfigFile(fileId) {
+            var url = 'https://www.googleapis.com/drive/v3/files/' + fileId + '?alt=media&key=' + API_KEY;
+            var xhr = new XMLHttpRequest(); xhr.open('GET', url, true);
+            if (xhr.overrideMimeType) xhr.overrideMimeType('text/plain; charset=utf-8');
+            xhr.onreadystatechange = function() { if (xhr.readyState === 4 && xhr.status === 200) { parseConfigText(xhr.responseText); } };
+            xhr.send();
+        }
+
+        function parseConfigText(text) {
+            var lines = text.split('\n'); var section = "";
+            var tempB = [], tempA = [], tempF = [], tempS = [], tempQ = [];
+            for (var i = 0; i < lines.length; i++) {
+                var line = lines[i].replace('\r', '').trim();
+                if (!line || line.indexOf('#') === 0) continue;
+                if (line.indexOf('[') === 0) { section = line.toUpperCase(); continue; }
+                if (section === "[THONG TIN QUAN TRONG]") {
+                    var parts = line.split('=');
+                    if(parts.length === 2) {
+                        var k = parts[0].trim().toUpperCase(); var v = parts[1].trim();
+                        if(k === "VI_DO") { if(!localStorage.getItem('myLat')) clientLatitude = parseFloat(v.replace(',', '.')); defaultLatitude = parseFloat(v.replace(',', '.')); }
+                        if(k === "KINH_DO") { if(!localStorage.getItem('myLon')) clientLongitude = parseFloat(v.replace(',', '.')); defaultLongitude = parseFloat(v.replace(',', '.')); }
+                        if(k === "TEN_DIA_PHUONG") { if(!localStorage.getItem('myName')) clientLocalName = v; defaultLocalName = v; }
+                    }
+                }
+                else if (section === "[DANH SACH SINH NHAT]") {
+                    var mB = line.match(/^(\d{1,2})\s*[\/]\s*(\d{1,2})\s+(.+)$/);
+                    if (mB) tempB.push({d: parseInt(mB[1],10), m: parseInt(mB[2],10), name: mB[3].trim()});
+                }
+                else if (section === "[DANH SACH NGAY GIO]") {
+                    var mA = line.match(/^(\d{1,2})\s*[\/]\s*(\d{1,2})\s+(.+)$/);
+                    if (mA) tempA.push({d: parseInt(mA[1],10), m: parseInt(mA[2],10), name: mA[3].trim()});
+                }
+                else if (section === "[LE HOI VIET NAM]" || section === "[NGAY LE TON GIAO]" || section === "[LE HOI VA NGAY LE TON GIAO]") {
+                    var mF = line.match(/^(s|l)\s*[\/]\s*(\d{1,2})\s*[\/]\s*(\d{1,2})\s+(.+)$/i);
+                    if (mF) tempF.push({type: mF[1].toLowerCase(), m: parseInt(mF[2],10), d: parseInt(mF[3],10), text: mF[4].trim()});
+                }
+                else if (section === "[DAC SAN THEO MUA]") {
+                    var mS = line.match(/^(\d{1,2})\s+(.+)$/);
+                    if (mS) tempS.push({m: parseInt(mS[1],10), text: mS[2].trim()});
+                }
+                else if (section === "[KHO DANH NGON CUOC LIFE]" || section === "[KHO DANH NGON CUOC SONG]") {
+                    tempQ.push(line);
+                }
+            }
+            if(tempB.length>0) birthdays = tempB; if(tempA.length>0) anniversaries = tempA;
+            if(tempF.length>0) festivalsData = tempF; if(tempS.length>0) specialtiesData = tempS;
+            if(tempQ.length>0) quotePool = tempQ;
+            
+            updateWeatherAndAQI(); updateClock();
+            updateDynamicContentBySlide(); 
+            checkForBirthdayMusic('load');
+        }
+
+        function showToast(msg) {
+            var toast = document.getElementById('toast-msg');
+            toast.innerText = msg;
+            toast.classList.add('show');
+            if(toastTimeout) clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(function() { toast.classList.remove('show'); }, 3000);
+        }
+
+        function applyClockStyle() {
+            var s = clockStyles[currentStyleIdx];
+            var hrNode = document.getElementById('hr-node');
+            var minNode = document.getElementById('min-node');
+            hrNode.style.fontFamily = s.f; hrNode.style.color = s.hc; hrNode.style.fontWeight = s.fw;
+            minNode.style.fontFamily = s.f; minNode.style.color = s.mc; minNode.style.fontWeight = s.fw;
+            localStorage.setItem('clockStyle', currentStyleIdx);
+        }
+
+        function playNote(freq, startTime, duration, type) {
+            if (!audioCtx) return;
+            var osc = audioCtx.createOscillator(); var gainNode = audioCtx.createGain();
+            osc.type = type || 'sine'; osc.frequency.setValueAtTime(freq, startTime);
+            gainNode.gain.setValueAtTime(0.2, startTime); gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+            osc.connect(gainNode); gainNode.connect(audioCtx.destination); osc.start(startTime); osc.stop(startTime + duration);
+        }
+
+        function playSolemnChime() {
+            if (!audioCtx) { try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){} }
+            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+            showToast("🔔 Thử chuông báo");
+            var t = audioCtx.currentTime;
+            playNote(220.00, t, 3.5, 'sine'); playNote(440.00, t + 0.2, 3.0, 'sine'); playNote(554.37, t + 0.5, 3.0, 'sine'); playNote(659.25, t + 0.8, 3.0, 'sine'); playNote(880.00, t + 1.2, 4.0, 'sine'); 
+        }
+
+        function playHappyBirthday() {
+            if (!audioCtx) { try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){} }
+            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+            var t = audioCtx.currentTime; var tempo = 0.45; 
+            function p(f, d) { playNote(f, t, d * tempo, 'triangle'); t += d * tempo; }
+            p(261.63, 0.75); p(261.63, 0.25); p(293.66, 1); p(261.63, 1); p(349.23, 1); p(329.63, 2);
+            p(261.63, 0.75); p(261.63, 0.25); p(293.66, 1); p(261.63, 1); p(392.00, 1); p(349.23, 2);
+            p(261.63, 0.75); p(261.63, 0.25); p(523.25, 1); p(440.00, 1); p(349.23, 1); p(329.63, 1); p(293.66, 2);
+            p(466.16, 0.75); p(466.16, 0.25); p(440.00, 1); p(349.23, 1); p(392.00, 1); p(349.23, 2);
+        }
+
+        /* 🌟 GIAO DIỆN MODAL BẢNG CÀI ĐẶT VÀ DANH SÁCH */
         function openLocationModal() {
             var modal = document.getElementById('location-modal');
             document.getElementById('loc-name').value = clientLocalName;
@@ -343,7 +454,7 @@
             closeLocationModal();
             localStorage.removeItem('myName'); localStorage.removeItem('myLat'); localStorage.removeItem('myLon');
             clientLocalName = defaultLocalName; clientLatitude = defaultLatitude; clientLongitude = defaultLongitude;
-            showToast("📍 Đã khôi phục vị trí gốc");
+            showToast("📍 Đã khôi phục vị trí mặc định");
             globalAQI = "--"; 
             updateWeatherAndAQI(); updateDynamicContentBySlide();
         }
@@ -456,8 +567,10 @@
             }
         }
 
+        /* 🌟 HIỂN THỊ SINH NHẬT / NGÀY GIỖ */
         function renderEvents(sMonth, lMonth, sDay, lDay) {
-            var leftHtml = ""; var currentBirths = [];
+            var leftHtml = "";
+            var currentBirths = [];
             for (var b = 0; b < birthdays.length; b++) { if (birthdays[b].m === sMonth) currentBirths.push(birthdays[b]); }
             currentBirths.sort(function(a, b) { return a.d - b.d; });
 
@@ -469,20 +582,26 @@
                     leftHtml += '<div class="' + cls + '">' + txt + '</div>';
                 }
             }
+            
             var leftContainer = document.getElementById('bottom-left-events');
             if (leftContainer && leftContainer.innerHTML !== leftHtml) { leftContainer.innerHTML = leftHtml; }
 
-            windowDeathList = []; var currentDeaths = [];
+            windowDeathList = [];
+            var currentDeaths = [];
             for (var a = 0; a < anniversaries.length; a++) { if (anniversaries[a].m === lMonth) currentDeaths.push(anniversaries[a]); }
             currentDeaths.sort(function(a, b) { return a.d - b.d; });
 
             if (currentDeaths.length > 0) {
                 for (var j = 0; j < currentDeaths.length; j++) {
-                    var ann = currentDeaths[j]; var diff = ann.d - lDay; var shortName = ann.name.split(" (")[0]; 
+                    var ann = currentDeaths[j]; var diff = ann.d - lDay;
+                    var shortName = ann.name.split(" (")[0]; 
                     var txt = "Giỗ " + shortName + " (" + ann.d + "/" + ann.m + " ÂL)";
-                    if (diff < 0) { windowDeathList.push('<span class="death-event-passed">' + txt + '</span>'); } 
-                    else {
-                        if (diff === 0) { txt = "Hôm nay " + txt; } else if (diff <= 3) { txt = "Còn " + diff + " ngày đến " + txt; }
+
+                    if (diff < 0) { 
+                        windowDeathList.push('<span class="death-event-passed">' + txt + '</span>');
+                    } else {
+                        if (diff === 0) { txt = "Hôm nay " + txt; } 
+                        else if (diff <= 3) { txt = "Còn " + diff + " ngày đến " + txt; }
                         windowDeathList.push('<span class="death-highlight">' + txt + '</span>');
                     }
                 }
@@ -496,46 +615,80 @@
             for(var i=0; i<birthdays.length; i++) {
                 if(birthdays[i].m === (now.getMonth() + 1) && birthdays[i].d === now.getDate()) { birthdayPerson = birthdays[i]; break; }
             }
+
             if (birthdayPerson) {
-                if (loadMorningMusicFlag === false && hours >= wakeUpHour && hours < 8) { showToast("🎂 Sinh Nhật " + birthdayPerson.name + "!"); playHappyBirthday(); loadMorningMusicFlag = true; }
-                if (clock8AMMusicFlag === false && hours === 8 && minutes === 0) { showToast("🎂 Sinh Nhật " + birthdayPerson.name + "!"); playHappyBirthday(); clock8AMMusicFlag = true; }
-                if (clock14PMMusicFlag === false && hours === 14 && minutes === 0) { showToast("🎂 Sinh Nhật " + birthdayPerson.name + "!"); playHappyBirthday(); clock14PMMusicFlag = true; }
-                if (clock18PMMusicFlag === false && hours === 18 && minutes === 0) { showToast("🎂 Sinh Nhật " + birthdayPerson.name + "!"); playHappyBirthday(); clock18PMMusicFlag = true; }
+                if (loadMorningMusicFlag === false && hours >= wakeUpHour && hours < 8) {
+                    showToast("🎂 Chúc mừng Sinh Nhật " + birthdayPerson.name + "!");
+                    playHappyBirthday(); loadMorningMusicFlag = true; 
+                }
+                if (clock8AMMusicFlag === false && hours === 8 && minutes === 0) {
+                    showToast("🎂 Chúc mừng Sinh Nhật " + birthdayPerson.name + "!");
+                    playHappyBirthday(); clock8AMMusicFlag = true; 
+                }
+                if (clock14PMMusicFlag === false && hours === 14 && minutes === 0) {
+                    showToast("🎂 Chúc mừng Sinh Nhật " + birthdayPerson.name + "!");
+                    playHappyBirthday(); clock14PMMusicFlag = true; 
+                }
+                if (clock18PMMusicFlag === false && hours === 18 && minutes === 0) {
+                    showToast("🎂 Chúc mừng Sinh Nhật " + birthdayPerson.name + "!");
+                    playHappyBirthday(); clock18PMMusicFlag = true; 
+                }
+
                 if (lastBirthdayCheckDate && lastBirthdayCheckDate !== now.getDate()) {
-                    loadMorningMusicFlag = false; clock8AMMusicFlag = false; clock14PMMusicFlag = false; clock18PMMusicFlag = false; lastBirthdayCheckDate = now.getDate();
+                    loadMorningMusicFlag = false; clock8AMMusicFlag = false; 
+                    clock14PMMusicFlag = false; clock18PMMusicFlag = false;
+                    lastBirthdayCheckDate = now.getDate();
                 } else if (!lastBirthdayCheckDate) { lastBirthdayCheckDate = now.getDate(); }
-            } else { loadMorningMusicFlag = false; clock8AMMusicFlag = false; clock14PMMusicFlag = false; clock18PMMusicFlag = false; }
+            } else {
+                loadMorningMusicFlag = false; clock8AMMusicFlag = false;
+                clock14PMMusicFlag = false; clock18PMMusicFlag = false;
+            }
         }
 
         function updateClock() {
-            var now = new Date(); var hours = now.getHours(); var minutes = now.getMinutes();
-            if (hours === wakeUpHour && minutes === 0 && now.getSeconds() === 0) { forceNightMode = null; syncDriveData(); }
+            var now = new Date(); var hours = now.getHours(); var minutes = now.getMinutes(); var seconds = now.getSeconds();
+            if (hours === wakeUpHour && minutes === 0 && seconds === 0) { forceNightMode = null; syncDriveData(); }
+
             var hrStr = hours < 10 ? '0' + hours : hours; var minStr = minutes < 10 ? '0' + minutes : minutes;
-            document.getElementById('hr-node').innerText = hrStr; document.getElementById('min-node').innerText = minStr;
-            document.getElementById('night-hr-node').innerText = (window.innerWidth > window.innerHeight) ? (hrStr + ":") : hrStr;
-            document.getElementById('night-min-node').innerText = minStr;
+            var hrNode = document.getElementById('hr-node'); var minNode = document.getElementById('min-node');
+            var nHrNode = document.getElementById('night-hr-node'); var nMinNode = document.getElementById('night-min-node');
+            
+            if(hrNode.innerText !== hrStr) hrNode.innerText = hrStr; 
+            if(minNode.innerText !== minStr) minNode.innerText = minStr;
+            
+            var nHrStr = (window.innerWidth > window.innerHeight) ? (hrStr + ":") : hrStr;
+            if(nHrNode.innerText !== nHrStr) nHrNode.innerText = nHrStr; 
+            if(nMinNode.innerText !== minStr) nMinNode.innerText = minStr;
 
             var isNightModeToggled = document.body.classList.contains('night-active');
             if (forceNightMode === null) {
                 var shouldBeNight = (hours >= 21 || hours < wakeUpHour);
-                if (shouldBeNight && !isNightModeToggled) { document.body.classList.add('night-active'); document.getElementById('brightness-overlay').style.background = 'rgba(0,0,0,0.5)'; } 
-                else if (!shouldBeNight && isNightModeToggled) { document.body.classList.remove('night-active'); document.getElementById('brightness-overlay').style.background = 'rgba(0,0,0,0)'; }
+                if (shouldBeNight && !isNightModeToggled) { document.body.classList.add('night-active'); document.getElementById('brightness-overlay').style.background = 'rgba(0,0,0,0.5)';} 
+                else if (!shouldBeNight && isNightModeToggled) { document.body.classList.remove('night-active'); document.getElementById('brightness-overlay').style.background = 'rgba(0,0,0,0)';}
             }
 
             var checkTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0); var activePhase = phases[0];
             for (var i = 0; i < phases.length; i++) { var d = new Date(phases[i][0], phases[i][1], phases[i][2], 0, 0, 0); if (checkTime >= d) activePhase = phases[i]; else break; }
-            var currentLunarDay = Math.floor((checkTime - new Date(activePhase[0], activePhase[1], activePhase[2], 0, 0, 0)) / (1000 * 60 * 60 * 24)) + 1;
+            var startDate = new Date(activePhase[0], activePhase[1], activePhase[2], 0, 0, 0);
+            var currentLunarDay = Math.floor((checkTime - startDate) / (1000 * 60 * 60 * 24)) + 1;
             var currentLunarMonth = (activePhase[1] === 0 ? 12 : activePhase[1]);
 
             var shortDays = ['CN', 'Th 2', 'Th 3', 'Th 4', 'Th 5', 'Th 6', 'Th 7'];
-            document.getElementById('date-solar-top').innerHTML = '<span class="highlight-yellow">' + shortDays[now.getDay()] + '</span> ' + now.getDate() + '/' + (now.getMonth() + 1);
-            document.getElementById('date-lunar-top').innerHTML = '<span class="highlight-yellow">AL</span> ' + currentLunarDay + '/' + currentLunarMonth;
+            var solarHtml = '<span class="highlight-yellow">' + shortDays[now.getDay()] + '</span> ' + now.getDate() + '/' + (now.getMonth() + 1);
+            var solarNode = document.getElementById('date-solar-top');
+            if(solarNode.innerHTML !== solarHtml) solarNode.innerHTML = solarHtml;
+
+            var lunarHtml = '<span class="highlight-yellow">AL</span> ' + currentLunarDay + '/' + currentLunarMonth;
+            var lunarNode = document.getElementById('date-lunar-top');
+            if(lunarNode.innerHTML !== lunarHtml) lunarNode.innerHTML = lunarHtml;
 
             renderEvents(now.getMonth() + 1, currentLunarMonth, now.getDate(), currentLunarDay);
-            applyDynamicPositions(); checkForBirthdayMusic('clock');
+            applyDynamicPositions();
+            checkForBirthdayMusic('clock');
         }
-        setInterval(updateClock, 1000);
+        setInterval(updateClock, 1000); 
 
+        /* 🌟 GỌI API THỜI TIẾT DỰ BÁO CHỐNG LỖI KẸT SỐ LIỆU (1 TIẾNG/LẦN) */
         function generateSimulatedWeather() {
             var hr = new Date().getHours(); var baseTemp = 24; 
             if (hr >= 11 && hr <= 15) baseTemp = 32; else if (hr >= 5 && hr <= 8) baseTemp = 22;
@@ -547,11 +700,17 @@
             rotateWeatherDisplay();
         }
 
-        /* 🌟 CẬP NHẬT THỜI TIẾT THEO CHU KỲ 1 TIẾNG / LẦN */
         function updateWeatherAndAQI() {
             var lat = parseFloat(clientLatitude); var lon = parseFloat(clientLongitude);
             if (isNaN(lat) || !lat) { lat = 12.6792; lon = 108.0694; }
             var cb = new Date().getTime();
+
+            // Chặn đứng dấu "--" khi load ban đầu
+            if (document.getElementById('weather-val').innerText === "--") {
+                document.getElementById('weather-val').innerText = "26";
+                globalHum = "75%"; globalRain = "10%"; globalWind = "8 km/h"; globalUV = "1.0"; globalAlt = "473m"; globalSunrise = "05:24"; globalSunset = "18:12"; globalAQI = 40;
+                rotateWeatherDisplay();
+            }
 
             var xhrW = new XMLHttpRequest(); xhrW.timeout = 8000;
             xhrW.open('GET', 'https://api.open-meteo.com/v1/forecast?latitude=' + lat.toFixed(4) + '&longitude=' + lon.toFixed(4) + '&hourly=temperature_2m,relative_humidity_2m,precipitation_probability,uv_index&daily=sunrise,sunset&timezone=Asia%2FHo_Chi_Minh&forecast_days=1&_cb=' + cb, true);
@@ -574,6 +733,7 @@
 
             var xhrA = new XMLHttpRequest(); xhrA.timeout = 8000;
             xhrA.open('GET', 'https://air-quality-api.open-meteo.com/v1/air-quality?latitude=' + lat.toFixed(4) + '&longitude=' + lon.toFixed(4) + '&hourly=us_aqi,pm2_5&timezone=Asia%2FHo_Chi_Minh&forecast_days=1&_cb=' + cb, true);
+            xhrA.onerror = function() { rotateWeatherDisplay(); }; xhrA.ontimeout = function() { rotateWeatherDisplay(); };
             xhrA.onreadystatechange = function() {
                 if (xhrA.readyState === 4 && xhrA.status === 200) {
                     try {
@@ -589,68 +749,160 @@
                 }
             }; xhrA.send();
         }
-        setInterval(updateWeatherAndAQI, 3600000); // Tự động kéo API mới sau mỗi 60 phút
+        setInterval(updateWeatherAndAQI, 3600000); // 1 tiếng làm mới 1 lần
 
+        /* 🌟 KHÔI PHỤC NỐI DANH NGÔN, ĐẶC SẢN AI */
         function updateDynamicContentBySlide() {
-            var quoteElement = document.getElementById('quote-row'); if(!quoteElement) return;
-            var finalQuote = (quotePool.length > 0) ? quotePool[Math.floor(Math.random() * quotePool.length)] : "Nhà là nơi bão dừng sau cánh cửa, nơi bình yên ấm áp nhất để trở về.";
-            quoteElement.innerHTML = finalQuote;
+            var now = new Date(); var currentSolarMonth = now.getMonth() + 1; var sDay = now.getDate();
+            var checkTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0); var activePhase = phases[0];
+            for (var i = 0; i < phases.length; i++) { var d = new Date(phases[i][0], phases[i][1], phases[i][2], 0, 0, 0); if (checkTime >= d) activePhase = phases[i]; else break; }
+            var currentLunarMonth = (activePhase[1] === 0 ? 12 : activePhase[1]);
+            var lDay = Math.floor((checkTime - new Date(activePhase[0], activePhase[1], activePhase[2], 0, 0, 0)) / (1000 * 60 * 60 * 24)) + 1;
+
+            rotateWeatherDisplay();
+
+            var activeSpecialties = [];
+            for (var s=0; s<specialtiesData.length; s++) { if(specialtiesData[s].m === currentSolarMonth || specialtiesData[s].m === 0) activeSpecialties.push(specialtiesData[s].text); }
+
+            var finalQuote = ""; var dice = Math.random(); 
+            if (dice < 0.5 && activeSpecialties.length > 0) { finalQuote = "Mùa này " + activeSpecialties[Math.floor(Math.random() * activeSpecialties.length)]; } 
+            else if (quotePool.length > 0) { finalQuote = quotePool[Math.floor(Math.random() * quotePool.length)]; }
+            else { finalQuote = "Nhà là nơi bão dừng sau cánh cửa, nơi bình yên ấm áp nhất để trở về."; }
+
+            var nextActiveFestivalText = "";
+            var minDiff = 365;
+            for(var f=0; f<festivalsData.length; f++) {
+                var fest = festivalsData[f];
+                if(fest.type === 's' && fest.m === currentSolarMonth && fest.d >= sDay) {
+                    var diff = fest.d - sDay;
+                    if(diff < minDiff) { minDiff = diff; nextActiveFestivalText = (diff === 0 ? "Hôm nay: " : "Còn " + diff + " ngày đến ") + fest.text + " (" + fest.d + "/" + fest.m + ")"; }
+                }
+                if(fest.type === 'l' && fest.m === currentLunarMonth && fest.d >= lDay) {
+                    var diffL = fest.d - lDay;
+                    if(diffL >= 0 && diffL < minDiff) { minDiff = diffL; nextActiveFestivalText = (diffL === 0 ? "Hôm nay: " : "Còn " + diffL + " ngày đến ") + fest.text + " (" + fest.d + "/" + fest.m + " ÂL)"; }
+                }
+            }
+
+            var quoteElement = document.getElementById('quote-row');
+            quoteElement.innerHTML = finalQuote; 
 
             setTimeout(function() {
                 var style = window.getComputedStyle(quoteElement);
-                var linesCount = Math.round(quoteElement.offsetHeight / (parseFloat(style.lineHeight) || 20));
-                var extras = [];
-                if(windowDeathList.length > 0) extras = extras.concat(windowDeathList);
+                var lineHeight = parseFloat(style.lineHeight) || (parseFloat(style.fontSize) * 1.5);
+                var height = quoteElement.offsetHeight;
+                var linesCount = Math.round(height / lineHeight);
+
+                var extrasArray = [];
+                if(nextActiveFestivalText !== "") extrasArray.push('<span class="countdown-highlight">' + nextActiveFestivalText + '</span>');
+                if(windowDeathList.length > 0) extrasArray = extrasArray.concat(windowDeathList);
                 
-                if (extras.length > 0) {
-                    var extrasStr = extras.join(' <span style="color:#ffffff; font-weight:400;">|</span> ');
-                    quoteElement.innerHTML = finalQuote + (linesCount <= 1 ? '<br>' : ' <span style="color:#ffffff; font-weight:400;">|</span> ') + extrasStr;
+                if (extrasArray.length > 0) {
+                    var extrasStr = extrasArray.join(' <span style="color:#ffffff; font-weight:400;">|</span> ');
+                    if (linesCount <= 1) {
+                        quoteElement.innerHTML = finalQuote + '<br>' + extrasStr;
+                    } else {
+                        quoteElement.innerHTML = finalQuote + ' <span style="color:#ffffff; font-weight:400;">|</span> ' + extrasStr;
+                    }
                 }
-                syncEnvWidth(); // Cập nhật đo thước đo tâm khối nhiệt độ mỗi khi lật slide
             }, 50);
         }
 
+        /* 🌟 THUẬT TOÁN TẢI 15 ẢNH MỚI NHẤT VÀ CHỐNG TREO ẢNH */
         function syncDriveData() {
             var query = encodeURIComponent("'" + FOLDER_ID + "' in parents and name = 'cauhinh.txt' and trashed = false");
             var url = 'https://www.googleapis.com/drive/v3/files?q=' + query + '&key=' + API_KEY + '&fields=files(id)';
             var xhr = new XMLHttpRequest(); xhr.open('GET', url, true);
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4 && xhr.status === 200) {
-                    var data = JSON.parse(xhr.responseText); if (data.files && data.files.length > 0) { downloadConfigFile(data.files[0].id); }
+                    var data = JSON.parse(xhr.responseText);
+                    if (data.files && data.files.length > 0) { downloadConfigFile(data.files[0].id); }
                 }
-            }; xhr.send();
+            };
+            xhr.send();
 
             var imgQuery = encodeURIComponent("'" + FOLDER_ID + "' in parents and mimeType contains 'image/'");
-            var imgUrl = 'https://www.googleapis.com/drive/v3/files?q=' + imgQuery + '&orderBy=createdTime desc&key=' + API_KEY + '&fields=files(id)';
+            var imgUrl = 'https://www.googleapis.com/drive/v3/files?q=' + imgQuery + '&orderBy=createdTime desc&key=' + API_KEY + '&fields=files(id,createdTime)';
             var xhrDrive = new XMLHttpRequest(); xhrDrive.open('GET', imgUrl, true);
             xhrDrive.onreadystatechange = function() {
-                if (xhrDrive.readyState === 4 && xhrDrive.status === 200) {
-                    var data = JSON.parse(xhrDrive.responseText);
-                    if (data.files && data.files.length > 0) {
-                        var allImgs = []; for (var i = 0; i < data.files.length; i++) { allImgs.push('https://drive.google.com/thumbnail?id=' + data.files[i].id + '&sz=w2048'); }
-                        var newestImgs = allImgs.slice(0, 15);
-                        function shuffle(arr) { var a = arr.slice(); for (var k = a.length - 1; k > 0; k--) { var j = Math.floor(Math.random() * (k + 1)); var t = a[k]; a[k] = a[j]; a[j] = t; } return a; }
-                        images = [].concat(shuffle(newestImgs), shuffle(newestImgs), shuffle(allImgs)); currentIndex = 0; initSlideshow();
-                    } else { fallbackInit("Thư mục ảnh trống!"); }
+                if (xhrDrive.readyState === 4) {
+                    if (xhrDrive.status === 200) {
+                        var data = JSON.parse(xhrDrive.responseText);
+                        if (data.files && data.files.length > 0) {
+                            var allImgs = [];
+                            for (var i = 0; i < data.files.length; i++) { 
+                                allImgs.push('https://drive.google.com/thumbnail?id=' + data.files[i].id + '&sz=w2048'); 
+                            }
+                            var newestImgs = allImgs.slice(0, 15);
+                            function shuffleArray(arr) {
+                                var a = arr.slice();
+                                for (var k = a.length - 1; k > 0; k--) { var j = Math.floor(Math.random() * (k + 1)); var temp = a[k]; a[k] = a[j]; a[j] = temp; }
+                                return a;
+                            }
+                            images = [].concat(shuffleArray(newestImgs), shuffleArray(newestImgs), shuffleArray(allImgs));
+                            currentIndex = 0;
+                            initSlideshow();
+                        } else { fallbackInit("Thư mục ảnh rỗng!"); }
+                    } else {
+                        fallbackInit("Lỗi lấy dữ liệu đám mây. Đang dùng ảnh dự phòng...");
+                    }
                 }
             }; xhrDrive.send();
         }
 
-        function fallbackInit(msg) { document.getElementById('quote-row').innerText = msg; images = ['https://images.unsplash.com/photo-1506744626753-14002fa88301?q=80&w=2048']; initSlideshow(); }
-        function updateImageDisplayMechanism(img, gp) { img.classList.remove('fit-cover', 'fit-contain'); gp.classList.add('show-blur'); if (window.innerWidth > window.innerHeight) { img.classList.add(img.naturalWidth > img.naturalHeight ? 'fit-cover' : 'fit-contain'); } else { img.classList.add(img.naturalWidth > img.naturalHeight ? 'fit-contain' : 'fit-cover'); } }
-        
-        function loadAndDisplayImage(url, gID, bgID, fgID) {
-            var cg = document.getElementById(isGroup1Active ? 'group1' : 'group2'); var ng = document.getElementById(gID);
-            var nb = document.getElementById(bgID); var nf = document.getElementById(fgID);
-            nf.onload = function() { updateImageDisplayMechanism(nf, ng); cg.classList.remove('active'); ng.classList.add('active'); isGroup1Active = !isGroup1Active; currentIndex = (currentIndex + 1) % images.length; updateDynamicContentBySlide(); };
-            nf.onerror = function() { if (url.indexOf('unsplash.com') === -1) fallbackInit("Đang nạp ảnh cứu hộ..."); };
-            nb.src = url; nf.src = url;
+        function fallbackInit(msg) {
+            document.getElementById('quote-row').innerText = msg;
+            images = ['https://images.unsplash.com/photo-1506744626753-14002fa88301?q=80&w=2048&auto=format&fit=crop'];
+            initSlideshow();
         }
 
-        function initSlideshow() { applyClockStyle(); updateClock(); updateWeatherAndAQI(); loadAndDisplayImage(images[0], isGroup1Active ? 'group1' : 'group2', isGroup1Active ? 'bg1' : 'bg2', isGroup1Active ? 'fg1' : 'fg2'); changeIntervalMode(currentIntervalIdx + 1); }
-        function goToNextSlide() { if(images.length <= 1) return; var nextIndex = (currentIndex + 1) % images.length; loadAndDisplayImage(images[nextIndex], isGroup1Active ? 'group2' : 'group1', isGroup1Active ? 'bg2' : 'bg1', isGroup1Active ? 'fg2' : 'fg1'); }
-        function changeIntervalMode(mode) { currentIntervalIdx = mode - 1; if (slideInterval) clearInterval(slideInterval); slideInterval = setInterval(goToNextSlide, stepSeconds[currentIntervalIdx] * 1000); }
+        function updateImageDisplayMechanism(imgElement, groupElement) {
+            var isScreenLandscape = (window.innerWidth > window.innerHeight);
+            var isImageLandscape = (imgElement.naturalWidth > imgElement.naturalHeight);
+            imgElement.classList.remove('fit-cover', 'fit-contain'); groupElement.classList.add('show-blur');
+            if (isScreenLandscape) { if (isImageLandscape) { imgElement.classList.add('fit-cover'); } else { imgElement.classList.add('fit-contain'); } } 
+            else { if (!isImageLandscape) { imgElement.classList.add('fit-cover'); } else { imgElement.classList.add('fit-contain'); } }
+            var nHrNode = document.getElementById('night-hr-node');
+            var hrStr = document.getElementById('hr-node').innerText;
+            if (isScreenLandscape) { nHrNode.innerText = hrStr + ":"; } else { nHrNode.innerText = hrStr; }
+        }
 
+        window.addEventListener('resize', function() {
+            var activeFg = document.getElementById(isGroup1Active ? 'fg1' : 'fg2');
+            var activeGroup = document.getElementById(isGroup1Active ? 'group1' : 'group2');
+            if (activeFg && activeFg.naturalWidth) updateImageDisplayMechanism(activeFg, activeGroup);
+        });
+
+        function loadAndDisplayImage(imgUrl, groupID, bgID, fgID) {
+            var currentGroup = document.getElementById(isGroup1Active ? 'group1' : 'group2'); var nextGroup = document.getElementById(groupID);
+            var nextBg = document.getElementById(bgID); var nextFg = document.getElementById(fgID);
+            
+            nextFg.onload = function() { 
+                updateImageDisplayMechanism(nextFg, nextGroup); 
+                currentGroup.classList.remove('active'); 
+                nextGroup.classList.add('active'); 
+                isGroup1Active = !isGroup1Active; 
+                currentIndex = (currentIndex + 1) % images.length; 
+                updateDynamicContentBySlide(); 
+            };
+            
+            nextFg.onerror = function() {
+                if (imgUrl.indexOf('unsplash.com') === -1) { fallbackInit("Đang lấy lại ảnh dự phòng..."); }
+            };
+            
+            nextBg.src = imgUrl; nextFg.src = imgUrl;
+        }
+
+        function initSlideshow() { applyClockStyle(); updateClock(); loadAndDisplayImage(images[0], isGroup1Active ? 'group1' : 'group2', isGroup1Active ? 'bg1' : 'bg2', isGroup1Active ? 'fg1' : 'fg2'); changeIntervalMode(currentIntervalIdx + 1); }
+        function goToNextSlide() { if(images.length <= 1) return; var nextIndex = (currentIndex + 1) % images.length; loadAndDisplayImage(images[nextIndex], isGroup1Active ? 'group2' : 'group1', isGroup1Active ? 'bg2' : 'bg1', isGroup1Active ? 'fg2' : 'fg1'); }
+
+        function changeIntervalMode(modeVal) {
+            currentIntervalIdx = modeVal - 1; var seconds = stepSeconds[currentIntervalIdx];
+            if (slideInterval) clearInterval(slideInterval); slideInterval = setInterval(goToNextSlide, seconds * 1000);
+        }
+
+        // Khởi động
+        updateClock();
+        updateWeatherAndAQI();
         syncDriveData();
     </script>
 </body>
