@@ -8,7 +8,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="referrer" content="no-referrer">
     
-    <title>Khung Ảnh Số Thông Minh - V97 Flawless Core</title>
+    <title>Khung Ảnh Số Thông Minh - V98 Smart Rotation</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,7 +39,7 @@
         .tap-target { -webkit-tap-highlight-color: transparent; outline: none; border: none; background: transparent; cursor: pointer; transition: opacity 0.2s; }
         .tap-target:active { opacity: 0.6; }
 
-        /* CỘT TRÁI TRÊN (GIỜ + LỊCH - CĂN GIỮA) */
+        /* CỘT TRÁI TRÊN (GIỜ + LỊCH) */
         #info-container { position: absolute; top: 35px; left: 35px; z-index: 4; text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.6); display: flex; flex-direction: column; align-items: center; transition: transform 2s ease-in-out; width: auto; }
         #clock-flex-wrapper { display: flex; flex-direction: column; align-items: center; width: 100%; margin-left: 0; }
         .hours-style, .minutes-style { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 8rem; letter-spacing: -2px; display: block; line-height: 0.85; transition: color 0.5s, font-family 0.5s; width: 100%; text-align: center; margin-left: 0; } 
@@ -49,10 +49,10 @@
         #date-lunar-top { font-size: 1.6rem; font-weight: 700; color: #ffffff; margin-top: 4px; white-space: nowrap; text-align: center; }
         .highlight-yellow { color: #F4B41A; font-weight: 700; }
 
-        /* CỘT PHẢI TRÊN (THỜI TIẾT TĨNH ĐỒNG LOẠT TRONG SUỐT) */
-        #top-right-wrapper { position: absolute; top: 35px; right: 35px; z-index: 4; display: flex; flex-direction: row; align-items: flex-start; justify-content: flex-end; gap: 20px; text-shadow: 0px 2px 5px rgba(0,0,0,0.6); transition: transform 2s ease-in-out; }
-        #right-env-container { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; margin-top: 8px; }
-        .env-static-row { font-size: 1.15rem; color: rgba(255, 255, 255, 0.95); font-weight: 600; text-align: right; background: transparent; white-space: nowrap; }
+        /* CỘT PHẢI TRÊN (THỜI TIẾT + NHIỆT ĐỘ - XOAY VÒNG) */
+        #top-right-wrapper { position: absolute; top: 35px; right: 35px; z-index: 4; display: flex; flex-direction: row; align-items: flex-start; justify-content: flex-end; gap: 15px; text-shadow: 0px 2px 5px rgba(0,0,0,0.6); transition: transform 2s ease-in-out; }
+        #right-env-container { display: flex; flex-direction: column; align-items: flex-end; margin-top: 12px; }
+        .env-rotating-item { font-size: 1.25rem; color: rgba(255, 255, 255, 0.95); font-weight: 600; text-align: right; padding: 4px; background: transparent; white-space: nowrap; transition: opacity 0.5s ease; }
 
         #temp-wrapper { position: relative; display: flex; align-items: flex-start; justify-content: flex-end; flex-shrink: 0; margin-left: 0; text-align: right; margin-right: 15px; } 
         #weather-val { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #ffffff; letter-spacing: -2px; line-height: 0.82; font-size: 4.5rem; display: inline-block; }
@@ -62,7 +62,7 @@
         @keyframes pulseGlow { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
 
         /* KHU VỰC ĐÁY (SINH NHẬT TRÁI - VĂN BẢN TRẢI DÀI PHẢI) */
-        #bottom-container { position: absolute; bottom: 35px; left: 35px; right: 35px; z-index: 4; display: flex; flex-direction: row; align-items: flex-end; justify-content: space-between; text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.7); transition: transform 2s ease-in-out; }
+        #bottom-container { position: absolute; bottom: 35px; left: 35px; right: 35px; z-index: 4; display: flex; flex-direction: row; align-items: flex-end; justify-content: space-between; text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.7); transition: transform 2s ease-in-out; gap: 30px;}
         
         #bottom-left-events { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; flex-shrink: 0; }
         .event-header { font-size: 1.1rem; color: #F4B41A; font-weight: 700; text-align: left; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
@@ -71,7 +71,7 @@
         .event-urgent { color: #F4B41A !important; font-weight: 700; background: rgba(0, 0, 0, 0.7); -webkit-animation: pulseGlow 2s infinite; animation: pulseGlow 2s infinite; }
         .event-today-birth { color: #2ecc71 !important; font-weight: 700; font-size: 1.25rem; background: rgba(0, 0, 0, 0.8); }
 
-        #bottom-right-text { flex: 1; display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; text-align: right; margin-left: 30px; }
+        #bottom-right-text { flex: 1; display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; text-align: right; }
         #quote-row { font-size: 1.15rem; font-weight: 500; font-style: normal; color: #f5f5f7; line-height: 1.5; word-wrap: break-word; text-align: right; width: 100%; }
         
         .countdown-highlight { color: #F4B41A; font-weight: 700; }
@@ -108,13 +108,12 @@
         .night-active #night-clock-box { display: flex; align-items: center; justify-content: center; flex-direction: row; }
         .night-hours, .night-minutes { font-family: 'Tourney', cursive !important; font-weight: 600 !important; color: #FF9500 !important; font-size: 46vmin; line-height: 0.9; margin: 0 1vmin; letter-spacing: -2vmin; }
 
-        /* BỐ CỤC DỌC (PORTRAIT) */
         @media (orientation: portrait) {
             .hours-style, .minutes-style { font-size: 8.5rem; text-align: center; } 
             #date-solar-top { font-size: 1.6rem; text-align: center; } 
             #date-lunar-top { font-size: 1.6rem; text-align: center; }
             .event-header { font-size: 1.1rem; } .event-item { font-size: 1.15rem; }
-            
+            .env-rotating-item { font-size: 1.15rem; }
             #bottom-container { flex-direction: column; align-items: stretch; gap: 15px; }
             #bottom-left-events { align-items: flex-start; max-width: 100%; width: 100%; }
             #bottom-right-text { text-align: right; align-items: flex-end; margin-left: 0; width: 100%; }
@@ -138,6 +137,7 @@
         <div id="brightness-overlay"></div>
         <div id="toast-msg">Thông báo</div>
 
+        <!-- CỘT TRÁI TRÊN -->
         <div id="info-container">
             <div id="clock-flex-wrapper">
                 <span class="hours-style tap-target" id="hr-node" ontouchstart="handleAction(event, 'night')" onclick="handleAction(event, 'night')">00</span>
@@ -152,20 +152,27 @@
             <span class="night-minutes tap-target" id="night-min-node" ontouchstart="handleAction(event, 'night')" onclick="handleAction(event, 'night')">00</span>
         </div>
 
+        <!-- PHẢI TRÊN -->
         <div id="top-right-wrapper">
+            <!-- Bấm Thời tiết mở bảng Cài đặt vị trí -->
             <div id="right-env-container" class="tap-target" ontouchstart="handleAction(event, 'open_location')" onclick="handleAction(event, 'open_location')"></div>
+            <!-- Bấm Nhiệt độ Đổi ảnh kế tiếp -->
             <div id="temp-wrapper" class="tap-target" ontouchstart="handleAction(event, 'next')" onclick="handleAction(event, 'next')">
                 <span id="weather-val">--</span><span class="degree-symbol">°</span>
             </div>
         </div>
         
+        <!-- CỘT ĐÁY -->
         <div id="bottom-container">
+            <!-- Bấm Sinh nhật hiện danh sách Sinh Nhật -->
             <div id="bottom-left-events" class="tap-target" ontouchstart="handleAction(event, 'show_birth')" onclick="handleAction(event, 'show_birth')"></div>
+            <!-- Bấm Danh ngôn hiện danh sách Giỗ -->
             <div id="bottom-right-text" class="tap-target" ontouchstart="handleAction(event, 'show_death')" onclick="handleAction(event, 'show_death')">
                 <span id="quote-row">Đang tải và đồng bộ hệ thống dữ liệu điện toán đám mây...</span>
             </div>
         </div>
         
+        <!-- BẢNG CÀI ĐẶT VỊ TRÍ -->
         <div id="location-modal" class="modal-base">
             <div class="modal-title">CÀI ĐẶT VỊ TRÍ</div>
             <input type="text" id="loc-name" class="loc-input" placeholder="Tên địa phương (VD: Tân Lập)">
@@ -178,6 +185,7 @@
             <button class="btn-close-modal" ontouchstart="closeLocationModal(); event.preventDefault();" onclick="closeLocationModal()">Đóng (Hủy)</button>
         </div>
 
+        <!-- BẢNG DANH SÁCH LỊCH -->
         <div id="list-modal" class="modal-base">
             <div id="list-title" class="modal-title">DANH SÁCH</div>
             <div id="list-content"></div>
@@ -194,6 +202,7 @@
         
         var globalAQI = "--", globalHum = "--", globalRain = "--", globalSunrise = "--", globalSunset = "--"; 
         var globalWind = "--", globalUV = "--", globalAlt = "--";
+        var envDisplayIndex = 0; // Index cho vòng quay thời tiết
         var windowDeathList = []; 
         
         var bX1 = 0, bY1 = 0; var bX2 = 0, bY2 = 0; var bX3 = 0, bY3 = 0;
@@ -238,16 +247,16 @@
             [2030, 0, 6, 11, "Kỷ Dậu"], [2030, 1, 5, 12, "Kỷ Dậu"], [2030, 2, 3, 1, "Canh Tuất"], [2030, 3, 5, 2, "Canh Tuất"], [2030, 4, 3, 3, "Canh Tuất"], [2030, 5, 2, 4, "Canh Tuất"], [2030, 6, 1, 5, "Canh Tuất"], [2030, 6, 30, 6, "Canh Tuất"], [2030, 7, 30, 7, "Canh Tuất"], [2030, 8, 29, 8, "Canh Tuất"], [2030, 9, 27, 9, "Canh Tuất"], [2030, 10, 27, 10, "Canh Tuất"], [2030, 11, 26, 11, "Canh Tuất"]
         ];
 
-        /* 🌟 THUẬT TOÁN ĐỔI MÀU CẢNH BÁO AI (FIX LỖI TYPE ERROR CỦA INDEXOF TRÊN SỐ) */
+        /* 🌟 THUẬT TOÁN ĐỔI MÀU CẢNH BÁO AI */
         function getEnvColor(type, val) {
-            var strVal = String(val); // Ép kiểu chuỗi để phòng ngừa lỗi đứt gãy Javascript
+            var strVal = String(val); 
             if (strVal === "--" || strVal.indexOf('--') !== -1) return "#ffffff";
             var v = parseFloat(strVal);
             if (type === 'aqi') {
                 if (v <= 50) return "#ffffff";
-                if (v <= 100) return "#F4B41A"; // Vàng
-                if (v <= 150) return "#FF9500"; // Cam
-                return "#FF3366"; // Đỏ
+                if (v <= 100) return "#F4B41A"; 
+                if (v <= 150) return "#FF9500"; 
+                return "#FF3366"; 
             }
             if (type === 'uv') {
                 if (v <= 2) return "#ffffff";
@@ -263,20 +272,25 @@
             return "#ffffff";
         }
 
-        /* 🌟 HIỂN THỊ KHỐI THỜI TIẾT TĨNH ĐỒNG LOẠT SIÊU NHANH */
-        function refreshCurrentEnv() {
+        /* 🌟 HIỂN THỊ VÀ XOAY VÒNG THỜI TIẾT MỖI 2 PHÚT */
+        function rotateWeatherDisplay() {
+            var envPool = [
+                '🍃 AQI <span style="color:' + getEnvColor('aqi', globalAQI) + '; font-weight:700;">' + globalAQI + '</span>',
+                '💧 ' + globalHum,
+                '🌧️ <span style="color:' + getEnvColor('rain', globalRain) + '; font-weight:700;">' + globalRain + '</span>',
+                '🌬️ ' + globalWind,
+                '☀️ <span style="color:' + getEnvColor('uv', globalUV) + '; font-weight:700;">UV ' + globalUV + '</span>',
+                '🌅 ' + globalSunrise + ' - ' + globalSunset,
+                '⛰️ ' + globalAlt
+            ];
+            var currentEnv = envPool[envDisplayIndex % envPool.length];
+            envDisplayIndex++;
             var container = document.getElementById('right-env-container');
-            if(!container) return;
-            var aColor = getEnvColor('aqi', globalAQI); 
-            var uColor = getEnvColor('uv', globalUV); 
-            var rColor = getEnvColor('rain', globalRain);
-            
-            container.innerHTML = `
-                <div class="env-static-row">🍃 AQI: <span style="color:${aColor}; font-weight:700;">${globalAQI}</span> &nbsp;|&nbsp; ☀️ UV: <span style="color:${uColor}; font-weight:700;">${globalUV}</span></div>
-                <div class="env-static-row">🌧️ Mưa: <span style="color:${rColor}; font-weight:700;">${globalRain}</span> &nbsp;|&nbsp; 💧 Ẩm: <span>${globalHum}</span></div>
-                <div class="env-static-row">🌅 ${globalSunrise} - ${globalSunset}</div>
-            `;
+            if(container) container.innerHTML = '<div class="env-rotating-item">' + currentEnv + '</div>';
         }
+        
+        // Kích hoạt vòng lặp xoay thời tiết (2 phút = 120000ms)
+        setInterval(rotateWeatherDisplay, 120000);
 
         function fetchConfigFromDrive() {
             var query = encodeURIComponent("'" + FOLDER_ID + "' in parents and name = 'cauhinh.txt' and trashed = false");
@@ -395,7 +409,7 @@
             p(466.16, 0.75); p(466.16, 0.25); p(440.00, 1); p(349.23, 1); p(392.00, 1); p(349.23, 2);
         }
 
-        /* 🌟 GIAO DIỆN MODAL BẢNG CÀI ĐẶT VÀ DANH SÁCH */
+        /* 🌟 BẢNG MODAL VÀ DANH SÁCH */
         function openLocationModal() {
             var modal = document.getElementById('location-modal');
             document.getElementById('loc-name').value = clientLocalName;
@@ -544,6 +558,7 @@
             }
         }
 
+        /* 🌟 KHÔI PHỤC NGÀY GIỖ, SINH NHẬT VÀ LƯU windowDeathList */
         function renderEvents(sMonth, lMonth, sDay, lDay) {
             var leftHtml = "";
             var currentBirths = [];
@@ -664,7 +679,7 @@
         }
         setInterval(updateClock, 1000); 
 
-        /* 🌟 GỌI API THỜI TIẾT DỰ BÁO THEO GIỜ CHỐNG LỖI KẸT SỐ LIỆU */
+        /* 🌟 GỌI API THỜI TIẾT 1 TIẾNG / LẦN (3600000ms) */
         function generateSimulatedWeather() {
             var hr = new Date().getHours(); var baseTemp = 24; 
             if (hr >= 11 && hr <= 15) baseTemp = 32; else if (hr >= 5 && hr <= 8) baseTemp = 22;
@@ -673,7 +688,7 @@
             globalUV = (hr >= 10 && hr <= 14) ? "6.8" : "0.5"; globalAlt = "473m";
             if(globalSunrise === "--") globalSunrise = "05:24"; if(globalSunset === "--") globalSunset = "18:13";
             if(globalAQI === "--") globalAQI = 38;
-            refreshCurrentEnv();
+            rotateWeatherDisplay();
         }
 
         function updateWeatherAndAQI() {
@@ -681,11 +696,10 @@
             if (isNaN(lat) || !lat) { lat = 12.6792; lon = 108.0694; }
             var cb = new Date().getTime();
 
-            // Chặn đứng dấu "--" khi load ban đầu
             if (document.getElementById('weather-val').innerText === "--") {
                 document.getElementById('weather-val').innerText = "26";
                 globalHum = "75%"; globalRain = "10%"; globalWind = "8 km/h"; globalUV = "1.0"; globalAlt = "473m"; globalSunrise = "05:24"; globalSunset = "18:12"; globalAQI = 40;
-                refreshCurrentEnv();
+                rotateWeatherDisplay();
             }
 
             var xhrW = new XMLHttpRequest(); xhrW.timeout = 8000;
@@ -702,14 +716,14 @@
                             globalUV = d.hourly.uv_index[hr] != null ? d.hourly.uv_index[hr].toFixed(1) : "0.5";
                         }
                         if(d.daily && d.daily.sunrise) { globalSunrise = d.daily.sunrise[0].substring(11, 16); globalSunset = d.daily.sunset[0].substring(11, 16); }
-                        refreshCurrentEnv();
+                        rotateWeatherDisplay();
                     } catch(e) { generateSimulatedWeather(); }
                 }
             }; xhrW.send();
 
             var xhrA = new XMLHttpRequest(); xhrA.timeout = 8000;
             xhrA.open('GET', 'https://air-quality-api.open-meteo.com/v1/air-quality?latitude=' + lat.toFixed(4) + '&longitude=' + lon.toFixed(4) + '&hourly=us_aqi,pm2_5&timezone=Asia%2FHo_Chi_Minh&forecast_days=1&_cb=' + cb, true);
-            xhrA.onerror = function() { refreshCurrentEnv(); }; xhrA.ontimeout = function() { refreshCurrentEnv(); };
+            xhrA.onerror = function() { rotateWeatherDisplay(); }; xhrA.ontimeout = function() { rotateWeatherDisplay(); };
             xhrA.onreadystatechange = function() {
                 if (xhrA.readyState === 4 && xhrA.status === 200) {
                     try {
@@ -720,27 +734,68 @@
                             if (pm <= 12.0) globalAQI = Math.round((50/12.0)*pm); else if (pm <= 35.4) globalAQI = Math.round(((49)/(23.4))*(pm-12.1)+51);
                             else if (pm <= 55.4) globalAQI = Math.round(((49)/(20.0))*(pm-35.5)+101); else globalAQI = Math.round(pm + 100);
                         }
-                        refreshCurrentEnv();
+                        rotateWeatherDisplay();
                     } catch(e) {}
                 }
             }; xhrA.send();
         }
-        setInterval(updateWeatherAndAQI, 600000); 
+        setInterval(updateWeatherAndAQI, 3600000); // 🌟 1 tiếng / lần
 
+        /* 🌟 KHÔI PHỤC HOÀN TOÀN ĐẶC SẢN, LỄ HỘI, VÀ NỐI NGÀY GIỖ THÔNG MINH */
         function updateDynamicContentBySlide() {
-            var quoteElement = document.getElementById('quote-row'); if(!quoteElement) return;
-            var finalQuote = (quotePool.length > 0) ? quotePool[Math.floor(Math.random() * quotePool.length)] : "Nhà là nơi bão dừng sau cánh cửa, nơi bình yên ấm áp nhất để trở về.";
-            quoteElement.innerHTML = finalQuote;
+            var now = new Date(); var currentSolarMonth = now.getMonth() + 1; var sDay = now.getDate();
+            var checkTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0); var activePhase = phases[0];
+            for (var i = 0; i < phases.length; i++) { var d = new Date(phases[i][0], phases[i][1], phases[i][2], 0, 0, 0); if (checkTime >= d) activePhase = phases[i]; else break; }
+            var currentLunarMonth = (activePhase[1] === 0 ? 12 : activePhase[1]);
+            var lDay = Math.floor((checkTime - new Date(activePhase[0], activePhase[1], activePhase[2], 0, 0, 0)) / (1000 * 60 * 60 * 24)) + 1;
 
+            // Xoay vòng khối thời tiết
+            rotateWeatherDisplay();
+
+            // Tính toán Lễ hội & Danh ngôn
+            var activeSpecialties = [];
+            for (var s=0; s<specialtiesData.length; s++) { if(specialtiesData[s].m === currentSolarMonth || specialtiesData[s].m === 0) activeSpecialties.push(specialtiesData[s].text); }
+
+            var finalQuote = ""; var dice = Math.random(); 
+            if (dice < 0.5 && activeSpecialties.length > 0) { finalQuote = "Mùa này " + activeSpecialties[Math.floor(Math.random() * activeSpecialties.length)]; } 
+            else if (quotePool.length > 0) { finalQuote = quotePool[Math.floor(Math.random() * quotePool.length)]; }
+            else { finalQuote = "Nhà là nơi bão dừng sau cánh cửa, nơi bình yên ấm áp nhất để trở về."; }
+
+            var nextActiveFestivalText = "";
+            var minDiff = 365;
+            for(var f=0; f<festivalsData.length; f++) {
+                var fest = festivalsData[f];
+                if(fest.type === 's' && fest.m === currentSolarMonth && fest.d >= sDay) {
+                    var diff = fest.d - sDay;
+                    if(diff < minDiff) { minDiff = diff; nextActiveFestivalText = (diff === 0 ? "Hôm nay: " : "Còn " + diff + " ngày đến ") + fest.text + " (" + fest.d + "/" + fest.m + ")"; }
+                }
+                if(fest.type === 'l' && fest.m === currentLunarMonth && fest.d >= lDay) {
+                    var diffL = fest.d - lDay;
+                    if(diffL >= 0 && diffL < minDiff) { minDiff = diffL; nextActiveFestivalText = (diffL === 0 ? "Hôm nay: " : "Còn " + diffL + " ngày đến ") + fest.text + " (" + fest.d + "/" + fest.m + " ÂL)"; }
+                }
+            }
+
+            var quoteElement = document.getElementById('quote-row');
+            quoteElement.innerHTML = finalQuote; 
+
+            // Nối dòng ngày giỗ, đếm ngược thông minh
             setTimeout(function() {
                 var style = window.getComputedStyle(quoteElement);
-                var linesCount = Math.round(quoteElement.offsetHeight / (parseFloat(style.lineHeight) || 20));
-                var extras = [];
-                if(windowDeathList.length > 0) extras = extras.concat(windowDeathList);
+                var lineHeight = parseFloat(style.lineHeight) || (parseFloat(style.fontSize) * 1.5);
+                var height = quoteElement.offsetHeight;
+                var linesCount = Math.round(height / lineHeight);
+
+                var extrasArray = [];
+                if(nextActiveFestivalText !== "") extrasArray.push('<span class="countdown-highlight">' + nextActiveFestivalText + '</span>');
+                if(windowDeathList.length > 0) extrasArray = extrasArray.concat(windowDeathList);
                 
-                if (extras.length > 0) {
-                    var extrasStr = extras.join(' <span style="color:#ffffff; font-weight:400;">|</span> ');
-                    quoteElement.innerHTML = finalQuote + (linesCount <= 1 ? '<br>' : ' <span style="color:#ffffff; font-weight:400;">|</span> ') + extrasStr;
+                if (extrasArray.length > 0) {
+                    var extrasStr = extrasArray.join(' <span style="color:#ffffff; font-weight:400;">|</span> ');
+                    if (linesCount <= 1) {
+                        quoteElement.innerHTML = finalQuote + '<br>' + extrasStr;
+                    } else {
+                        quoteElement.innerHTML = finalQuote + ' <span style="color:#ffffff; font-weight:400;">|</span> ' + extrasStr;
+                    }
                 }
             }, 50);
         }
@@ -751,42 +806,98 @@
             var xhr = new XMLHttpRequest(); xhr.open('GET', url, true);
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4 && xhr.status === 200) {
-                    var data = JSON.parse(xhr.responseText); if (data.files && data.files.length > 0) { downloadConfigFile(data.files[0].id); }
+                    var data = JSON.parse(xhr.responseText);
+                    if (data.files && data.files.length > 0) { downloadConfigFile(data.files[0].id); }
                 }
-            }; xhr.send();
+            };
+            xhr.send();
 
             var imgQuery = encodeURIComponent("'" + FOLDER_ID + "' in parents and mimeType contains 'image/'");
-            var imgUrl = 'https://www.googleapis.com/drive/v3/files?q=' + imgQuery + '&orderBy=createdTime desc&key=' + API_KEY + '&fields=files(id)';
+            var imgUrl = 'https://www.googleapis.com/drive/v3/files?q=' + imgQuery + '&orderBy=createdTime desc&key=' + API_KEY + '&fields=files(id,createdTime)';
             var xhrDrive = new XMLHttpRequest(); xhrDrive.open('GET', imgUrl, true);
             xhrDrive.onreadystatechange = function() {
-                if (xhrDrive.readyState === 4 && xhrDrive.status === 200) {
-                    var data = JSON.parse(xhrDrive.responseText);
-                    if (data.files && data.files.length > 0) {
-                        var allImgs = []; for (var i = 0; i < data.files.length; i++) { allImgs.push('https://drive.google.com/thumbnail?id=' + data.files[i].id + '&sz=w2048'); }
-                        var newestImgs = allImgs.slice(0, 15);
-                        function shuffle(arr) { var a = arr.slice(); for (var k = a.length - 1; k > 0; k--) { var j = Math.floor(Math.random() * (k + 1)); var t = a[k]; a[k] = a[j]; a[j] = t; } return a; }
-                        images = [].concat(shuffle(newestImgs), shuffle(newestImgs), shuffle(allImgs)); currentIndex = 0; initSlideshow();
-                    } else { fallbackInit("Thư mục ảnh trống!"); }
+                if (xhrDrive.readyState === 4) {
+                    if (xhrDrive.status === 200) {
+                        var data = JSON.parse(xhrDrive.responseText);
+                        if (data.files && data.files.length > 0) {
+                            var allImgs = [];
+                            for (var i = 0; i < data.files.length; i++) { 
+                                allImgs.push('https://drive.google.com/thumbnail?id=' + data.files[i].id + '&sz=w2048'); 
+                            }
+                            
+                            var newestImgs = allImgs.slice(0, 15);
+
+                            function shuffleArray(arr) {
+                                var a = arr.slice();
+                                for (var k = a.length - 1; k > 0; k--) { var j = Math.floor(Math.random() * (k + 1)); var temp = a[k]; a[k] = a[j]; a[j] = temp; }
+                                return a;
+                            }
+
+                            images = [].concat(shuffleArray(newestImgs), shuffleArray(newestImgs), shuffleArray(allImgs));
+                            currentIndex = 0;
+                            initSlideshow();
+                        } else { fallbackInit("Thư mục trống! Vui lòng tải ảnh lên Drive."); }
+                    } else {
+                        fallbackInit("Lỗi lấy dữ liệu đám mây. Đang dùng ảnh dự phòng...");
+                    }
                 }
             }; xhrDrive.send();
         }
 
-        function fallbackInit(msg) { document.getElementById('quote-row').innerText = msg; images = ['https://images.unsplash.com/photo-1506744626753-14002fa88301?q=80&w=2048&auto=format&fit=crop']; initSlideshow(); }
-        function updateImageDisplayMechanism(img, gp) { img.classList.remove('fit-cover', 'fit-contain'); gp.classList.add('show-blur'); if (window.innerWidth > window.innerHeight) { img.classList.add(img.naturalWidth > img.naturalHeight ? 'fit-cover' : 'fit-contain'); } else { img.classList.add(img.naturalWidth > img.naturalHeight ? 'fit-contain' : 'fit-cover'); } }
-        
-        function loadAndDisplayImage(url, gID, bgID, fgID) {
-            var cg = document.getElementById(isGroup1Active ? 'group1' : 'group2'); var ng = document.getElementById(gID);
-            var nb = document.getElementById(bgID); var nf = document.getElementById(fgID);
-            nf.onload = function() { updateImageDisplayMechanism(nf, ng); cg.classList.remove('active'); ng.classList.add('active'); isGroup1Active = !isGroup1Active; currentIndex = (currentIndex + 1) % images.length; updateDynamicContentBySlide(); };
-            nf.onerror = function() { if (url.indexOf('unsplash.com') === -1) fallbackInit("Đang nạp ảnh cứu hộ..."); };
-            nb.src = url; nf.src = url;
+        function fallbackInit(msg) {
+            document.getElementById('quote-row').innerText = msg;
+            images = ['https://images.unsplash.com/photo-1506744626753-14002fa88301?q=80&w=2048&auto=format&fit=crop'];
+            initSlideshow();
+        }
+
+        function updateImageDisplayMechanism(imgElement, groupElement) {
+            var isScreenLandscape = (window.innerWidth > window.innerHeight);
+            var isImageLandscape = (imgElement.naturalWidth > imgElement.naturalHeight);
+            imgElement.classList.remove('fit-cover', 'fit-contain'); groupElement.classList.add('show-blur');
+            if (isScreenLandscape) { if (isImageLandscape) { imgElement.classList.add('fit-cover'); } else { imgElement.classList.add('fit-contain'); } } 
+            else { if (!isImageLandscape) { imgElement.classList.add('fit-cover'); } else { imgElement.classList.add('fit-contain'); } }
+            var nHrNode = document.getElementById('night-hr-node');
+            var hrStr = document.getElementById('hr-node').innerText;
+            if (isScreenLandscape) { nHrNode.innerText = hrStr + ":"; } else { nHrNode.innerText = hrStr; }
+        }
+
+        window.addEventListener('resize', function() {
+            var activeFg = document.getElementById(isGroup1Active ? 'fg1' : 'fg2');
+            var activeGroup = document.getElementById(isGroup1Active ? 'group1' : 'group2');
+            if (activeFg && activeFg.naturalWidth) updateImageDisplayMechanism(activeFg, activeGroup);
+        });
+
+        function loadAndDisplayImage(imgUrl, groupID, bgID, fgID) {
+            var currentGroup = document.getElementById(isGroup1Active ? 'group1' : 'group2'); var nextGroup = document.getElementById(groupID);
+            var nextBg = document.getElementById(bgID); var nextFg = document.getElementById(fgID);
+            
+            nextFg.onload = function() { 
+                updateImageDisplayMechanism(nextFg, nextGroup); 
+                currentGroup.classList.remove('active'); 
+                nextGroup.classList.add('active'); 
+                isGroup1Active = !isGroup1Active; 
+                currentIndex = (currentIndex + 1) % images.length; 
+                updateDynamicContentBySlide(); 
+            };
+            
+            nextFg.onerror = function() {
+                if (imgUrl.indexOf('unsplash.com') === -1) {
+                    fallbackInit("Mạng chập chờn. Đang lấy lại ảnh dự phòng...");
+                }
+            };
+            
+            nextBg.src = imgUrl; nextFg.src = imgUrl;
         }
 
         function initSlideshow() { applyClockStyle(); updateClock(); updateWeatherAndAQI(); loadAndDisplayImage(images[0], isGroup1Active ? 'group1' : 'group2', isGroup1Active ? 'bg1' : 'bg2', isGroup1Active ? 'fg1' : 'fg2'); changeIntervalMode(currentIntervalIdx + 1); }
         function goToNextSlide() { if(images.length <= 1) return; var nextIndex = (currentIndex + 1) % images.length; loadAndDisplayImage(images[nextIndex], isGroup1Active ? 'group2' : 'group1', isGroup1Active ? 'bg2' : 'bg1', isGroup1Active ? 'fg2' : 'fg1'); }
-        function changeIntervalMode(mode) { currentIntervalIdx = mode - 1; if (slideInterval) clearInterval(slideInterval); slideInterval = setInterval(goToNextSlide, stepSeconds[currentIntervalIdx] * 1000); }
 
-        updateClock(); 
+        function changeIntervalMode(modeVal) {
+            currentIntervalIdx = modeVal - 1; var seconds = stepSeconds[currentIntervalIdx];
+            if (slideInterval) clearInterval(slideInterval); slideInterval = setInterval(goToNextSlide, seconds * 1000);
+        }
+
+        // Khởi động
         syncDriveData();
     </script>
 </body>
