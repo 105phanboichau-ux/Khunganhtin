@@ -8,7 +8,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="referrer" content="no-referrer">
     
-    <title>Khung Ảnh Số Thông Minh - V102 Ultimate Full Code</title>
+    <title>Khung Ảnh Số Thông Minh - V103 UI/UX Upgrade</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,6 +35,11 @@
 
         .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.15); z-index: 3; pointer-events: none; }
         #brightness-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0); z-index: 998; pointer-events: none; transition: background 0.5s ease; }
+        
+        /* 🔥 VÙNG TRỐNG GIỮA MÀN HÌNH ĐỂ BẤM TẠM DỪNG */
+        #center-pause-zone { position: absolute; top: 25%; bottom: 25%; left: 25%; right: 25%; z-index: 999; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        #pause-status-btn { background: rgba(0,0,0,0.7); color: #F4B41A; font-weight: 700; font-size: 1.5rem; padding: 15px 30px; border-radius: 50px; border: 2px solid #F4B41A; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; text-transform: uppercase; letter-spacing: 2px; box-shadow: 0px 5px 20px rgba(0,0,0,0.5); }
+        #pause-status-btn.show-status { opacity: 1; }
 
         .tap-target { -webkit-tap-highlight-color: transparent; outline: none; border: none; background: transparent; cursor: pointer; transition: opacity 0.2s; }
         .tap-target:active { opacity: 0.6; }
@@ -90,7 +95,10 @@
         .loc-btn:active { transform: scale(0.95); }
         .btn-save { background: #F4B41A; color: #000; }
         .btn-default { background: transparent; color: #fff; border: 1px solid #fff; }
-        .btn-close-modal { background: transparent; color: #aaa; font-weight: 400; border: none; font-size: 0.95rem; text-align: center; margin-top: -5px; padding: 5px; cursor: pointer; }
+        
+        /* 🔥 CẢI TIẾN NÚT ĐÓNG BẢNG XUỐNG DƯỚI RÕ RÀNG */
+        .btn-close-modal { background: rgba(255,255,255,0.1); color: #fff; font-weight: 600; border: 1px solid rgba(255,255,255,0.3); font-size: 1rem; text-align: center; margin-top: 5px; padding: 12px; cursor: pointer; border-radius: 8px; transition: all 0.2s; }
+        .btn-close-modal:active { background: rgba(255,255,255,0.2); }
         
         #toast-msg { position: absolute; top: 15%; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.85); color: #F4B41A; border: 1px solid #F4B41A; padding: 12px 24px; border-radius: 8px; font-size: 1.2rem; font-weight: 700; z-index: 10000; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; text-align: center; box-shadow: 0px 4px 15px rgba(0,0,0,0.5); }
         #toast-msg.show { opacity: 1; }
@@ -131,6 +139,10 @@
         <div id="brightness-overlay"></div>
         <div id="toast-msg">Thông báo</div>
 
+        <div id="center-pause-zone" ontouchstart="handleAction(event, 'toggle_pause')" onclick="handleAction(event, 'toggle_pause')">
+            <div id="pause-status-btn">TẠM DỪNG</div>
+        </div>
+
         <div id="info-container">
             <div id="clock-flex-wrapper">
                 <span class="hours-style tap-target" id="hr-node" ontouchstart="handleAction(event, 'night')" onclick="handleAction(event, 'night')">00</span>
@@ -153,7 +165,7 @@
         </div>
         
         <div id="bottom-container">
-            <div id="bottom-left-events" class="tap-target" ontouchstart="handleAction(event, 'show_birth')" onclick="handleAction(event, 'show_birth')"></div>
+            <div id="bottom-left-events" class="tap-target" ontouchstart="handleAction(event, 'chime')" onclick="handleAction(event, 'chime')"></div>
             <div id="bottom-right-text" class="tap-target" ontouchstart="handleAction(event, 'show_death')" onclick="handleAction(event, 'show_death')">
                 <span id="quote-row">Đang tải và đồng bộ hệ thống dữ liệu điện toán đám mây...</span>
             </div>
@@ -168,13 +180,13 @@
                 <button class="loc-btn btn-save" ontouchstart="saveLocation(); event.preventDefault();" onclick="saveLocation()">LƯU</button>
                 <button class="loc-btn btn-default" ontouchstart="defaultLocation(); event.preventDefault();" onclick="defaultLocation()">MẶC ĐỊNH</button>
             </div>
-            <button class="btn-close-modal" ontouchstart="closeLocationModal(); event.preventDefault();" onclick="closeLocationModal()">Đóng (Hủy)</button>
+            <button class="btn-close-modal" ontouchstart="closeLocationModal(); event.preventDefault();" onclick="closeLocationModal()">ĐÓNG (HỦY VÀ THOÁT)</button>
         </div>
 
         <div id="list-modal" class="modal-base">
             <div id="list-title" class="modal-title">DANH SÁCH</div>
             <div id="list-content"></div>
-            <button class="btn-close-modal" style="margin-top:10px;" ontouchstart="closeListModal(); event.preventDefault();" onclick="closeListModal()">Đóng bảng</button>
+            <button class="btn-close-modal" ontouchstart="closeListModal(); event.preventDefault();" onclick="closeListModal()">ĐÓNG BẢNG</button>
         </div>
 
     </div>
@@ -196,7 +208,12 @@
         var wakeUpHour = localStorage.getItem('wakeUpHour') ? parseInt(localStorage.getItem('wakeUpHour')) : 6;
         
         var loadMorningMusicFlag = false; var clock8AMMusicFlag = false; var clock14PMMusicFlag = false; var clock18PMMusicFlag = false; var lastBirthdayCheckDate = null; 
-        var hourlyChimePlayed = false; // Cờ kiểm soát tiếng chuông 1 tiếng / lần
+        var hourlyChimePlayed = false; 
+
+        // 🔥 BIẾN MỚI CHO TÍNH NĂNG CHUÔNG & TẠM DỪNG
+        var isSlideshowPaused = false;
+        var pauseStatusTimeout;
+        var chimeTestState = parseInt(localStorage.getItem('chimeTestState')) || 0; // 0: Chuông thường, 1: Im lặng, 2: Nhạc Sinh Nhật, 3: Nhạc Đám Giỗ
         
         var clockStyles = [
             { f: "'Montserrat', sans-serif", hc: "#F4B41A", mc: "#ffffff", fw: 700 }, { f: "'Montserrat', sans-serif", hc: "#ffffff", mc: "#F4B41A", fw: 700 },
@@ -257,7 +274,6 @@
             return "#ffffff";
         }
 
-        /* 🌟 THUẬT TOÁN ĐO CHIỀU NGANG ÉP TÂM */
         function syncEnvWidth() {
             setTimeout(function() {
                 var tempVal = document.getElementById('weather-val');
@@ -296,7 +312,7 @@
                 syncEnvWidth();
             }
         }
-        setInterval(rotateWeatherDisplay, 120000); // 2 Phút
+        setInterval(rotateWeatherDisplay, 120000); 
 
         function fetchConfigFromDrive() {
             var query = encodeURIComponent("'" + FOLDER_ID + "' in parents and name = 'cauhinh.txt' and trashed = false");
@@ -406,6 +422,17 @@
             p(466.16, 0.75); p(466.16, 0.25); p(440.00, 1); p(349.23, 1); p(392.00, 1); p(349.23, 2);
         }
 
+        /* THÊM BÀI NHẠC ĐÁM GIỖ BẰNG SÓNG ÂM (Tùy chỉnh giai điệu buồn/trầm) */
+        function playSadChime() {
+            if (!audioCtx) { try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){} }
+            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+            var t = audioCtx.currentTime;
+            playNote(146.83, t, 4.0, 'sine');      // D3
+            playNote(164.81, t + 1.0, 3.0, 'sine'); // E3
+            playNote(174.61, t + 2.0, 3.0, 'sine'); // F3
+            playNote(220.00, t + 3.0, 5.0, 'sine'); // A3 (Kéo dài)
+        }
+
         function openLocationModal() {
             var modal = document.getElementById('location-modal');
             document.getElementById('loc-name').value = clientLocalName;
@@ -413,7 +440,9 @@
             document.getElementById('loc-lon').value = clientLongitude;
             modal.classList.add('show-modal');
             if (locationModalTimeout) clearTimeout(locationModalTimeout);
-            locationModalTimeout = setTimeout(closeLocationModal, 60000); 
+            
+            // 🔥 TĂNG THỜI GIAN ĐÓNG BẢNG TỰ ĐỘNG LÊN 120 GIÂY
+            locationModalTimeout = setTimeout(closeLocationModal, 120000); 
         }
 
         function closeLocationModal() {
@@ -464,7 +493,9 @@
             }
             modal.classList.add('show-modal');
             if(listModalTimeout) clearTimeout(listModalTimeout);
-            listModalTimeout = setTimeout(closeListModal, 10000); 
+            
+            // 🔥 TĂNG THỜI GIAN ĐÓNG BẢNG LÊN 120 GIÂY
+            listModalTimeout = setTimeout(closeListModal, 120000); 
         }
         function closeListModal() { document.getElementById('list-modal').classList.remove('show-modal'); }
 
@@ -493,11 +524,58 @@
                 changeIntervalMode(currentIntervalIdx + 1);
                 showToast("⏳ Đổi thời gian ảnh: " + mins + " Phút");
             }
-            else if (action === 'next') { forceNextSlide(); }
-            else if (action === 'chime') { showToast("🔔 Thử chuông báo"); playSolemnChime(); }
+            else if (action === 'next') { 
+                // Khi khách bấm đổi ảnh, nếu đang Tạm dừng thì tự động bật lại Tiếp Tục
+                if (isSlideshowPaused) {
+                    isSlideshowPaused = false;
+                    changeIntervalMode(currentIntervalIdx + 1);
+                }
+                forceNextSlide(); 
+            }
+            // 🔥 NÂNG CẤP VÒNG LẶP CHUÔNG (CHIME TEST STATE)
+            else if (action === 'chime') { 
+                chimeTestState = (chimeTestState + 1) % 4; // Trạng thái: 0, 1, 2, 3
+                localStorage.setItem('chimeTestState', chimeTestState);
+                
+                if (chimeTestState === 0) {
+                    showToast("🔔 Đã BẬT Chuông báo hằng giờ");
+                    playSolemnChime();
+                } else if (chimeTestState === 1) {
+                    showToast("🔕 Đã TẮT Chuông báo hằng giờ");
+                } else if (chimeTestState === 2) {
+                    showToast("🎂 Thử nhạc: Sinh Nhật");
+                    playHappyBirthday();
+                } else if (chimeTestState === 3) {
+                    showToast("🕯️ Thử nhạc: Đám Giỗ");
+                    playSadChime();
+                }
+            }
             else if (action === 'open_location') { openLocationModal(); }
             else if (action === 'show_birth') { showAllLists('birth'); }
             else if (action === 'show_death') { showAllLists('death'); }
+            
+            // 🔥 XỬ LÝ TÍNH NĂNG TẠM DỪNG / TIẾP TỤC
+            else if (action === 'toggle_pause') {
+                var btnStatus = document.getElementById('pause-status-btn');
+                if (isSlideshowPaused) {
+                    // Đang dừng -> Bật lại
+                    isSlideshowPaused = false;
+                    changeIntervalMode(currentIntervalIdx + 1);
+                    btnStatus.innerText = "▶ TIẾP TỤC";
+                } else {
+                    // Đang chạy -> Dừng
+                    isSlideshowPaused = true;
+                    if (slideInterval) clearInterval(slideInterval);
+                    btnStatus.innerText = "⏸ TẠM DỪNG";
+                }
+                
+                // Hiện nút lên 5 giây rồi tắt
+                btnStatus.classList.add('show-status');
+                if(pauseStatusTimeout) clearTimeout(pauseStatusTimeout);
+                pauseStatusTimeout = setTimeout(function() { 
+                    btnStatus.classList.remove('show-status'); 
+                }, 5000);
+            }
         }
 
         function forceNextSlide() { goToNextSlide(); changeIntervalMode(currentIntervalIdx + 1); showToast("Đang đổi ảnh..."); }
@@ -673,7 +751,7 @@
             applyDynamicPositions();
             checkForBirthdayMusic('clock');
 
-            /* 🌟 ĐỘNG CƠ BÁO CHUÔNG 1 TIẾNG / LẦN (KHÔNG CHẠY KHI ĐANG NHẠC SINH NHẬT HOẶC ĐÊM) */
+            // 🔥 LOGIC KIỂM SOÁT TẮT/BẬT CHUÔNG HẰNG GIỜ DỰA TRÊN CHIME TEST STATE
             var isBirthday = false;
             if (birthdays.length > 0) {
                 for(var j=0; j<birthdays.length; j++) {
@@ -682,7 +760,9 @@
             }
             if (minutes === 0 && seconds === 0 && !hourlyChimePlayed) {
                 hourlyChimePlayed = true;
-                if (!document.body.classList.contains('night-active')) {
+                
+                // Trạng thái 0: Mới cho phép kêu chuông giờ
+                if (chimeTestState === 0 && !document.body.classList.contains('night-active')) {
                     if (!(isBirthday && (hours === 8 || hours === 14 || hours === 18 || hours === wakeUpHour))) {
                         playSolemnChime();
                     }
@@ -808,7 +888,6 @@
             }, 50);
         }
 
-        /* 🌟 CƠ CHẾ LỌC ẢNH 48 GIỜ THÔNG MINH VÀ LẤY 1000 ẢNH TỪ DRIVE */
         function syncDriveData() {
             var query = encodeURIComponent("'" + FOLDER_ID + "' in parents and name = 'cauhinh.txt' and trashed = false");
             var url = 'https://www.googleapis.com/drive/v3/files?q=' + query + '&key=' + API_KEY + '&fields=files(id)';
@@ -821,7 +900,6 @@
             };
             xhr.send();
 
-            // Lấy tối đa 1000 ảnh từ thư mục
             var imgQuery = encodeURIComponent("'" + FOLDER_ID + "' in parents and mimeType contains 'image/'");
             var imgUrl = 'https://www.googleapis.com/drive/v3/files?q=' + imgQuery + '&pageSize=1000&key=' + API_KEY + '&fields=files(id,createdTime)';
             var xhrDrive = new XMLHttpRequest(); xhrDrive.open('GET', imgUrl, true);
@@ -832,12 +910,11 @@
                         if (data.files && data.files.length > 0) {
                             var allImgs = [];
                             var recentImgs = [];
-                            var twoDaysAgo = new Date(Date.now() - 48 * 60 * 60 * 1000); // Mốc 48 giờ trước
+                            var twoDaysAgo = new Date(Date.now() - 48 * 60 * 60 * 1000); 
                             
                             for (var i = 0; i < data.files.length; i++) { 
                                 var imgPath = 'https://drive.google.com/thumbnail?id=' + data.files[i].id + '&sz=w2048';
                                 allImgs.push(imgPath);
-                                // Kiểm tra nếu ảnh tạo trong vòng 2 ngày qua
                                 if (new Date(data.files[i].createdTime) >= twoDaysAgo) {
                                     recentImgs.push(imgPath);
                                 }
@@ -849,11 +926,9 @@
                                 return a;
                             }
 
-                            // 🌟 Thuật toán tạo luồng phát (Playlist): 1 vòng ảnh mới -> Toàn bộ ảnh
                             if (recentImgs.length > 0) {
                                 images = shuffleArray(recentImgs).concat(shuffleArray(allImgs));
                             } else {
-                                // Nếu không có ảnh mới trong 48h, chỉ trộn ngẫu nhiên toàn bộ
                                 images = shuffleArray(allImgs);
                             }
                             
@@ -913,11 +988,19 @@
         }
 
         function initSlideshow() { applyClockStyle(); updateClock(); updateWeatherAndAQI(); loadAndDisplayImage(images[0], isGroup1Active ? 'group1' : 'group2', isGroup1Active ? 'bg1' : 'bg2', isGroup1Active ? 'fg1' : 'fg2'); changeIntervalMode(currentIntervalIdx + 1); }
-        function goToNextSlide() { if(images.length <= 1) return; var nextIndex = (currentIndex + 1) % images.length; loadAndDisplayImage(images[nextIndex], isGroup1Active ? 'group2' : 'group1', isGroup1Active ? 'bg2' : 'bg1', isGroup1Active ? 'fg2' : 'fg1'); }
+        function goToNextSlide() { 
+            // Nếu hệ thống đang tạm dừng thì không làm gì cả
+            if (isSlideshowPaused) return; 
+
+            if(images.length <= 1) return; 
+            var nextIndex = (currentIndex + 1) % images.length; 
+            loadAndDisplayImage(images[nextIndex], isGroup1Active ? 'group2' : 'group1', isGroup1Active ? 'bg2' : 'bg1', isGroup1Active ? 'fg2' : 'fg1'); 
+        }
 
         function changeIntervalMode(modeVal) {
             currentIntervalIdx = modeVal - 1; var seconds = stepSeconds[currentIntervalIdx];
-            if (slideInterval) clearInterval(slideInterval); slideInterval = setInterval(goToNextSlide, seconds * 1000);
+            if (slideInterval) clearInterval(slideInterval); 
+            slideInterval = setInterval(goToNextSlide, seconds * 1000);
         }
 
         // Khởi động hệ thống
